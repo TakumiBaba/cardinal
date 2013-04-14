@@ -1,0 +1,10 @@
+{
+  "port": 3000,
+  "env": "development",
+  "maxage": 604800,
+  "migration": true,
+  "mongo": {
+    "development": "mongodb://localhost/condom-development",
+    "production": "mongodb://localhost/condom-production"
+  }
+}
