@@ -1,6 +1,6 @@
 {
-  "name": "node-condom",
-  "version": "0.4.0",
+  "name": "dingdong",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node web.js"
@@ -15,6 +15,8 @@
     "connect-mongo": "0.3.2",
     "st": "0.1.3",
     "direquire": "*",
-    "moment": ">= 2.0.0"
+    "moment": ">= 2.0.0",
+    "mocha": "*",
+    "underscore": "*"
   }
 }
