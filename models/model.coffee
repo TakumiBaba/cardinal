@@ -116,7 +116,7 @@ UserSchema = new Schema
   messages:
     type: [{type: ObjectId, ref: "Message"}]
     default: []
-  message_list: [{type: ObjectId, ref: "MessageList"}]
+  messageLists: [{type: ObjectId, ref: "MessageList"}]
   supporter_message:
     type: [SupporterMessageSchema]
   updatedAt:
@@ -195,13 +195,27 @@ MessageSchema = new Schema
   created_at:
     type: Date
     default: Date.now
-  id:
-    type: String
   text:
     type: String
   from:
     type: ObjectId
     ref: "User"
+  from_name:
+    type: String
+
+MessageListSchema = new Schema
+  created_at:
+    type: Date
+    default: Date.now
+  one:
+    type: ObjectId
+    ref: "User"
+  two:
+    type: ObjectId
+    ref: "User"
+  messages:
+    type: [{type: ObjectId, ref: "Message"}]
+    default: []
 
 module.exports =
   User: mongoose.model 'User', UserSchema
@@ -218,3 +232,5 @@ module.exports =
   NewsSchema: NewsSchema
   Message: mongoose.model 'Message', MessageSchema
   MessageSchema: MessageSchema
+  MessageList: mongoose.model 'MessageList', MessageListSchema
+  MessageListSchema: MessageListSchema

@@ -13,7 +13,7 @@ class Router extends Backbone.Router
   routes:
     "": "mypageAction"
     ":action": "mypageAction"
-    "u/:action": "userpageAction"
+    "u/:id": "userpageAction"
 
   mypageAction: (action)->
     if action is undefined
@@ -46,9 +46,11 @@ class Router extends Backbone.Router
 
 
 
-  userpageAction: (action)->
-    console.log action, "userpage"
-
+  userpageAction: (id)->
+    console.log id
+    user = new App.View.UserPage
+      id: id
+    user.model.fetch()
 
 window.fbAsyncInit = ->
   FB.init

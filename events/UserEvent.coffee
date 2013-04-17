@@ -75,3 +75,14 @@ exports.UserEvent = (app) ->
         throw err if err
         if user
           res.send user.following
+
+  followers:
+    fetch: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      User.findOne({id: id}).populate("follower", "id name profile").exec (err, user)->
+        throw err if err
+        if user
+          console.log user.follower
+          return res.send user.follower
+        else
+          return res.send []

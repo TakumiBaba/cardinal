@@ -21,6 +21,13 @@ class App.Collection.Followings extends Backbone.Collection
     super
     @.url = "/api/users/#{attrs.userid}/followings.json"
 
+class App.Collection.Followers extends Backbone.Collection
+  model: App.Model.User
+
+  constructor: (attrs, options)->
+    super
+    @.url = "/api/users/#{attrs.userid}/followers.json"
+
 class App.Collection.Messages extends Backbone.Collection
   # model: App.Model.Message
 

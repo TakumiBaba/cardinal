@@ -43,7 +43,7 @@ class App.View.LikePage extends Backbone.View
       id: user.id
       source: user.profile.image_url
       name: user.name
-      state: status
+      status: status
       text: text
     li = JST['like/thumbnail'](attributes)
     ul.append li

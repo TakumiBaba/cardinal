@@ -3,6 +3,7 @@ exports.DebugEvent = (app) ->
   User = app.settings.models.User
   Candidate = app.settings.models.Candidate
   Message = app.settings.models.Message
+  MessageList = app.settings.models.MessageList
   Talk = app.settings.models.Talk
   Comment = app.settings.models.Comment
   MessageEvent = app.settings.events.MessageEvent app
@@ -101,7 +102,7 @@ exports.DebugEvent = (app) ->
 
   talk:
     create: (req, res)->
-      id = req.session.userid
+      id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
       User.findOne id: id, (err, user)->
         throw err if err
         main = user
@@ -132,3 +133,43 @@ exports.DebugEvent = (app) ->
         _.each talks, (talk)->
           talk.remove()
       return res.send 'ok'
+
+  message:
+    create: (req, res)->
+      id = req.session.userid
+      User.findOne id: id, (err, user)->
+        throw err if err
+        main = user
+        User.find {}, (err, users)=>
+          throw err if err
+          shuffled = _.shuffle users
+          _.each [0..10], (i)=>
+            c = shuffled[i]
+            messageList = new MessageList()
+            messageList.one = main._id
+            messageList.two = c._id
+            _.each [0..5], (k)=>
+              message = new Message()
+              message.text = "こんばんわ#{k*2}"
+              message.from = if k%2 is 0 then c._id else main._id
+              message.from_name = if k%2 is 0 then c.name else main.name
+              message.save()
+              messageList.messages.push message
+            messageList.save()
+            main.messageLists.push messageList
+          main.save()
+          return  res.send main
+    reset: (req, res)->
+      id = req.session.userid
+      User.findOne id: id, (err, user)->
+        throw err if err
+        user.messageList = []
+        MessageList.find {}, (err, list)->
+          throw err if err
+          _.each list, (l)->
+            l.remove()
+        Message.find {}, (err, messages)->
+          throw err if err
+          _.each messages, (m)->
+            m.remove()
+        res.send 'ok'

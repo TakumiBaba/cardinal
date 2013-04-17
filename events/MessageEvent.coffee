@@ -1,33 +1,43 @@
 exports.MessageEvent = (app) ->
 
   Message = app.settings.models.Message
+  MessageList = app.settings.models.MessageList
   User = app.settings.models.User
 
   fetch: (req, res)->
     id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
-    User.findOne({id: id}).populate('messages').exec (err, user)->
+    User.findOne({id: id}).exec (err, user)->
       throw err if err
-      Message.find({_id: {$in: user.messages}}).populate('from', "profile name").exec (err, messages)->
+      MessageList.find({_id: {$in: user.messageLists}}).populate("messages").populate("one").populate("two").exec (err, list)->
         throw err if err
-        res.send messages
+        res.send list
 
   create: (req, res)->
-    from = req.params.from
-    to = req.params.to
+    userid = req.session.userid
+    candidateid = req.params.candidate_id
     text = req.body.text
-    if from? || to?
-      return false
-    User.find id: {$in: [from, to]}, (err, users)->
+    console.log userid, candidateid
+    User.find {id: {$in: [userid, candidateid]}}, (err, users)=>
       throw err if err
-      id = if users[0].facebook_id > users[1].facebook_id then "#{users[0].facebook_id}_#{users[1].facebook_id}" else "#{users[1].facebook_id}_#{users[0].facebook_id}"
-      from = _.find users, (user)->
-        return user.id is from
-      message = new Message()
-      message.id = id
-      message.from = from
-      message.text = text
-      message.save()
-      _.each users, (u)=>
-        u.messages.push message
-        u.save()
-      return res.send message
+      f = _.find users, (u)->
+        return u.id is userid
+      t = _.find users, (u)->
+        return u.id is candidateid
+      MessageList.findOne().where('one').in([f._id, t._id]).where('two').in([f._id, t._id]).exec (err, list)=>
+        throw err if err
+        console.log list
+        message = new Message()
+        message.text = text
+        message.from = f._id
+        message.from_name = f.name
+        message.save()
+        list.messages.push message
+        list.save()
+        return res.send message
+
+
+  comment:
+    fetch: (req, res)->
+      id = req.params.message_id
+      Message.find {id: id}, (err, message)->
+        throw err if err

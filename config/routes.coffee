@@ -22,6 +22,7 @@ module.exports = (app) ->
   app.get '/api/users/me/profile', User.profile.fetch
   app.post '/api/users/me/profile', User.profile.update
   app.get '/api/users/:user_id/followings.json', User.followings.fetch
+  app.get '/api/users/:user_id/followers.json', User.followers.fetch
   # app.get '/api/users/:user_id/follower.json', User.fetchFollower
 
   # TalkEvent
@@ -32,7 +33,7 @@ module.exports = (app) ->
 
   # MessageEvent
   app.get '/api/users/:user_id/messages.json', Message.fetch
-  app.post '/api/message', Message.create
+  app.post '/api/users/:user_id/:candidate_id/message', Message.create
 
   # LikeEvent
   app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更
@@ -41,9 +42,10 @@ module.exports = (app) ->
   # DebugEvent
   app.get '/debug/api/users', Debug.user.fetchAll
   app.get '/debug/api/setup', Debug.setup
-  app.get '/debug/api/message', Debug.message
-  app.get '/debug/api/talk/create', Debug.talk.create
+  app.get '/debug/api/talk/:user_id/create', Debug.talk.create
   app.get '/debug/api/talk/reset', Debug.talk.reset
+  app.get '/debug/api/message/create', Debug.message.create
+  app.get '/debug/api/message/reset', Debug.message.reset
 
 
   return SiteEvent.failure

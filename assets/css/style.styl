@@ -12,7 +12,8 @@ div#wrapper
 
 div#sidebar
   overflow: scroll
-  position: fixed
+  position: relative
+  float: left
   height: 100%
   width: 200px
   padding-top: 10px
@@ -67,8 +68,8 @@ div#sidebar
                 word-wrap: break-word
 
 div#main
-  position: absolute
-  left: 240px
+  position: relative
+  float: left
 
 //
 //  マッチングページ
@@ -99,7 +100,7 @@ div#matching_page
   div.box
     height: 500px
     width: 100%
-    div.sm_side
+    div.matching_side_div
       height: 100%
       width: 10%
       min-width: 100px
@@ -252,3 +253,207 @@ div.comments_box
     list-style: none
     li
       width: 100%
+
+
+div#message_page
+  div.user-list-column
+    float: left
+    width: 100px
+    height: 100%
+    min-height: 400px
+    ul.message-user-thumbnail
+      list-style: none
+      li
+        height: 100px
+        margin-right: 15px
+        margin-bottom: 10px
+        img
+          border: 3px solid white
+      li.active
+        img
+          border: 3px solid #ed4b7c
+
+  div#message-list-view
+    float: left
+    div.message-body
+      float: left
+      min-width: 300px
+      border: 1px solid #ccc
+      margin-bottom: 10px
+      ul
+        list-style: none
+        li
+          padding-top: 15px
+          margin-bottom: 15px
+          div.message_clm
+            clear: left
+            max-width: 400px
+            padding: 0px 10px 10px 10px
+            div.message_left
+              float: left
+              min-height: 100px
+              height: 100%
+              width: 32px
+              img.message_img
+                float: left
+                width: 32px
+                height: 32px
+                display: block
+            div.message_line
+              float: left
+              height: 100%
+              max-width: 300px
+              margin-left: 8px
+              font-size: 13px
+              color: #666
+              line-height: 120%
+    div.message-footer
+      clear: left
+      img
+        float: left
+        width: 32px
+        height: 32px
+        display: block
+        margin-right: 10px
+      div.reply_box
+        float: left:
+        width: 300px
+        textarea
+          width: 100%
+        button
+          float: right
+
+
+div.profile_and_following_view
+  h3.title_box
+    font-weight: normal
+    border-bottom: 1px solid #ddd
+    display: block
+    clear: left
+  width: 100%
+  ul
+    list-style: none
+    height: 100%
+    overflow: scroll
+    display: block
+    margin-left: 5px
+    li
+      margin-right: 15px
+      margin-bottom: 5px
+      img
+        border: 4px solid white
+        width: 65px
+        height: 65px
+      &:last-child
+        img
+
+    li.active
+      img
+        border: 4px solid #ed4b7c
+        // border: 4px solid #5987e7
+  div.box
+    height: 500px
+    width: 100%
+    div.sm_side
+      height: 100%
+      width: 10%
+      min-width: 100px
+      float: left
+    div.main_box
+      float: left
+      height: 100%
+      width: 100%
+      div.box_menu
+        float: left
+        img.profile_image
+          max-width: 100px
+          max-height: 100px
+          margin-right: 20px
+      div.detail_profile
+        float: left
+        width: 100%
+        height: 100%
+        margin-top: 20px
+        ul.supporter-menu
+          margin: 0px
+          overflow: inherit
+          display: block
+          li
+            margin: 0px 0px -1px 0px
+        div#detailprofile
+          div.follower_column
+            width: 20%
+            height: 100%
+            float: left
+            ul.follower-list
+              height: 400px
+              width: 100%
+              overflow: scroll
+              display: block
+              li
+                width: 100%
+            div.follower-column-body
+              width: 100%
+          div.profile-column
+            float: left
+            height: 400px
+            position: relative
+            // height: 100%
+            width: 70%
+            // プロフィール全体をスクロールできるようにする
+            table
+              width: 90%
+              display: block
+              overflow: scroll
+              td.key
+                background-color: #f0fff0
+        div#matchinglist
+          div.likebox
+            width: 100%
+            margin-bottom: 30px
+            ul
+              list-style: none
+              li
+                width: 150px
+                height: 220px
+                float: left
+                margin-top: 20px
+                div.thumbnail
+                  margin-right: 10px
+                  a
+                    display: block
+                    text-align: center
+                    img
+                      margin: 0 auto
+                      width: 110px
+                      height: 110px
+        div#likelist
+          div.likebox
+            width: 100%
+            margin-bottom: 30px
+            height: 200px
+            ul
+              list-style: none
+              li
+                width: 150px
+                height: 200px
+                float: left
+                margin-top: 20px
+                div.thumbnail
+                  margin-right: 10px
+                  a
+                    display: block
+                    text-align: center
+                    img
+                      margin: 0 auto
+                      width: 110px
+                      height: 110px
+
+  div.supporter_matching
+    height: 400px
+    float: left
+    div.sp_side
+      height: 100%
+      width: 100px
+      float: left
+      ul

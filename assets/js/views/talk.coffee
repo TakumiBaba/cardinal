@@ -47,7 +47,7 @@ class App.View.TalkUnit extends Backbone.View
     c = @model.get('candidate')
     u = @model.get('user')
     attributes =
-      source: u.profile.image_url
+      source: App.User.get('profile').image_url
       name: u.name
       candidate_name: c.name
       last_update: @model.get('updatedAt')
