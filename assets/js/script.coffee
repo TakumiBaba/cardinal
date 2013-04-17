@@ -42,7 +42,9 @@ class Router extends Backbone.Router
         profile = new App.View.ProfilePage()
         profile.render()
       # when 'me'
-      # when 'supporters'
+      when 'supporter'
+        supporter = new App.View.SupporterPage()
+        supporter.render()
       when "invite"
         FB.ui
           method: "apprequests"

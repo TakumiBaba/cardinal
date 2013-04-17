@@ -86,3 +86,23 @@ exports.UserEvent = (app) ->
           return res.send user.follower
         else
           return res.send []
+
+  pending:
+    fetch: (req, res)->
+      id = req.session.userid
+      User.findOne({id: id}).populate('pending').exec (err, user)->
+        throw err if err
+        if user
+          return res.send user.pending
+        else
+          return res.send []
+
+  request:
+    fetch: (req, res)->
+      id = req.session.userid
+      User.findOne({id: id}).populate('request').exec (err, user)->
+        throw err if err
+        if user
+          return res.send user.request
+        else
+          return res.send []

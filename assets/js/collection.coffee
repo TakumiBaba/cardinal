@@ -28,6 +28,20 @@ class App.Collection.Followers extends Backbone.Collection
     super
     @.url = "/api/users/#{attrs.userid}/followers.json"
 
+class App.Collection.Pending extends Backbone.Collection
+  model: App.Model.User
+
+  constructor: (attrs, options)->
+    super
+    @.url = "/api/users/#{attrs.userid}/pending.json"
+
+class App.Collection.Request extends Backbone.Collection
+  model: App.Model.User
+
+  constructor: (attrs, options)->
+    super
+    @.url = "/api/users/#{attrs.userid}/request.json"
+
 class App.Collection.Messages extends Backbone.Collection
   # model: App.Model.Message
 

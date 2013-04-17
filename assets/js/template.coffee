@@ -750,3 +750,43 @@ JST['candidate/page'] = _.template(
   </div>
   """
   )
+
+JST['supporter/page'] = _.template(
+  """
+  <div id="supporter_list_page">
+    <div id='following' class="thumbnail_box clearfix">
+      <h3>応援中の仲間</h3>
+      <ul class='user_list'>
+      </ul>
+    </div>
+    <div id='follower' class="thumbnail_box clearfix">
+      <h3>応援してくれている仲間</h3>
+      <ul class='user_list'>
+      </ul>
+    </div>
+    <div id='request' class="thumbnail_box clearfix">
+      <h3>応援申請</h3>
+      <ul class='user_list'>
+      </ul>
+    </div>
+    <div id='pending' class="thumbnail_box clearfix">
+      <h3>応援申請待ち</h3>
+      <ul class='user_list'>
+      </ul>
+    </div>
+  </div>
+  """
+)
+JST['supporter/li'] = _.template(
+  """
+  <li id="<%= id %>" >
+    <div class='thumbnail'>
+      <button class='close hide'>&times;</button>
+      <a href="/#/user/<%= id %>" class='to-user'>
+        <img src=<%= source %> />
+        <h5><%= name %></h5>
+      </a>
+    </div>
+  </li>
+  """
+  )

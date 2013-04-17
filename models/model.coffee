@@ -103,6 +103,12 @@ UserSchema = new Schema
   follower:
     type: [{type: ObjectId, ref: "User"}]
     default: []
+  pending:
+    type: [{type: ObjectId, ref: "User"}]
+    default: []
+  request:
+    type: [{type: ObjectId, ref: "User"}]
+    default: []
   profile_message:
     type: String
   talks:
