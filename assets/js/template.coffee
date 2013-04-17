@@ -348,7 +348,7 @@ JST['profile/page'] = _.template(
 JST['sidebar/following'] = _.template(
   """
   <li>
-    <a href="/#/u/<%= id %>" class='sidebar_following'>
+    <a href="/#/s/<%= id %>" class='sidebar_following'>
       <img src=<%= source %> />
       <div><p><%= name %>さん</p></div>
     </a>
@@ -380,7 +380,7 @@ JST['like/thumbnail'] = _.template(
   <li id="<%= id %>" >
     <div class='thumbnail'>
       <button class='close hide'>&times;</button>
-      <a href="/#/user/<%= id %>" class='to-user'>
+      <a href="/#/u/<%= id %>" class='to-user'>
         <img src=<%= source %> />
         <h5><%= name %></h5>
       </a>
@@ -403,7 +403,7 @@ JST['talk/unit'] = _.template(
   """
   <div class='com_box'>
     <div>
-      <img src="<%= source %>" class='com_img'/>
+      <img src="<%= another_source %>" class='com_img'/>
     </div>
     <div class='com_line'>
       <p><%= name %>さんから<%= candidate_name %>さんについて相談があります。</p>
@@ -574,7 +574,7 @@ JST['matching/follower'] = _.template(
   """
   );
 
-JST['userpage/page'] = _.template(
+JST['supporting/userpage/page'] = _.template(
   """
   <div id='user_page' class='profile_and_following_view'>
     <h3 class='title_box'>ユーザーページ</h2>
@@ -582,12 +582,10 @@ JST['userpage/page'] = _.template(
       <div class='user_profiles main_box'>
         <div class='box_menu'>
           <img class='profile_image pull-left' src='<%= image_source %>' />
-          <h4 class='name'><%= name %></h4>
+          <h4 class='name'><%= name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
           <div class='btn-group'>
-            <button class='like btn pink'>いいね！</button>
-            <button class='sendMessage btn btn-success'>メッセージを送る</button>
-            <button class='recommend btn btn-primary'>友達に勧める</button>
+            <button class='recommend btn btn-primary disabled'>友達に勧める</button>
           </div>
         </div>
         <div class='detail_profile pull-left'>
@@ -671,3 +669,84 @@ JST['userpage/matching-thumbnail'] = _.template(
   </li>
   """
 )
+
+JST['userpage/sys_matching/thumbnail'] = _.template(
+  """
+  <li id="<%= id %>" >
+    <div class='thumbnail'>
+      <button class='close hide'>&times;</button>
+      <a href="/#/user/<%= id %>" class='to-user'>
+        <img src=<%= source %> />
+        <h5><%= name %></h5>
+      </a>
+      <button class='like-action btn-block btn btn-primary l_d_<%= status %>'><%= text %></button>
+      <a class='to-talk'><span>応援トークをする</span></a></div>
+  </li>
+  """
+  )
+JST['userpage/sup_matching/thumbnail'] = _.template(
+  """
+  <li id="<%= id %>" >
+    <div class='thumbnail'>
+      <button class='close hide'>&times;</button>
+      <a href="/#/user/<%= id %>" class='to-user'>
+        <img src=<%= source %> />
+        <h5><%= name %></h5>
+      </a>
+      <a class='to-talk'><span>応援トークをする</span></a></div>
+  </li>
+  """
+  )
+JST['userpage/like/thumbnail'] = _.template(
+  """
+  <li id="<%= id %>" >
+    <div class='thumbnail'>
+      <button class='close hide'>&times;</button>
+      <a href="/#/user/<%= id %>" class='to-user'>
+        <img src=<%= source %> />
+        <h5><%= name %></h5>
+      </a>
+      <a class='to-talk'><span>応援トークをする</span></a></div>
+  </li>
+  """
+  )
+
+JST['candidate/page'] = _.template(
+  """
+  <div id='user_page' class='profile_and_following_view'>
+    <h3 class='title_box'>ユーザーページ</h2>
+    <div class='box'>
+      <div class='user_profiles main_box'>
+        <div class='box_menu'>
+          <img class='profile_image pull-left' src='<%= image_source %>' />
+          <h4 class='name'><%= name %>さん</h4>
+          <h5 class='simple_profile'><%= gender_birthday %></h5>
+          <div class='btn-group'>
+            <button class='like btn btn-primary disabled'>いいね！</button>
+              <button class='send-message btn btn-primary disabled'>メッセージを送る</button>
+            <button class='recommend btn btn-primary disabled'>友達に勧める</button>
+          </div>
+        </div>
+        <div class='detail_profile pull-left'>
+          <div id="detailprofile">
+            <div class='profile_column pull-left'>
+              <h5>プロフィール詳細</h5>
+              <table class='table'>
+                <tbody>
+                <% html = App.JST['userpage/detailProfile'](profile) %>
+                <%= html %>
+                </tbody>
+              </table>
+            </div>
+            <div class='follower_column'>
+              <h5>応援団一覧</h5>
+              <ul class='follower-list pull-left'>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  """
+  )

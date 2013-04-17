@@ -14,6 +14,7 @@ class Router extends Backbone.Router
     "": "mypageAction"
     ":action": "mypageAction"
     "u/:id": "userpageAction"
+    "s/:id": "supporterpageAction"
 
   mypageAction: (action)->
     if action is undefined
@@ -42,15 +43,24 @@ class Router extends Backbone.Router
         profile.render()
       # when 'me'
       # when 'supporters'
-      # when 'invite'
+      when "invite"
+        FB.ui
+          method: "apprequests"
+          message: "応援に参加してください！"
+          data: App.User.get('id')
 
 
 
-  userpageAction: (id)->
-    console.log id
+  supporterpageAction: (id)->
+    $("div#main").empty()
     user = new App.View.UserPage
       id: id
     user.model.fetch()
+
+  userpageAction: (id)->
+    $("div#main").empty()
+    candidate = new App.View.CandidatePage
+      id: id
 
 window.fbAsyncInit = ->
   FB.init

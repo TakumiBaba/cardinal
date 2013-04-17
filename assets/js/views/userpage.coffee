@@ -4,6 +4,9 @@ JST = App.JST
 class App.View.UserPage extends Backbone.View
   el: "div#main"
 
+  events:
+    "click ul.supporter-menu li": "changeTab"
+
   constructor: (attrs, options)->
     super
     $(@.el).empty()
@@ -13,17 +16,6 @@ class App.View.UserPage extends Backbone.View
 
     _.bindAll @, "render"
     @model.bind 'change', @render
-
-    profileView = new App.View.UserPageProfile
-      model: @model
-    matchinglistView = new App.View.UserPageMatchingList
-      id: id
-    likelistView = new App.View.UserPageLikeList
-      id: id
-    matchinglistView = new App.View.UserPageMatchingList
-      id: id
-    supportertalkView = new App.View.UserPageSupporterTalk
-      id: id
 
   render: (model)->
     console.log model
@@ -36,9 +28,34 @@ class App.View.UserPage extends Backbone.View
       gender_birthday: "#{gender} #{user.get('profile').age}歳　#{b.getFullYear()}年#{b.getMonth()-1}月#{b.getDay()}日生まれ"
       follower: user.get('follower')
       profile: user.get('profile')
-    html = JST['userpage/page'](options)
+    html = JST['supporting/userpage/page'](options)
     $(@.el).empty()
     $(@.el).html html
+
+    profileView = new App.View.UserPageProfile
+      id: @model.id
+
+  changeTab: (e)->
+    tab = $(e.currentTarget).find('a').attr 'href'
+    console.log tab
+    if tab is "#detailprofile"
+      $("div#detailprofile").empty()
+      profileView = new App.View.UserPageProfile
+        id: @model.id
+    else if tab is "#matchinglist"
+      $("div#matchinglist").find('ul.userpage-like-thumbnail').each ()->
+        $(@).empty()
+      matchinglistView = new App.View.UserPageMatchingList
+        id: @model.id
+    else if tab is "#likelist"
+      $("div#likelist").find('ul.like-thumbnail').each ()->
+        $(@).empty()
+      likelistView = new App.View.UserPageLikeList
+        id: @model.id
+    else if tab is "#supportertalk"
+      $("div#supportertalk").find('ul').empty()
+      supportertalkView = new App.View.UserPageSupporterTalk
+        id: @model.id
 
 class App.View.UserPageProfile extends Backbone.View
   el: "div#detailprofile"
@@ -46,7 +63,12 @@ class App.View.UserPageProfile extends Backbone.View
   constructor: (attrs, options)->
     super
     _.bindAll @, "render", "appendFollower"
-    @.model.bind 'change', @.render
+
+    @model = new App.Model.User
+      id: attrs.id
+    @model.bind 'change', @.render
+
+    @model.fetch()
 
     @.followers = new App.Collection.Followers
       userid: @model.id
@@ -80,8 +102,13 @@ class App.View.UserPageProfile extends Backbone.View
 class App.View.UserPageMatchingList extends Backbone.View
   el: "div#matchinglist"
 
+  events:
+    "click button.like-action": "recommend"
+    "click a.to-talk": "talk"
+
   constructor: (attrs, option)->
     super
+    @targetId = attrs.id
     @.collection = new App.Collection.PreCandidates
       userid: attrs.id
       status: "0"
@@ -93,28 +120,62 @@ class App.View.UserPageMatchingList extends Backbone.View
     @.collection.fetch()
 
   appendItem: (model)->
+    console.log model.get('user').name
     if model.get('isSystemMatching')
       ul = $("div.system ul")
+      text = "オススメする"
+      render = JST['userpage/sys_matching/thumbnail']
     else
       ul = $("div.supporter ul")
+      text = ""
+      render = JST['userpage/sup_matching/thumbnail']
     attributes =
       id: model.get('user').id
       source: model.get('user').profile.image_url
-      text: "いいね！"
+      text: text
       status: model.get('status')
       name: model.get('user').name
-    li = JST['like/thumbnail'](attributes)
+    li = render(attributes)
     ul.append li
 
   appendAllItem: (collection)->
+    console.log collection.models.length
     _.each collection.models, @.appendItem
+
+  recommend: (e)->
+    id = $(e.currentTarget).parent().parent().attr 'id'
+    $.ajax
+      type: "POST"
+      url: "/api/users/#{@targetId}/candidates/#{id}.json"
+      data:
+        status: 0
+        promotion: true
+      success: (data)->
+        console.log data
+
+  talk: (e)->
+    id = $(e.currentTarget).parent().parent().attr 'id'
+    console.log id
+    $.ajax
+      type: "POST"
+      url: "/api/talks.json"
+      data:
+        one: @targetId
+        two: id
+      success:(data)->
+        console.log data
+        window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
 
 class App.View.UserPageLikeList extends Backbone.View
   el: "div#likelist"
 
+  events:
+    "click a.to-talk": "talk"
+
   constructor: (attrs, options)->
     super
 
+    @.targetId = attrs.id
     @.collection = new App.Collection.PreCandidates
       userid: attrs.id
       status: "1,2,3"
@@ -142,12 +203,25 @@ class App.View.UserPageLikeList extends Backbone.View
       source: user.profile.image_url
       name: user.name
       status: status
-      text: "イイね！"
-    li = JST['like/thumbnail'](attributes)
+      text: ""
+    li = JST['userpage/like/thumbnail'](attributes)
     ul.append li
 
   appendAllItem: (collection)->
     _.each collection.models, @.appendItem
+
+  talk: (e)->
+    id = $(e.currentTarget).parent().parent().attr 'id'
+    console.log id
+    $.ajax
+      type: "POST"
+      url: "/api/talks.json"
+      data:
+        one: @targetId
+        two: id
+      success:(data)->
+        console.log data
+        window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
 
 class App.View.UserPageSupporterTalk extends Backbone.View
   el: "div#supportertalk"
@@ -171,4 +245,5 @@ class App.View.UserPageSupporterTalk extends Backbone.View
     $("div#supportertalk ul.talk_list").append talk.el
 
   appendAllItem: (collection)->
+    $(@.el).find('ul.talk_list').empty()
     _.each collection.models, @.appendItem

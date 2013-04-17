@@ -37,7 +37,7 @@ module.exports = (app) ->
 
   # LikeEvent
   app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更
-  app.post '/api/users/me/candidates/:candidate_id.json', Like.update
+  app.post '/api/users/:user_id/candidates/:candidate_id.json', Like.update
 
   # DebugEvent
   app.get '/debug/api/users', Debug.user.fetchAll

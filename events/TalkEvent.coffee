@@ -11,24 +11,39 @@ exports.TalkEvent = (app) ->
       console.log user.talks
       Talk.find({_id: {$in: user.talks}}).populate('candidate').populate('user').exec (err, talks)->
         return res.send talks
-    # Talk.findOne id: id, (err, talk)->
-    #   throw err if err
-    #   if talk
-    #     return res.send talk
-    #   else
-    #     return res.send 'talk is not'
 
   create: (req, res)->
-    one = req.body.one
-    two = req.body.two
-
-    Talk.findOne id: {$in: [one, two]}, (err, talk)->
+    one = if req.body.one is 'me' then req.session.userid else req.body.one
+    two = if req.body.two is 'me' then req.session.userid else req.body.two
+    User.find id: {$in: [one, two]}, (err, users)=>
       throw err if err
-      unless talk
-        talk = new Talk()
-        talk.save()
+      console.log users
+      o = ""
+      t = ""
+      console.log 'hoge', o
+      _.each users, (user)=>
+        o = user if user.id is one
+        t = user if user.id is two
+      Talk.findOne({}).where("candidate").in([o._id, t._id]).where("user").in([o._id, t._id]).exec (err, talk)=>
+        throw err if err
+        unless talk
+          talk = new Talk()
+          talk.user = o._id
+          talk.candidate = t._id
+          talk.save()
+          o.talks.push talk
+          o.save()
+          console.log 'new'
+        console.log 'old'
         return res.send talk
-      return res.send talk
+
+    # Talk.findOne id: {$in: [one, two]}, (err, talk)->
+    #   throw err if err
+    #   unless talk
+    #     talk = new Talk()
+    #     talk.save()
+    #     return res.send talk
+    #   return res.send talk
 
   comment:
     create: (req, res)->

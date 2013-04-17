@@ -14,33 +14,24 @@ exports.LikeEvent = (app) ->
         list = _.filter candidates, (c)=>
           return _.contains status, c.status.toString()
         return res.send list
-      # candidatesId = _.pluck user.candidates, "user"
-      # list = _.filter user.candidates, (c)=>
-      #   return _.contains status, c.status.toString()
-      # console.log list
-      # return res.send list
 
   update: (req, res)->
     newStatus = req.body.status
     candidateId = req.params.candidate_id
-    id = req.session.userid
-    User.findOne({id: id}).exec (err, user)->
+    id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
+    promotion = req.body.promotion
+    console.log promotion
+    User.findOne({id: id}).exec (err, user)=>
       throw err if err
-      Candidate.find({_id: {$in: user.candidates}}).populate("user").exec (err, candidates)->
+      Candidate.find({_id: {$in: user.candidates}}).populate("user").exec (err, candidates)=>
         throw err if err
         candidate = _.find candidates, (c)->
           return c.user.id is candidateId
         candidate.status = newStatus
+        if promotion is "true"
+          candidate.isSystemMatching = false
         candidate.save()
         return res.send candidate
-      # _.each user.candidates, (c, i)=>
-      #   if c.user.id is candidateId
-      #     user.candidates[i].status = newStatus
-      #     user.updatedAt = Date.now()
-      #     user.save (err)->
-      #       throw err if err
-      #       console.log @
-      #     return res.send user.candidates[i]
 
 
 

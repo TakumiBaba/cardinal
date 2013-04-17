@@ -149,8 +149,7 @@ TalkSchema = new Schema
     default: Date.now
   comments:
     type: [type: ObjectId, ref: "Comment"]
-    # type: [CommentSchema]
-    # default: []
+    default: []
   candidate:
     type: ObjectId
     ref: "User"
