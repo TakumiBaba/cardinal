@@ -4,8 +4,12 @@ JST = App.JST
 class App.View.CandidatePage extends Backbone.View
   el: "div#main"
 
+  events:
+    "click button.like": "doLike"
+
   constructor: (attrs, options)->
     super
+    $(@.el).children().remove()
     @.model = new App.Model.User
       id: attrs.id
 
@@ -40,3 +44,13 @@ class App.View.CandidatePage extends Backbone.View
       li = JST['matching/follower'](attributes)
       $(@.el).find('ul.follower-list').append li
       console.log model
+
+  doLike: (e)->
+    console.log e
+    # $.ajax
+    #   type: "POST"
+    #   url: "/api/users/me/candidates/#{@model.get('id')}.json"
+    #   data:
+    #     status: "up"
+    #   success:(data)->
+    #     console.log data

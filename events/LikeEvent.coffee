@@ -27,7 +27,14 @@ exports.LikeEvent = (app) ->
         throw err if err
         candidate = _.find candidates, (c)->
           return c.user.id is candidateId
-        candidate.status = newStatus
+        if newStatus is 'up'
+          console.log 'up!'
+          if candidate.status is 1
+            candidate.status = 3
+          else
+            candidate.status = 1
+        else
+          candidate.status = newStatus
         if promotion is "true"
           candidate.isSystemMatching = false
         candidate.save()

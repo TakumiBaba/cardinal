@@ -722,8 +722,8 @@ JST['candidate/page'] = _.template(
           <h4 class='name'><%= name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
           <div class='btn-group'>
-            <button class='like btn btn-primary disabled'>いいね！</button>
-              <button class='send-message btn btn-primary disabled'>メッセージを送る</button>
+            <button class='like btn btn-primary'>いいね！</button>
+              <button class='send-message btn btn-success'>メッセージを送る</button>
             <button class='recommend btn btn-primary disabled'>友達に勧める</button>
           </div>
         </div>

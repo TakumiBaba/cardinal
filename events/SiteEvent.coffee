@@ -1,8 +1,10 @@
 exports.SiteEvent = (app) ->
 
   User = app.settings.models.User
+  Candidate = app.settings.models.Candidate
   helper = app.settings.helper
   Crypto = require 'crypto'
+  DebugEvent = app.settings.events.DebugEvent
 
 
   index: (req, res)->
@@ -18,6 +20,29 @@ exports.SiteEvent = (app) ->
       if user
         console.log 'user is exist'
         req.session.userid = user.id
+        exclusion = user.candidates
+        User.find({}).nin(exclusion).exec (err, users)->
+          throw err if err
+          shuffled = _.shuffle users
+          _.each [0..40], (i)=>
+            if user.candidates.length < 30
+              status = 0
+              if i < 20
+                status = _.random(1,2)
+              else if 20 < i < 22
+                status = 3
+              else
+                status = 0
+              candidate = new Candidate
+                user: shuffled[i]._id
+                status: status
+                isSystemMatching: true
+              candidate.save()
+              user.candidates.push candidate._id
+            else if 30 < i < 40
+              user.following.push shuffled[i]._id if user.following.length < 10
+              user.follower.push shuffled[i]._id if user.follower.length < 10
+            user.save()
         return res.send user.id
       else
         console.log 'create user'
@@ -33,6 +58,28 @@ exports.SiteEvent = (app) ->
         user.profile.image_url = "https://graph.facebook.com/#{params.id}/picture?type=large"
         user.save()
         req.session.userid = user.id
+        User.find({}).exec (err, users)->
+          throw err if err
+          shuffled = _.shuffle users
+          _.each [0..40], (i)=>
+            if user.candidates.length < 30
+              status = 0
+              if i < 20
+                status = _.random(1,2)
+              else if 20 < i < 22
+                status = 3
+              else
+                status = 0
+              candidate = new Candidate
+                user: shuffled[i]._id
+                status: status
+                isSystemMatching: true
+              candidate.save()
+              user.candidates.push candidate._id
+            else if 30 < i < 40
+              user.following.push shuffled[i]._id if user.following.length < 10
+              user.follower.push shuffled[i]._id if user.follower.length < 10
+            user.save()
         return res.send user.id
 
   failure: (req, res) ->

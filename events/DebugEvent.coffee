@@ -42,22 +42,22 @@ exports.DebugEvent = (app) ->
             u.following.push shuffled[i]._id if u.following.length < 10
             u.follower.push shuffled[i]._id if u.follower.length < 10
             u.save()
-        _.each u.candidates, (mm, i)=>
-          Candidate.findOne({_id: mm}).populate('user', "id").exec (err, candidate)=>
-            throw err if err
-            _.each [0..20], (i)=>
-              if i%2 is 0
-                from = candidate.user.id
-                to = u.id
-              else
-                to = candidate.user.id
-                from = u.id
-              req.params =
-                from: from
-                to:   to
-              req.body =
-                text: "hoge#{_.random(0, 100)}fuga"
-              MessageEvent.create req, res
+        # _.each u.candidates, (mm, i)=>
+        #   Candidate.findOne({_id: mm}).populate('user', "id").exec (err, candidate)=>
+        #     throw err if err
+        #     _.each [0..20], (i)=>
+        #       if i%2 is 0
+        #         from = candidate.user.id
+        #         to = u.id
+        #       else
+        #         to = candidate.user.id
+        #         from = u.id
+        #       req.params =
+        #         from: from
+        #         to:   to
+        #       req.body =
+        #         text: "hoge#{_.random(0, 100)}fuga"
+        #       MessageEvent.create req, res
         # _.each u.candidates, (mm, i)=>
         #   User.findOne _id: mm.user, (err, temp)=>
         #     throw err if err
