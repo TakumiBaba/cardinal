@@ -22,20 +22,15 @@ class Router extends Backbone.Router
     switch action
       # when 'index'
       when 'matching'
-        console.log action
         matching = new App.View.MatchingPage()
         matching.render()
-
       when 'message'
-        console.log action
         message = new App.View.MessagePage()
         message.render()
       when 'like'
-        console.log action
         like = new App.View.LikePage()
         like.render()
       when 'talk'
-        console.log action
         talk = new App.View.TalkPage()
         talk.render()
       when 'profile'
@@ -50,8 +45,9 @@ class Router extends Backbone.Router
           method: "apprequests"
           message: "応援に参加してください！"
           data: App.User.get('id')
-
-
+      when "signup"
+        signup = new App.View.SignupPage()
+        signup.render()
 
   supporterpageAction: (id)->
     $("div#main").empty()
@@ -86,6 +82,7 @@ window.fbAsyncInit = ->
               id: id
             sidebar = new App.View.Sidebar
               model: App.User
+
             App.User.fetch()
 
             router = new Router()

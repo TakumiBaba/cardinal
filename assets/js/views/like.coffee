@@ -8,6 +8,7 @@ class App.View.LikePage extends Backbone.View
     "click button.l_d_1": "cancelLike"
     "click button.l_d_2": "doLike"
     "click button.l_d_3": "sendMessage"
+    "click a.to-talk": "talk"
 
   constructor: ->
     super
@@ -61,6 +62,7 @@ class App.View.LikePage extends Backbone.View
     model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}.json"
     model.set("status", 0)
     model.save()
+    $($(e.currentTarget).parent().parent()).remove()
   doLike: (e)->
     target = $($(e.currentTarget).parents()[1]).attr 'id'
     model = _.find @.collection.models, (model)->
@@ -68,9 +70,33 @@ class App.View.LikePage extends Backbone.View
     model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}.json"
     model.set("status", 3)
     model.save()
+    li = $($(e.currentTarget).parent().parent()).clone()
+    @appendItem model
+    # $("div.each-like ul").append li
+    $($(e.currentTarget).parent().parent()).remove()
   sendMessage: (e)->
     console.log 'send message'
     target = $($(e.currentTarget).parents()[1]).attr 'id'
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
     console.log model
+    $.ajax
+      type: "POST"
+      url: "/api/users/me/#{target}/message"
+      success: (data)->
+        if data
+          location.href = "/#/message"
+
+
+  talk: (e)->
+    id = $($(e.currentTarget).parent().parent()).attr 'id'
+    console.log id
+    $.ajax
+      type: "POST"
+      url: "/api/talks.json"
+      data:
+        one: "me"
+        two: id
+      success:(data)->
+        if data
+          location.href = "/#/talk"

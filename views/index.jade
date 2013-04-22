@@ -19,6 +19,7 @@ html
     !=js('views/userpage')
     !=js('views/candidatepage')
     !=js('views/supporterpage')
+    !=js('views/signup')
     !=js('model')
     !=js('collection')
     !=js('template')
@@ -26,32 +27,4 @@ html
   body
     div#wrapper
       div#sidebar.pull-left.span3
-        a(href='/#/')
-          img.logo(src='/image/logo.png')
-        div#welcome_box.clearfix
-          a.pull-left: img.user_profile_image(src="http://placehold.jp/40x40.png")
-          div
-            a.user_name(href="/#/me")
-            a(href="/#/profile")  プロフィールを編集する
-        a.pull-right.usage(href='/#/usage'): small 使い方
-        div#navigation.clearfix
-          ul.nav.nav-list
-            li.nav-header メニュー
-            //- - if (isSupporter == false)
-            li.like: a(href='/#/like') いいねリスト
-            li.talk: a(href='/#/talk') 応援トーク
-            li.message: a(href='/#/message') メッセージ
-            li.test: a(href="/#/invite") 応援団を増やす
-            li.supporter: a(href='/#/supporter') あなたの婚活仲間
-            //- - if (isSupporter == true)
-              li.signup: a(href='/#/signup') 婚活を始める
-            li.nav-header あなたが応援している人
-            li: ul.nav.nav-list.following
-        div#sidebar-bottom.pull-left
-          ul.breadcrumb
-            li: a() 利用規約
-            li.divider /
-            li: a() プライバシーポリシー
-            li.divider /
-            li: a() 運営チーム
       div#main.pull-left.span10

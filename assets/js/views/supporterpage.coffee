@@ -4,41 +4,52 @@ JST = App.JST
 class App.View.SupporterPage extends Backbone.View
   el: "div#main"
 
+  events:
+    "click button.following": "removeFollowing"
+
   constructor: ->
     super
     $(@.el).empty()
 
+    _.bindAll @, "appendFollowings", "appendFollowers", "appendPending", "appendRequest"
+
     @followings = new App.Collection.Followings
-      userid: "me"
-    @followers  = new App.Collection.Followers
       userid: "me"
     @pending    = new App.Collection.Pending
       userid: "me"
-    @request    = new App.Collection.Request
-      userid: "me"
-
-    _.bindAll @, "appendFollowings", "appendFollowers", "appendPending", "appendRequest"
     @followings.bind 'reset', @.appendFollowings
-    @followers.bind 'reset', @.appendFollowers
     @pending.bind 'reset', @.appendPending
-    @request.bind 'reset', @.appendReuqest
+    if App.User.get('isSupporter') is false
+      @followers  = new App.Collection.Followers
+        userid: "me"
+      @request    = new App.Collection.Request
+        userid: "me"
+      @followers.bind 'reset', @.appendFollowers
+      @request.bind 'reset', @.appendReuqest
 
   render: ->
-    html = JST['supporter/page']()
+    console.log App.User.get('isSupporter')
+    if App.User.get('isSupporter') is false
+      html = JST['supporter/page']()
+    else
+      html = JST['supporter/supporter-page']()
     $(@.el).html html
 
     @followings.fetch()
-    @followers.fetch()
     @pending.fetch()
-    @request.fetch()
+    if App.User.get('isSupporter') is false
+      @followers.fetch()
+      @request.fetch()
 
   appendFollowings: (collection)->
     if collection.models.length > 0
       _.each collection.models, (model)=>
+        console.log model
         attributes =
           id: model.get('id')
-          source: model.get('profile').image_url
+          source: "/api/users/#{model.get('id')}/picture"
           name: model.get('name')
+          approval: model.get('approval')
         li = JST['supporter/li'](attributes)
         $(@.el).find('div#following ul').append li
 
@@ -75,3 +86,12 @@ class App.View.SupporterPage extends Backbone.View
           name: model.get('name')
         li = JST['supporter/li'](attributes)
         $(@.el).find('div#request ul').append li
+
+  removeFollowing: (e)->
+    id = $(e.currentTarget).parent().parent().attr 'id'
+    $.ajax
+      type: "DELETE"
+      url: "/api/users/me/following/#{id}"
+      success:(data)=>
+        $($(e.currentTarget).parent().parent()).remove()
+        console.log data

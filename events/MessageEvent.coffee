@@ -13,7 +13,7 @@ exports.MessageEvent = (app) ->
         res.send list
 
   create: (req, res)->
-    userid = req.session.userid
+    userid = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
     candidateid = req.params.candidate_id
     text = req.body.text
     console.log userid, candidateid
@@ -26,14 +26,25 @@ exports.MessageEvent = (app) ->
       MessageList.findOne().where('one').in([f._id, t._id]).where('two').in([f._id, t._id]).exec (err, list)=>
         throw err if err
         console.log list
-        message = new Message()
-        message.text = text
-        message.from = f._id
-        message.from_name = f.name
-        message.save()
-        list.messages.push message
-        list.save()
-        return res.send message
+        if !list
+          messageList = new MessageList()
+          messageList.one = f._id
+          messageList.two = t._id
+          f.messageLists.push messageList
+          t.messageLists.push messageList
+          messageList.save ()=>
+            f.save()
+            t.save()
+            return res.send messageList
+        else
+          message = new Message()
+          message.text = text
+          message.from = f._id
+          message.from_name = f.name
+          message.save()
+          list.messages.push message
+          list.save()
+          return res.send message
 
 
   comment:

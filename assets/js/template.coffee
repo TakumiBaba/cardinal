@@ -272,7 +272,7 @@ JST['profile/page'] = _.template(
           <label for="shape" class="control-label">体型</label>
           <div class="controls">
             <select name="shape" id="shape">
-            <% options = ["---","スリム","細め","ふつう","ぽっちゃり","グラマー","ガッチリ","太め"] %>
+            <% options = ["---","スリム","ふつう","ぽっちゃり","グラマー","ガッチリ","太め"] %>
             <% _.each(options, function(item, i){
                 if(shape == i){
                   var option = "<option selected value="+i+">"+item+"</option>"
@@ -544,7 +544,7 @@ JST['userpage/detailProfile'] = _.template(
     <td class='key'>学歴</td><td><%= educationArray[education] %></td>
     <td class='key'>血液型</td><td><%= bloodTypeArray[bloodType] %></td>
   </tr>
-  <% shapeArray = ["---","スリム","細め","ふつう","ぽっちゃり","グラマー","ガッチリ","太め"] %>
+  <% shapeArray = ["---","スリム","ふつう","ぽっちゃり","グラマー","ガッチリ","太め"] %>
   <tr>
     <td class='key'>年収</td><td><%= height %>cm</td>
     <td class='key'>体型</td><td><%= shapeArray[shape] %></td>
@@ -769,8 +769,19 @@ JST['supporter/page'] = _.template(
       <ul class='user_list'>
       </ul>
     </div>
-    <div id='pending' class="thumbnail_box clearfix">
+    <!--<div id='pending' class="thumbnail_box clearfix">
       <h3>応援申請待ち</h3>
+      <ul class='user_list'>
+      </ul>
+    </div> -->
+  </div>
+  """
+)
+JST['supporter/supporter-page'] = _.template(
+  """
+  <div id="supporter_list_page">
+    <div id='following' class="thumbnail_box clearfix">
+      <h3>応援中の仲間</h3>
       <ul class='user_list'>
       </ul>
     </div>
@@ -782,11 +793,272 @@ JST['supporter/li'] = _.template(
   <li id="<%= id %>" >
     <div class='thumbnail'>
       <button class='close hide'>&times;</button>
-      <a href="/#/user/<%= id %>" class='to-user'>
+      <a href="/#/s/<%= id %>" class='to-user'>
         <img src=<%= source %> />
         <h5><%= name %></h5>
       </a>
+      <button class='btn btn-block following'>削除する</button>
     </div>
   </li>
+  """
+  )
+
+JST['signup/page'] = _.template(
+  """
+  <div class="signup_page">
+    <h3 class='title_box'>婚活者登録</h3>
+    <div class="info box-inner container">
+      <form action="/api/signup" method="POST" class="form-horizontal">
+        <div class="control-group">
+          <label for="name" class="control-label">名前
+          </label>
+          <div class="controls">
+            <input type="text" name="name" id="name" required value="<%= fullName %>"/>
+            <div class="control-group">
+            </div>
+          </div>
+          <label for="gender" class="control-label">性別
+          </label>
+          <div class="controls">
+            <label class="radio inline">
+              <input type="radio" name="gender" id="gender_male" value="male" <% if(gender == 'male'){%><%= "checked"%><%} %>/>男
+            </label>
+            <label class="radio inline">
+              <input type="radio" name="gender" id="gender_female" value="female" <% if(gender == 'female'){%><%= "checked"%><%} %> />女
+            </label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="birthday" class="control-label">生年月日
+          </label>
+          <div class="controls">
+            <select name="birthday_year" id="birthday_year" class="span2">
+              <option>1954</option>
+              <option>1955</option>
+              <option>1956</option>
+              <option>1957</option>
+              <option>1958</option>
+              <option>1959</option>
+              <option>1960</option>
+              <option>1961</option>
+              <option>1962</option>
+              <option>1963</option>
+              <option>1964</option>
+              <option>1965</option>
+              <option>1966</option>
+              <option>1967</option>
+              <option>1968</option>
+              <option>1969</option>
+              <option>1970</option>
+              <option>1971</option>
+              <option>1972</option>
+              <option>1973</option>
+              <option>1974</option>
+              <option>1975</option>
+              <option>1976</option>
+              <option>1977</option>
+              <option>1978</option>
+              <option>1979</option>
+              <option>1980</option>
+              <option>1981</option>
+              <option>1982</option>
+              <option>1983</option>
+              <option>1984</option>
+              <option>1985</option>
+              <option>1986</option>
+              <option>1987</option>
+              <option>1988</option>
+              <option>1989</option>
+              <option selected>1990</option>
+              <option>1991</option>
+              <option>1992</option>
+            </select>年
+            <select name="birthday_month" id="birthday_month" class="span1">
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+            </select>月
+            <select name="birthday_day" id="birthday_day" class="span1">
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+              <option>21</option>
+              <option>22</option>
+              <option>23</option>
+              <option>24</option>
+              <option>25</option>
+              <option>26</option>
+              <option>27</option>
+              <option>28</option>
+              <option>29</option>
+              <option>30</option>
+              <option>31</option>
+            </select>日
+          </div>
+        </div>
+        <div class='control-group'>
+          <div class='controls'>
+            <label class='checkbox'>
+              <input type="checkbox" class='required_checkbox' required>22歳以上ですか?
+            </label>
+            <label class='checkbox'>
+              <input type="checkbox" class='required_checkbox' required>あなたは独身ですか?
+            </label>
+          </div>
+        </div>
+        <input type="hidden" name="id" id="id" value="<%= facebook_id %>" />
+        <input type="hidden" name="username" id="username" value="<%= username %>" />
+        <input type="hidden" name="first_name" id="first_name" value="<%= firstName %>" />
+        <input type="hidden" name="last_name" id="last_name" value="<%= lastName %>" />
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-primary register">登録する
+            </button>
+            <button type="button" class="btn cancel">キャンセル
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal hide fade">
+    <div class="modal-header">
+      <h3 id="myModalLabel">規約に同意してください
+      </h3>
+    </div>
+    <div class="modal-body">
+      <div class="control-group">
+        <label class="checkbox">
+          <input type="checkbox" value="" id="is-married"/>
+          <p>結婚していません
+          </p>
+        </label>
+      </div>
+      <div class="control-group">
+        <label class="checkbox">
+          <input type="checkbox" value="" id="use-policy"/>
+          <p>利用規約に同意する
+          </p>
+        </label>
+      </div>
+      <div class="control-group">
+        <label class="checkbox">
+          <input type="checkbox" value="" id="over-age"/>
+          <p>22歳以上です
+          </p>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="agreement" class="btn btn-primary">同意する
+      </button>
+      <button id="disagreement" class="btn">同意しない
+      </button>
+    </div>
+  </div>
+  """
+  )
+
+JST['sidebar/main'] = _.template(
+  """
+  <a href="/#/">
+    <img class='logo' src='/image/logo.png' />
+  </a>
+  <div id="welcome_box" class="clearfix">
+    <a class='pull-left'>
+      <img class='user_profile_image' src="<%= source %>" />
+    </a>
+    <div>
+      <a class='user_name' href="/#/me"><%= name %></a>
+      <a href="/#/profile">プロフィールを編集する</a>
+    </div>
+  </div>
+  <a class='pull-right usage' href="/#/usage"><small>使い方</small></a>
+  <div id="navigation" class="clearfix">
+    <ul class="nav nav-list">
+      <li class="nav-header">メニュー</li>
+      <li class="like"><a href='/#/like'> いいねリスト</a></li>
+      <li class="talk"><a href='/#/talk'> 応援トーク</a></li>
+      <li class="message"><a href='/#/message'> メッセージ</a></li>
+      <li class="test"><a href="/#/invite"> 応援団を増やす</a></li>
+      <li class="supporter"><a href='/#/supporter'> あなたの婚活仲間</a></li>
+      <li class="nav-header">あなたが応援している人</li>
+      <li>
+        <ul class='nav nav-list following'></ul>
+      </li>
+    </ul>
+  </div>
+  <div id="sidebar-bottom" class='pull-left'>
+    <ul class='breadcrumb'>
+      <li><a>利用規約</a></li>
+      <li class="divider">/</li>
+      <li><a>プライバシーポリシー</a></li>
+      <li class="divider">/</li>
+      <li><a>運営チーム</a></li>
+    </ul>
+  </div>
+  """
+  )
+JST['sidebar/supporter'] = _.template(
+  """
+  <a href="/#/">
+    <img class='logo' src='/image/logo.png' />
+  </a>
+  <div id="welcome_box" class="clearfix">
+    <a class='pull-left'>
+      <img class='user_profile_image' src="<%= source %>" />
+    </a>
+    <div>
+      <a class='user_name' href="/#/me"><%= name %></a>
+      <a href="/#/profile">プロフィールを編集する</a>
+    </div>
+  </div>
+  <a class='pull-right usage' href="/#/usage"><small>使い方</small></a>
+  <div id="navigation" class="clearfix">
+    <ul class="nav nav-list">
+      <li class="nav-header">メニュー</li>
+      <li class="supporter"><a href='/#/supporter'>あなたの婚活仲間</a></li>
+        <li class="signup"><a href='/#/signup'>婚活を始める</a></li>
+      <li class="nav-header">あなたが応援している人</li>
+      <li>
+        <ul class='nav nav-list following'></ul>
+      </li>
+    </ul>
+  </div>
+  <div id="sidebar-bottom" class='pull-left'>
+    <ul class='breadcrumb'>
+      <li><a>利用規約</a></li>
+      <li class="divider">/</li>
+      <li><a>プライバシーポリシー</a></li>
+      <li class="divider">/</li>
+      <li><a>運営チーム</a></li>
+    </ul>
+  </div>
   """
   )

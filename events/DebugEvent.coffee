@@ -6,6 +6,7 @@ exports.DebugEvent = (app) ->
   MessageList = app.settings.models.MessageList
   Talk = app.settings.models.Talk
   Comment = app.settings.models.Comment
+  Follow = app.settings.models.Follow
   MessageEvent = app.settings.events.MessageEvent app
   TalkEvent = app.settings.events.TalkEvent app
 
@@ -13,6 +14,12 @@ exports.DebugEvent = (app) ->
     fetchAll: (req, res)->
       User.find({}).exec (err, users)->
         throw err if err
+        res.send users
+    deleteAll: (req, res)->
+      User.find({}).exec (err, users)->
+        throw err if err
+        _.each users, (u)=>
+          u.remove()
         res.send users
 
   setup: (req, res)->
@@ -173,3 +180,55 @@ exports.DebugEvent = (app) ->
           _.each messages, (m)->
             m.remove()
         res.send 'ok'
+
+
+  followings:
+    fetch: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      User.findOne({id: id}).populate("following", "id name profile").exec (err, user)->
+        throw err if err
+        if user
+          res.send user.following
+        else
+          res.send []
+    create: (req, res)->
+      id = req.session.userid
+      followingId = req.params.followingId
+      User.find({id: {$in: [id, followingId]}}).exec (err, users)->
+        throw err if err
+        if users
+          me = _.filter users, (u)=>
+            return u.id is id
+          following = _.filter users, (u)=>
+            return u.id is followingId
+          if _.contains me.following, following
+            res.send 'already added'
+          else
+            following = new Follow()
+            following.approval = false
+            following.user = following._id
+            console.log following
+            console.log me.following
+            me.following.push following
+            me.save (err)->
+              throw err if err
+              res.send "add"
+    delete: (req, res)->
+      console.log 'hoge'
+      id = req.session.userid
+      deleteId = req.params.deleteId
+      console.log id, deleteId
+      User.find({id: {$in: [id, deleteId]}}).populate('following').exec (err, users)=>
+        throw err if err
+        if users
+          me = _.find users, (u)=>
+            return u.id is id
+          target = _.find users, (u)=>
+            return u.id is deleteId
+          _.each me.following, (follow, i)=>
+            if follow.id is target.id
+              me.following[i] = null
+          console.log me
+          me.save (err)->
+            throw err if err
+            res.send @

@@ -23,11 +23,16 @@ module.exports = (app) ->
   app.post '/api/users/me/profile', User.profile.update
   app.get '/api/users/:user_id/followings.json', User.followings.fetch
   app.get '/api/users/:user_id/followers.json', User.followers.fetch
+  app.get '/api/users/:user_id/pending.json', User.pending.fetch
+  app.get '/api/users/:user_id/request.json', User.request.fetch
+  # app.post '/api/users/:user_id/followings', User.followings.create
+  app.delete '/api/users/:user_id/following/:deleteId', User.followings.delete
+  app.post '/api/signup', User.signup
   # app.get '/api/users/:user_id/follower.json', User.fetchFollower
 
   # TalkEvent
   app.get '/api/users/:user_id/talks.json', Talk.fetch
-  app.post '/api/talks.json', Talk.create
+  app.post '/api/users/:user_id/talks/:candidate_id', Talk.create
   app.post '/api/talks/:talk_id/comment', Talk.comment.create
   app.get '/api/talks/:talk_id/comments.json', Talk.comment.fetch
 
@@ -41,11 +46,12 @@ module.exports = (app) ->
 
   # DebugEvent
   app.get '/debug/api/users', Debug.user.fetchAll
+  app.get '/debug/api/users/delete', Debug.user.deleteAll
   app.get '/debug/api/setup', Debug.setup
   app.get '/debug/api/talk/:user_id/create', Debug.talk.create
   app.get '/debug/api/talk/reset', Debug.talk.reset
   app.get '/debug/api/message/create', Debug.message.create
   app.get '/debug/api/message/reset', Debug.message.reset
-
+  app.get '/debug/api/users/me/following/:followingId', Debug.followings.create
 
   return SiteEvent.failure

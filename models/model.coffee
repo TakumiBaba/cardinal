@@ -98,8 +98,10 @@ UserSchema = new Schema
     type: [{type: ObjectId, ref: "Candidate"}]
     default: []
   following:
-    type: [{type: ObjectId, ref: "User"}]
-    default: []
+    type: [{type: ObjectId, ref: "Follow"}]
+  # following:
+  #   type: [FollowSchema]
+  #   default: []
   follower:
     type: [{type: ObjectId, ref: "User"}]
     default: []
@@ -116,6 +118,7 @@ UserSchema = new Schema
     default: []
   isSupporter:
     type: Boolean
+    default: true
   isFirstLogin:
     type: Boolean
     default: true
@@ -129,6 +132,18 @@ UserSchema = new Schema
     type: Date
   news:
     type: [NewsSchema]
+
+FollowSchema = new Schema
+  # user:
+  #   type: ObjectId
+  #   ref: "User"
+  name:
+    type: String
+  id:
+    type: String
+  approval:
+    type: Boolean
+    default: false
 
 CandidateSchema = new Schema
   user:
@@ -239,3 +254,5 @@ module.exports =
   MessageSchema: MessageSchema
   MessageList: mongoose.model 'MessageList', MessageListSchema
   MessageListSchema: MessageListSchema
+  Follow: mongoose.model 'Follow', FollowSchema
+  FollowSchema: FollowSchema

@@ -1,4 +1,5 @@
 App = window.App
+JST = App.JST
 
 class App.View.Sidebar extends Backbone.View
   el: "div#sidebar"
@@ -13,18 +14,25 @@ class App.View.Sidebar extends Backbone.View
     @.followings.bind 'add', @.appendFollowings
     @.followings.bind 'reset', @.appendAllFollowings
 
+  render: (model)=>
+    isSupporter = model.get('isSupporter')
+    if isSupporter is false
+      attributes =
+        name: model.get('firstName')
+        source: model.get('profile').image_url
+      html = JST['sidebar/main'](attributes)
+    else
+      attributes =
+        name: model.get('firstName')
+        source: model.get('profile').image_url
+      html = JST['sidebar/supporter'](attributes)
+    $(@.el).html html
     @.followings.fetch()
-
-  render: (model)->
-    user_profile_image = $(@.el).find('img.user_profile_image')
-    name = $(@.el).find('a.user_name')
-    user_profile_image.attr 'src', model.get('profile').image_url
-    name.html "#{model.get('firstName')}さん"
 
   appendFollowings: (model)->
     attributes =
       id: model.get('id')
-      source: model.get('profile').image_url
+      source: "/api/users/#{model.get('id')}/picture"
       name: model.get('name')
     li = App.JST['sidebar/following'](attributes)
     $(@.el).find('ul.following').append li
@@ -38,7 +46,6 @@ class App.View.ProfilePage extends Backbone.View
     "keydown input#like": "addLikeList"
     "click button.cancel": "cancel"
     "click button.save": "update"
-
 
   constructor: (attrs, options)->
     super

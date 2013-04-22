@@ -98,7 +98,16 @@ class App.View.MatchingListView extends Backbone.View
     @targetModel.urlRoot = "/api/users/me/candidates/#{@targetModel.get('user').id}.json"
     @targetModel.set "status", 1
     @targetModel.save()
+
   sendMessage: (e)->
     console.log e
+    console.log @targetModel.get('user').id
+    $.ajax
+      type: "POST"
+      url: "/api/users/me/#{@targetModel.get('user').id}/message"
+      success:(data)->
+        if data
+          location.href = "/#/message"
+
   recommend: (e)->
     console.log e
