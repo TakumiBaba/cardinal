@@ -25,14 +25,14 @@ module.exports = (app) ->
   app.get '/api/users/:user_id/followers.json', User.followers.fetch
   app.get '/api/users/:user_id/pending.json', User.pending.fetch
   app.get '/api/users/:user_id/request.json', User.request.fetch
-  # app.post '/api/users/:user_id/followings', User.followings.create
+  app.post '/api/users/me/following/:follow_id', User.followings.create
   app.delete '/api/users/:user_id/following/:deleteId', User.followings.delete
   app.post '/api/signup', User.signup
   # app.get '/api/users/:user_id/follower.json', User.fetchFollower
 
   # TalkEvent
   app.get '/api/users/:user_id/talks.json', Talk.fetch
-  app.post '/api/users/:user_id/talks/:candidate_id', Talk.create
+  app.post '/api/talks.json', Talk.create
   app.post '/api/talks/:talk_id/comment', Talk.comment.create
   app.get '/api/talks/:talk_id/comments.json', Talk.comment.fetch
 

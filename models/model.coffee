@@ -99,12 +99,8 @@ UserSchema = new Schema
     default: []
   following:
     type: [{type: ObjectId, ref: "Follow"}]
-  # following:
-  #   type: [FollowSchema]
-  #   default: []
   follower:
-    type: [{type: ObjectId, ref: "User"}]
-    default: []
+    type: [{type: ObjectId, ref: "Follow"}]
   pending:
     type: [{type: ObjectId, ref: "User"}]
     default: []

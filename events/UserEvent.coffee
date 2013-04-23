@@ -85,14 +85,30 @@ exports.UserEvent = (app) ->
           res.send []
     create: (req, res)->
       id = req.session.userid
-      followingId = req.body.followingId
-      User.find({id: {$in: [id, followingId]}}).populate('folloing').exec (err, users)->
+      followingId = req.params.following_facebook_id
+      User.findOne({id: id}).populate('following').exec (err, me)->
         throw err if err
+        User.findOne({facebook_id: followingId}).exec (err, folowing)->
+          throw err if err
+          unless following
+            user = new User()
+            sha1_hash = Crypto.createHash 'sha1'
+            sha1_hash.update followingId
+            user.id = sha1_hash.digest 'hex'
+            user.facebook_id = followingId
+            user.name = ""
+            user.first_name = ""
+            user.last_name = ""
+            user.profile.gender = ""
+            user.isSuppoter = true
+            user.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
+            user.save()
         if users
           me = _.filter users, (u)=>
             return u.id is id
           following = _.filter users, (u)=>
             return u.id is followingId
+          # if following && following.id is followingId
           if _.contains me.following, following
             res.send 'already added'
           else

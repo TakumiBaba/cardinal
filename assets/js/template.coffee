@@ -995,7 +995,7 @@ JST['sidebar/main'] = _.template(
       <img class='user_profile_image' src="<%= source %>" />
     </a>
     <div>
-      <a class='user_name' href="/#/me"><%= name %></a>
+      <a class='user_name' href="/#/me"><%= name %>さん</a>
       <a href="/#/profile">プロフィールを編集する</a>
     </div>
   </div>
@@ -1035,7 +1035,7 @@ JST['sidebar/supporter'] = _.template(
       <img class='user_profile_image' src="<%= source %>" />
     </a>
     <div>
-      <a class='user_name' href="/#/me"><%= name %></a>
+      <a class='user_name' href="/#/me"><%= name %>さん</a>
       <a href="/#/profile">プロフィールを編集する</a>
     </div>
   </div>

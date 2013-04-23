@@ -27,7 +27,6 @@ exports.SiteEvent = (app) ->
         User.find({}).where("id").nin(exclusion).where("profile.gender").ne(user.profile.gender).exec (err, users)->
           throw err if err
           shuffled = _.shuffle users
-          console.log 'hogefuga'
           state_zero = _.filter user.candidates, (c)=>
             return c.state is 0
           console.log state_zero

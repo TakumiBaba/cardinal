@@ -6,6 +6,7 @@ class App.View.CandidatePage extends Backbone.View
 
   events:
     "click button.like": "doLike"
+    "click button.sendMessage": "sendMessage"
 
   constructor: (attrs, options)->
     super
@@ -47,10 +48,19 @@ class App.View.CandidatePage extends Backbone.View
 
   doLike: (e)->
     console.log e
-    # $.ajax
-    #   type: "POST"
-    #   url: "/api/users/me/candidates/#{@model.get('id')}.json"
-    #   data:
-    #     status: "up"
-    #   success:(data)->
-    #     console.log data
+    $.ajax
+      type: "POST"
+      url: "/api/users/me/candidates/#{@model.get('id')}.json"
+      data:
+        status: "up"
+      success:(data)->
+        console.log data
+
+  sendMessage: (e)->
+    console.log @model.get('id')
+    $.ajax
+      type: "POST"
+      url: "/api/users/me/#{@model.get('id')}/message"
+      success:(data)->
+        if data
+          location.href = "/#/message"

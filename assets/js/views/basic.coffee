@@ -18,12 +18,12 @@ class App.View.Sidebar extends Backbone.View
     isSupporter = model.get('isSupporter')
     if isSupporter is false
       attributes =
-        name: model.get('firstName')
+        name: model.get('first_name')
         source: model.get('profile').image_url
       html = JST['sidebar/main'](attributes)
     else
       attributes =
-        name: model.get('firstName')
+        name: model.get('first_name')
         source: model.get('profile').image_url
       html = JST['sidebar/supporter'](attributes)
     $(@.el).html html

@@ -17,37 +17,41 @@ class Router extends Backbone.Router
     "s/:id": "supporterpageAction"
 
   mypageAction: (action)->
+    if @now
+      @now.undelegateEvents()
     if action is undefined
       action = 'matching'
     switch action
       # when 'index'
       when 'matching'
-        matching = new App.View.MatchingPage()
-        matching.render()
+        @now = new App.View.MatchingPage()
+        @now.render()
       when 'message'
-        message = new App.View.MessagePage()
-        message.render()
+        @now = new App.View.MessagePage()
+        @now.render()
       when 'like'
-        like = new App.View.LikePage()
-        like.render()
+        @now = new App.View.LikePage()
+        @now.render()
       when 'talk'
-        talk = new App.View.TalkPage()
-        talk.render()
+        @now = new App.View.TalkPage()
+        @now.render()
       when 'profile'
-        profile = new App.View.ProfilePage()
-        profile.render()
+        @now = new App.View.ProfilePage()
+        @now.render()
       # when 'me'
       when 'supporter'
-        supporter = new App.View.SupporterPage()
-        supporter.render()
+        @now = new App.View.SupporterPage()
+        @now.render()
       when "invite"
         FB.ui
           method: "apprequests"
           message: "応援に参加してください！"
           data: App.User.get('id')
+        , (res)->
+          console.log res
       when "signup"
-        signup = new App.View.SignupPage()
-        signup.render()
+        @now = new App.View.SignupPage()
+        @now.render()
 
   supporterpageAction: (id)->
     $("div#main").empty()

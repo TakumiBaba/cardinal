@@ -35,26 +35,34 @@ class App.View.UserPage extends Backbone.View
     profileView = new App.View.UserPageProfile
       id: @model.id
 
-  changeTab: (e)->
+  changeTab: (e)=>
     tab = $(e.currentTarget).find('a').attr 'href'
     console.log tab
     if tab is "#detailprofile"
+      if @profileView
+        @profileView.undelegateEvents()
       $("div#detailprofile").empty()
-      profileView = new App.View.UserPageProfile
+      @profileView = new App.View.UserPageProfile
         id: @model.id
     else if tab is "#matchinglist"
+      if @matchinglistView
+        @matchinglistView.undelegateEvents()
       $("div#matchinglist").find('ul.userpage-like-thumbnail').each ()->
         $(@).empty()
-      matchinglistView = new App.View.UserPageMatchingList
+      @matchinglistView = new App.View.UserPageMatchingList
         id: @model.id
     else if tab is "#likelist"
+      if @likelistView
+        @likelistView.undelegateEvents()
       $("div#likelist").find('ul.like-thumbnail').each ()->
         $(@).empty()
-      likelistView = new App.View.UserPageLikeList
+      @likelistView = new App.View.UserPageLikeList
         id: @model.id
     else if tab is "#supportertalk"
+      if @supportertalkView
+        @supportertalkView.undelegateEvents()
       $("div#supportertalk").find('ul').empty()
-      supportertalkView = new App.View.UserPageSupporterTalk
+      @supportertalkView = new App.View.UserPageSupporterTalk
         id: @model.id
 
 class App.View.UserPageProfile extends Backbone.View
@@ -219,9 +227,11 @@ class App.View.UserPageLikeList extends Backbone.View
       data:
         one: @targetId
         two: id
-      success:(data)->
+      success:(data)=>
         console.log data
         window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
+        location.href = "/#/s/#{@targetId}"
+
 
 class App.View.UserPageSupporterTalk extends Backbone.View
   el: "div#supportertalk"
