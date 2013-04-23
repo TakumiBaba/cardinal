@@ -90,7 +90,7 @@ class App.View.LikePage extends Backbone.View
     console.log model
     $.ajax
       type: "POST"
-      url: "/api/users/me/#{target}/message"
+      url: App.BaseUrl+"/api/users/me/#{target}/message"
       success: (data)->
         if data
           location.href = "/#/message"
@@ -101,7 +101,7 @@ class App.View.LikePage extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: "/api/talks.json"
+      url: App.BaseUrl+"/api/talks.json"
       data:
         one: "me"
         two: id

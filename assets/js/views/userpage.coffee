@@ -155,7 +155,7 @@ class App.View.UserPageMatchingList extends Backbone.View
     id = $(e.currentTarget).parent().parent().attr 'id'
     $.ajax
       type: "POST"
-      url: "/api/users/#{@targetId}/candidates/#{id}.json"
+      url: App.BaseUrl+"/api/users/#{@targetId}/candidates/#{id}.json"
       data:
         status: 0
         promotion: true
@@ -167,7 +167,7 @@ class App.View.UserPageMatchingList extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: "/api/talks.json"
+      url: App.BaseUrl+"/api/talks.json"
       data:
         one: @targetId
         two: id
@@ -224,7 +224,7 @@ class App.View.UserPageLikeList extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: "/api/talks.json"
+      url: App.BaseUrl+"/api/talks.json"
       data:
         one: @targetId
         two: id
