@@ -3,6 +3,7 @@ exports.SiteEvent = (app) ->
   User = app.settings.models.User
   Candidate = app.settings.models.Candidate
   Follow = app.settings.models.Follow
+  Status = app.settings.models.Status
   helper = app.settings.helper
   Crypto = require 'crypto'
   DebugEvent = app.settings.events.DebugEvent
@@ -18,49 +19,65 @@ exports.SiteEvent = (app) ->
     # User.findOne({facebook_id: id}).populate("candidates").exec (err, user)=>
     User.findOne({facebook_id: id}).exec (err, user)=>
       throw err if err
+      console.log user
       if user && !user.isFirstLogin
         console.log 'user is exist'
         req.session.userid = user.id
+        return res.send user.id if user.isSupporter
         exclusion = []
-        _.each user.candidates, (c)=>
-          exclusion.push c.id
-        # User.find({}).where("id").nin(exclusion).where("profile.gender").ne(user.profile.gender).exec (err, users)->
-          # throw err if err
-          # shuffled = _.shuffle users
-          # state_zero = _.filter user.candidates, (c)=>
-          #   return c.state is 0
-          # console.log state_zero
-          # _.each [state_zero.length..10], (i)=>
-          #   candidate = new Candidate
-          #     user: shuffled[i]._id
-          #     status: 0
-          #     isSystemMatching: true
-          #   candidate.save()
-          #   user.candidates.push candidate._id
-            # else if 30 < i < 40
-            #   if user.following.length < 15
-            #     following = new Follow
-            #       approval: false
-            #       name: shuffled[i].name
-            #       id: shuffled[i].id
-            #     following.save()
-            #     user.following.push following
-              # if user.following.length < 15
+        Status.find({ids: {$in: [user.id]}}).exec (err, statuses)=>
+          throw err if err
+          if statuses.length > 0
+            _.each statuses, (status)=>
+              console.log status
+              id = if status.ids[0] is user.id then status.ids[1] else status.ids[0]
+              exclusion.push id
+          stateZero = _.filter statuses, (status)=>
+            return (status.one_status is false) and (status.two_status is false)
+          console.log "StateZero is #{stateZero.length}"
+          num = stateZero.length
+          if num < 20
+            User.find({}).exec (err, users)->
+              throw err if err
+              users = _.shuffle users
+              _.each [num..20], (i)=>
+                console.log i
+                status = new Status()
+                status.one = user._id
+                status.two = users[i]._id
+                status.ids = [user.id, users[i].id]
+                status.save()
+                user.statuses.push status
+                users[i].statuses.push status
+                user.save()
+                users[i].save()
 
-              #   user.following.push
-              #     approval: false
-              #     user: shuffled[i]._id
-            #   following = new Follow()
-            #   following.approval = false
-            #   following.user = shuffled[i]._id
-            #   user.following.push following
-            #   # user.following.push shuffled[i]._id if user.following.length < 10
-            #   # user.follower.push shuffled[i]._id if user.follower.length < 10
-            # user.save()
+        #   User.find({}).where('id').nin(exclusion).where("profile.gender").ne(user.profile.gender).exec (err, users)=>
+        #     throw err if err
+        #     shuffled = _.shuffle users
+        #     stateZero = _.filter user.statuses, (status)=>
+        #       return status.one_status is false and status.two_status is false
+        #     return res.send user.id if stateZero.length > 10
+        #     maxNum = 20-stateZero.length
+        #     console.log maxNum
+        #     _.each [0..maxNum], (i)=>
+        #       console.log user._id, shuffled[i]._id
+        #       status = new Status()
+        #       status.one = user._id
+        #       status.two = shuffled[i]._id
+        #       status.ids = [user.id, shuffled[i].id]
+
+        #       user.statuses.push status
+        #       shuffled[i].statuses.push status
+        #       console.log status
+        #       shuffled[i].save()
+        #       status.save()
+        #     user.save()
         return res.send user.id
       else
         console.log 'create user'
-        if user.isFirstLogin
+        console.log user
+        if user is null || user.isFirstLogin is false
           user = new User()
         sha1_hash = Crypto.createHash 'sha1'
         sha1_hash.update params.id
@@ -74,38 +91,6 @@ exports.SiteEvent = (app) ->
         user.profile.image_url = "https://graph.facebook.com/#{params.id}/picture?type=large"
         user.save()
         req.session.userid = user.id
-        # User.find({}).exec (err, users)->
-        #   throw err if err
-        #   shuffled = _.shuffle users
-        #   _.each [0..40], (i)=>
-        #     if user.candidates.length < 30
-        #       status = 0
-        #       if i < 20
-        #         status = _.random(1,2)
-        #       else if 20 < i < 22
-        #         status = 3
-        #       else
-        #         status = 0
-        #       candidate = new Candidate
-        #         user: shuffled[i]._id
-        #         status: status
-        #         isSystemMatching: true
-        #       candidate.save()
-        #       user.candidates.push candidate._id
-            # else if 30 < i < 40
-              # following = new Follow()
-            #   following = {}
-            #   following.approval = false
-            #   following.user = shuffled[i]._id
-            #   user.following.push following
-              # following.approval = false
-              # following.user = shuffled[i]._id
-              # following.save (err)=>
-              #   user.following.push following
-              #   user.save()
-            #   user.following.push shuffled[i]._id if user.following.length < 10
-            #   user.follower.push shuffled[i]._id if user.follower.length < 10
-            # user.save()
         return res.send user.id
 
   failure: (req, res) ->

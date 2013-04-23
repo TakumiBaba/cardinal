@@ -49,7 +49,13 @@ class Router extends Backbone.Router
           message: "応援に参加してください！"
           data: App.User.get('id')
         , (res)->
-          console.log res
+          _.each res.to, (fbid)->
+            $.ajax
+              type: "POST"
+              url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+              success: (data)->
+                console.log data
+          # console.log res
       when "signup"
         @now = new App.View.SignupPage()
         @now.render()
@@ -88,9 +94,14 @@ window.fbAsyncInit = ->
             sidebar = new App.View.Sidebar
               model: App.User
 
-            App.User.fetch()
+            @start = ()->
+              Backbone.history.start()
+            _.bindAll @, "start"
+            App.User.bind 'change', @start
 
             router = new Router()
-            Backbone.history.start()
+            App.User.fetch()
+
+
     else
       FB.login()

@@ -57,9 +57,7 @@ exports.LikeEvent = (app) ->
                 status: status.one_status
                 myStatus: status.two_status
                 isSystemMatching: status.one_isSystemMatching
-            console.log query
             if _.contains query, "0"
-
               if json.status is false && json.myStatus is false
                 list.push json
             if _.contains query, "1"
@@ -71,7 +69,6 @@ exports.LikeEvent = (app) ->
             if _.contains query, "3"
               if json.status is true && json.myStatus is true
                 list.push json
-          console.log list
           return res.send list
 
     update: (req, res)->
@@ -79,7 +76,8 @@ exports.LikeEvent = (app) ->
       twoId = if req.params.twoId is 'me' then req.session.userid else req.params.twoId
       nextStatus = req.body.nextStatus || req.params.status
       console.log 'update!!'
-      User.find({id: {$in:[oneId, twoId]}}).populate('candidate').exec (err, users)->
+      console.log oneId, twoId
+      User.find({id: {$in:[oneId, twoId]}}).exec (err, users)->
         throw err if err
         one = {}
         two = {}
@@ -88,8 +86,9 @@ exports.LikeEvent = (app) ->
             one = u
           else
             two = u
-        Status.findOne({ids: {$all:[one.id, two.id]}}).populate("one", "id name").populate("two", "id name").exec (err, status)=>
+        Status.findOne({ids: {$all:[one.id, two.id]}}).populate('one', "id name profile").populate("two", "id name profile").exec (err, status)=>
           throw err if err
+          console.log status
           if status.one.id is one.id
             if nextStatus is "up"
               status.one_status = true
@@ -110,7 +109,7 @@ exports.LikeEvent = (app) ->
   create: (req, res)->
     oneId = if req.params.oneId is 'me' then req.session.userid else req.params.oneId
     twoId = if req.params.twoId is 'me' then req.session.userid else req.params.twoId
-    User.find({id: {$in:[oneId, twoId]}}).populate('candidate').exec (err, users)->
+    User.find({id: {$in:[oneId, twoId]}}).exec (err, users)->
       throw err if err
       one = {}
       two = {}
@@ -119,7 +118,7 @@ exports.LikeEvent = (app) ->
           one = u
         else
           two = u
-      Status.findOne({ids: {$all:[one.id, two.id]}}).exec (err, status)=>
+      Status.findOne({ids: {$all:[one.id, two.id]}}).exec (err, status)->
         throw err if err
         unless status
           status = new Status

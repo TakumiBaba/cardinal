@@ -69,6 +69,88 @@ exports.UserEvent = (app) ->
         else
           return res.send 'no data'
 
+  follow:
+    following:
+      fetch: (req, res)->
+        id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+        User.findOne({id: id}).exec (err, user)->
+          throw err if err
+          Follow.find({_id: {$in:user.following}}).populate('following', "id name profile").populate('follower', "id name profile").exec (err, follows)->
+            throw err if err
+            return res.send follows
+    follower:
+      fetch: (req, res)->
+        id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+        User.findOne({id: id}).exec (err, user)->
+          throw err if err
+          Follow.find({_id: {$in:user.follower}}).populate('follower', "id name profile").populate('follower', "id name profile").exec (err, follows)->
+            throw err if err
+            return res.send follows
+    update: (req, res)->
+      oneId = if req.params.oneId is "me" then req.session.userid else req.params.oneId
+      twoId = if req.params.twoId is "me" then req.session.userid else req.params.twoId
+      console.log oneId, twoId
+      Follow.findOne({ids: {$all: [oneId, twoId]}}).exec (err, follow)->
+        throw err if err
+        console.log follow
+        follow.approval = true
+        follow.save (err)->
+          throw err if err
+          return res.send follow
+
+    create: (req, res)->
+      followingId = req.params.following
+      followerId = req.params.follower
+      console.log followingId, followerId
+      User.find({facebook_id: {$in: [followingId, followerId]}}).exec (err, users)->
+        throw err if err
+        following = _.find users, (u)=>
+          return u.facebook_id is followingId
+        follower = _.find users, (u)=>
+          return u.facebook_id is followerId
+        unless following
+          following = new User()
+          sha1_hash = Crypto.createHash 'sha1'
+          sha1_hash.update followingId
+          following.id = sha1_hash.digest 'hex'
+          following.facebook_id = followingId
+          following.name = ""
+          following.first_name = ""
+          following.last_name = ""
+          following.profile.gender = ""
+          following.isSuppoter = true
+          following.isFirstLogin = true
+          following.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
+        unless follower
+          follower = new User()
+          sha1_hash = Crypto.createHash 'sha1'
+          sha1_hash.update followerId
+          follower.id = sha1_hash.digest 'hex'
+          follower.facebook_id = followerId
+          follower.name = ""
+          follower.first_name = ""
+          follower.last_name = ""
+          follower.profile.gender = ""
+          follower.isSuppoter = true
+          follower.isFirstLogin = true
+          follower.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
+        Follow.findOne({ids: {$all: [following.id, follower.id]}}).exec (err, follow)=>
+          throw err if err
+          unless follow
+            follow = new Follow()
+          follow.following = follower._id
+          follow.follower = following._id
+          follow.ids = [following.id, follower.id]
+          follow.save()
+          following.following.push follow
+          follower.follower.push follow
+          following.save()
+          follower.save()
+          return res.json
+            follow:follow
+            following:following
+            follower:follower
+
   followings:
     fetch: (req, res)->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
@@ -102,22 +184,23 @@ exports.UserEvent = (app) ->
             following.isSuppoter = true
             following.isFirstLogin = true
             following.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
-            following.save()
           f = _.find me.following, (f)=>
             return f.id is following.id
-          if !f
-            f = new Follow
-              name: following.name
-              id: following.id
-              approval: false
-            f.save (err)=>
-              me.following.push f
-              me.save (err)=>
-                following.request.push f
-                following.save()
-                return res.send f
-          else
-            return res.send f
+          following.save (err)=>
+            throw err if err
+            if !f
+              f = new Follow
+                name: following.name
+                id: following.id
+                approval: false
+              f.save (err)=>
+                me.following.push f
+                me.save (err)=>
+                  following.request.push f
+                  following.save()
+                  return res.send f
+            else
+              return res.send f
     update: (req, res)->
       id = req.session.userid
       # followingId

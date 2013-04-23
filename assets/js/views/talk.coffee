@@ -105,7 +105,7 @@ class App.View.Comments extends Backbone.View
     minutes = if d.getMinutes() < 10 then "0#{d.getMinutes()}" else d.getHours()
     created_at = "#{d.getMonth()+1}月#{d.getDate()}日 #{hours}:#{minutes}"
     attributes =
-      source: "/api/users/#{model.get('user')}/picture"
+      source: "/api/users/#{model.get('user').id}/picture"
       message: model.get('text')
       created_at: created_at
     html = JST['talk/comment'](attributes)

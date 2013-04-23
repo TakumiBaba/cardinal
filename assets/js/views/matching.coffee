@@ -63,6 +63,7 @@ class App.View.MatchingListView extends Backbone.View
     $(e.currentTarget).addClass 'active'
     _.each @collection.models, (model)=>
       if model.get('user').id is id
+        console.log id
         @targetModel = model
         @setDetail model
     @recommendButton = new App.View.FollowDropDownMenu
@@ -97,15 +98,15 @@ class App.View.MatchingListView extends Backbone.View
       html = JST['matching/follower'](options)
       $(@.el).find('ul.follower-list').append html
 
-  doLike: (e)->
-    console.log @targetModel
+  doLike: (e)=>
+    console.log @targetModel.get('user').id
     $.ajax
       type: "POST"
       url: "/api/users/me/candidates/#{@targetModel.get('user').id}"
       data:
         nextStatus: "up"
       success: (data)->
-        location.href = "/#/like"
+        # location.href = "/#/like"
         console.log data
 
   sendMessage: (e)->

@@ -22,7 +22,15 @@ exports.DebugEvent = (app) ->
         throw err if err
         _.each users, (u)=>
           u.remove()
-        res.send users
+      Status.find({}).exec (err, statuses)->
+        throw err if err
+        _.each statuses, (s)=>
+          s.remove()
+      Follow.find({}).exec (err, follows)->
+        throw err if err
+        _.each follows, (f)=>
+          f.remove()
+      res.send 'delete'
 
   setup: (req, res)->
     User.find {}, (err, users)->

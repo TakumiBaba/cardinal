@@ -19,14 +19,14 @@ class App.Collection.Followings extends Backbone.Collection
 
   constructor: (attrs, options)->
     super
-    @.url = "/api/users/#{attrs.userid}/followings.json"
+    @.url = "/api/users/#{attrs.userid}/followings"
 
 class App.Collection.Followers extends Backbone.Collection
   model: App.Model.User
 
   constructor: (attrs, options)->
     super
-    @.url = "/api/users/#{attrs.userid}/followers.json"
+    @.url = "/api/users/#{attrs.userid}/followers"
 
 class App.Collection.Pending extends Backbone.Collection
   model: App.Model.User

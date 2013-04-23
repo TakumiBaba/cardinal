@@ -795,6 +795,11 @@ JST['supporter/supporter-page'] = _.template(
       <ul class='user_list'>
       </ul>
     </div>
+    <div id='request' class='thumbnail_box clearfix'>
+      <h3>応援申請</h3>
+      <ul class='user_list'>
+      </ul>
+    </div>
   </div>
   """
 )
@@ -808,6 +813,22 @@ JST['supporter/li'] = _.template(
         <h5><%= name %></h5>
       </a>
       <button class='btn btn-block following'>削除する</button>
+    </div>
+  </li>
+  """
+  )
+
+JST['supporter/request-li'] = _.template(
+  """
+  <li id='<%= id %>' >
+    <div class='thumbnail'>
+      <button class='close hide'>&times;</button>
+      <a href='/#/s/<%= id %>' class='to-user'>
+        <img src=<%= source %> />
+        <h5><%= name %></h5>
+      </a>
+      <button class='btn btn-block request'>応援する</button>
+      <button class='btn btn-danger btn-block delete'>削除する</button>
     </div>
   </li>
   """

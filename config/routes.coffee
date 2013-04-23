@@ -21,9 +21,12 @@ module.exports = (app) ->
   app.put '/api/users/me', User.update
   app.get '/api/users/me/profile', User.profile.fetch
   app.post '/api/users/me/profile', User.profile.update
-  app.get '/api/users/:user_id/followings.json', User.followings.fetch
-  app.get '/api/users/:user_id/followings/:facebook_id', User.followings.create
-  app.get '/api/users/:user_id/followers.json', User.followers.fetch
+  app.get '/api/users/:user_id/followings', User.follow.following.fetch
+  app.get '/api/users/:user_id/followers', User.follow.follower.fetch
+  app.put '/api/users/:oneId/follow/:twoId', User.follow.update
+  app.post '/api/users/:following/follow/:follower', User.follow.create
+  app.get '/api/users/:following/follow/:follower', User.follow.create #
+
   app.get '/api/users/:user_id/pending.json', User.pending.fetch
   app.get '/api/users/:user_id/request.json', User.request.fetch
   app.post '/api/users/me/following/:follow_id', User.followings.create

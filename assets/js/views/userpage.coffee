@@ -99,6 +99,7 @@ class App.View.UserPageProfile extends Backbone.View
 
   appendFollower: (collection)->
     ul = $("ul.follower-list")
+    console.log collection
     _.each collection.models, (model)=>
       attributes =
         facebook_url: "https://facebook.com/#{model.get('facebook_id')}"

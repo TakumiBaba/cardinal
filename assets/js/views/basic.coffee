@@ -30,14 +30,17 @@ class App.View.Sidebar extends Backbone.View
     @.followings.fetch()
 
   appendFollowings: (model)->
-    attributes =
-      id: model.get('id')
-      source: "/api/users/#{model.get('id')}/picture"
-      name: model.get('name')
-    li = App.JST['sidebar/following'](attributes)
-    $(@.el).find('ul.following').append li
+    if model.get 'approval'
+      f = model.get('following')
+      attributes =
+        id: f.id
+        source: "/api/users/#{f.id}/picture"
+        name: f.name
+      li = App.JST['sidebar/following'](attributes)
+      $(@.el).find('ul.following').append li
 
   appendAllFollowings: (collection)->
+    console.log collection
     _.each collection.models, @.appendFollowings
 
 class App.View.ProfilePage extends Backbone.View
@@ -131,14 +134,15 @@ class App.View.FollowDropDownMenu extends Backbone.View
     @collection.fetch()
 
   appendItem: (model)->
-    console.log model
-    # if model.get('approval') is true
-    attributes =
-      id: model.get('id')
-      source: "/api/users/#{model.get('id')}/picture"
-      name: model.get('name')
-    html = JST['recommend/li'](attributes)
-    $(@.el).find('ul.recommend-following').append html
+    console.log model, "hogefuga"
+    if model.get('approval')
+      f = model.get('following')
+      attributes =
+        id: f.id
+        source: "/api/users/#{f.id}/picture"
+        name: f.name
+      html = JST['recommend/li'](attributes)
+      $(@.el).find('ul.recommend-following').append html
 
   appendAllItem: (collection)->
     _.each collection.models, @.appendItem

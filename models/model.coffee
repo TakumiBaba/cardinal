@@ -165,10 +165,14 @@ FollowSchema = new Schema
   # user:
   #   type: ObjectId
   #   ref: "User"
-  name:
-    type: String
-  id:
-    type: String
+  following:
+    type: ObjectId
+    ref: "User"
+  follower:
+    type: ObjectId
+    ref: "User"
+  ids:
+    type: [String]
   approval:
     type: Boolean
     default: false
