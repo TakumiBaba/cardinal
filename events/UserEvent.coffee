@@ -74,53 +74,53 @@ exports.UserEvent = (app) ->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       User.findOne({id: id}).populate('following').exec (err, user)->
         throw err if err
-        console.log user.following.length
+        console.log user
         if user
           following = []
           _.each user.following, (f)=>
             following.push f.user
-          console.log following.length
           res.send user.following
         else
           res.send []
     create: (req, res)->
-      id = req.session.userid
-      followingId = req.params.following_facebook_id
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      followingId = req.params.facebook_id
       User.findOne({id: id}).populate('following').exec (err, me)->
         throw err if err
         User.findOne({facebook_id: followingId}).exec (err, folowing)->
           throw err if err
           unless following
-            user = new User()
+            following = new User()
             sha1_hash = Crypto.createHash 'sha1'
             sha1_hash.update followingId
-            user.id = sha1_hash.digest 'hex'
-            user.facebook_id = followingId
-            user.name = ""
-            user.first_name = ""
-            user.last_name = ""
-            user.profile.gender = ""
-            user.isSuppoter = true
-            user.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
-            user.save()
-        if users
-          me = _.filter users, (u)=>
-            return u.id is id
-          following = _.filter users, (u)=>
-            return u.id is followingId
-          # if following && following.id is followingId
-          if _.contains me.following, following
-            res.send 'already added'
-          else
-            following = new Follow()
-            following.approval = false
-            following.id = following.id
-            following.name = following.name
+            following.id = sha1_hash.digest 'hex'
+            following.facebook_id = followingId
+            following.name = ""
+            following.first_name = ""
+            following.last_name = ""
+            following.profile.gender = ""
+            following.isSuppoter = true
+            following.isFirstLogin = true
+            following.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
             following.save()
-            me.following.push following
-            me.save (err)->
-              throw err if err
-              res.send "add"
+          f = _.find me.following, (f)=>
+            return f.id is following.id
+          if !f
+            f = new Follow
+              name: following.name
+              id: following.id
+              approval: false
+            f.save (err)=>
+              me.following.push f
+              me.save (err)=>
+                following.request.push f
+                following.save()
+                return res.send f
+          else
+            return res.send f
+    update: (req, res)->
+      id = req.session.userid
+      # followingId
     delete: (req, res)->
       console.log 'hoge'
       id = req.session.userid

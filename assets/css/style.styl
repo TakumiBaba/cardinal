@@ -81,7 +81,7 @@ div#matching_page
     border-bottom: 1px solid #ddd
     display: block
     clear: left
-  ul
+  ul.matching_side
     list-style: none
     height: 100%
     overflow: scroll
@@ -336,28 +336,27 @@ div.profile_and_following_view
     display: block
     clear: left
     width: 100%
-  ul
-    list-style: none
-    height: 100%
-    overflow: scroll
-    display: block
-    margin-left: 5px
-    li
-      margin-right: 15px
-      margin-bottom: 5px
-      img
-        border: 4px solid white
-        width: 65px
-        height: 65px
-      &:last-child
-        img
+  // ul
+  //   list-style: none
+  //   height: 100%
+  //   overflow: scroll
+  //   display: block
+  //   margin-left: 5px
+  //   li
+  //     margin-right: 15px
+  //     margin-bottom: 5px
+  //     img
+  //       border: 4px solid white
+  //       width: 65px
+  //       height: 65px
+  //     &:last-child
+  //       img
 
-    li.active
-      img
-        border: 4px solid #ed4b7c
-        // border: 4px solid #5987e7
+  //   li.active
+  //     img
+  //       border: 4px solid #ed4b7c
   div.box
-    height: 500px
+    height: 100%
     width: 100%
     overflow: scroll
     div.sm_side
@@ -372,6 +371,7 @@ div.profile_and_following_view
 
       div.box_menu
         float: left
+        width: 100%
         img.profile_image
           max-width: 100px
           max-height: 100px
@@ -481,3 +481,20 @@ div#supporter_list_page
         img
           width: 90px
           height: 70px
+
+div.recommend
+  li
+    margin-left: 0px
+    height: 50px
+    a
+      height: 40px
+    img
+      float: left
+      width: 40px
+      height: 40px
+    div
+      float: left
+      width: 100px
+      height: 50px
+      a
+        word-wrap: break-word

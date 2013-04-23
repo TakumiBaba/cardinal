@@ -33,7 +33,6 @@ class App.View.MatchingListView extends Backbone.View
 
   constructor: (attrs)->
     super
-    console.log attrs
     _.bindAll @, "appendItem", "appendAllItem", "setFollower"
     @.collection.bind "add", @appendItem
     @.collection.bind "reset", @appendAllItem
@@ -49,6 +48,7 @@ class App.View.MatchingListView extends Backbone.View
     $(@.el).find('ul.matching_side').append li
 
   appendAllItem: (collection)->
+    console.log collection
     flag = if $(@.el).hasClass 'system_matching' then true else false
     list = _.filter collection.models, (model)=>
       return model.get('isSystemMatching') is flag
@@ -65,6 +65,10 @@ class App.View.MatchingListView extends Backbone.View
       if model.get('user').id is id
         @targetModel = model
         @setDetail model
+    @recommendButton = new App.View.FollowDropDownMenu
+      targetId: id
+    @recommendButton.render()
+
   setDetail: (model)->
     user = model.get('user')
     console.log user
@@ -95,9 +99,14 @@ class App.View.MatchingListView extends Backbone.View
 
   doLike: (e)->
     console.log @targetModel
-    @targetModel.urlRoot = "/api/users/me/candidates/#{@targetModel.get('user').id}.json"
-    @targetModel.set "status", 1
-    @targetModel.save()
+    $.ajax
+      type: "POST"
+      url: "/api/users/me/candidates/#{@targetModel.get('user').id}"
+      data:
+        nextStatus: "up"
+      success: (data)->
+        location.href = "/#/like"
+        console.log data
 
   sendMessage: (e)->
     console.log e

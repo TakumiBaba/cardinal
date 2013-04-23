@@ -102,10 +102,10 @@ UserSchema = new Schema
   follower:
     type: [{type: ObjectId, ref: "Follow"}]
   pending:
-    type: [{type: ObjectId, ref: "User"}]
+    type: [{type: ObjectId, ref: "Follow"}]
     default: []
   request:
-    type: [{type: ObjectId, ref: "User"}]
+    type: [{type: ObjectId, ref: "Follow"}]
     default: []
   profile_message:
     type: String
@@ -117,7 +117,7 @@ UserSchema = new Schema
     default: true
   isFirstLogin:
     type: Boolean
-    default: true
+    default: false
   messages:
     type: [{type: ObjectId, ref: "Message"}]
     default: []
@@ -128,6 +128,38 @@ UserSchema = new Schema
     type: Date
   news:
     type: [NewsSchema]
+  statuses:
+    type: [{type: ObjectId, ref: "Status"}]
+
+
+
+StatusSchema = new Schema
+  one:
+    type: ObjectId
+    ref: "User"
+  two:
+    type: ObjectId
+    ref: "User"
+  ids:
+    type: [String]
+  one_status:
+    type: Boolean
+    default: false
+  one_isSystemMatching:
+    type: Boolean
+    default: true
+  two_status:
+    type: Boolean
+    default: false
+  two_isSystemMatching:
+    type: Boolean
+    default: true
+  lastUpdated:
+    type: Date
+
+StatusSchema.pre 'save', (next)->
+  @lastUpdated = Date.now()
+  next()
 
 FollowSchema = new Schema
   # user:
@@ -232,6 +264,12 @@ MessageListSchema = new Schema
   messages:
     type: [{type: ObjectId, ref: "Message"}]
     default: []
+  lastUpdated:
+    type: Date
+
+MessageSchema.pre 'save', (next)->
+  @lastUpdated = Date.now()
+  next()
 
 module.exports =
   User: mongoose.model 'User', UserSchema
@@ -252,3 +290,5 @@ module.exports =
   MessageListSchema: MessageListSchema
   Follow: mongoose.model 'Follow', FollowSchema
   FollowSchema: FollowSchema
+  Status: mongoose.model 'Status', StatusSchema
+  StatusSchema: StatusSchema

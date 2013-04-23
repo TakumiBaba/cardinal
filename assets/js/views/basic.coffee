@@ -109,3 +109,46 @@ class App.View.ProfilePage extends Backbone.View
     @.render()
 
 
+class App.View.FollowDropDownMenu extends Backbone.View
+  el:"div.recommend"
+
+  events:
+    "click li": "recommend"
+
+  constructor: (attrs, options)->
+    super
+
+    @.collection = new App.Collection.Followings
+      userid: "me"
+
+    @targetId = attrs.targetId
+
+    _.bindAll @, "appendItem", "appendAllItem"
+    @collection.bind 'add', @.appendItem
+    @collection.bind 'reset', @.appendAllItem
+
+  render:->
+    @collection.fetch()
+
+  appendItem: (model)->
+    console.log model
+    # if model.get('approval') is true
+    attributes =
+      id: model.get('id')
+      source: "/api/users/#{model.get('id')}/picture"
+      name: model.get('name')
+    html = JST['recommend/li'](attributes)
+    $(@.el).find('ul.recommend-following').append html
+
+  appendAllItem: (collection)->
+    _.each collection.models, @.appendItem
+
+  recommend: (e)->
+    console.log e.currentTarget
+    id = $(e.currentTarget).attr 'id'
+    console.log @targetId, id
+    $.ajax
+      type: "POST"
+      url: "/api/users/#{id}/candidates/#{@targetId}/recommend"
+      success: (data)->
+        console.log data

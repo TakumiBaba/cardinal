@@ -4,6 +4,7 @@ window.App = {
   Model: {}
   Collection: {}
 }
+baseUrl = "https://localhost:3001/"
 
 class Router extends Backbone.Router
 
@@ -67,7 +68,7 @@ class Router extends Backbone.Router
 window.fbAsyncInit = ->
   FB.init
     appId: 381551511881912
-    channelUrl: '//localhost:3000/'
+    channelUrl: '//www.mag.keio.ac.jp/~bb/'
     status: true
     cookie: true
     xfbml: true
@@ -78,7 +79,7 @@ window.fbAsyncInit = ->
       FB.api 'me', (res)->
         $.ajax
           type: "POST"
-          url: "/api/login"
+          url: "https://localhost:3001/api/login"
           data: res
           success: (id)->
             console.log id

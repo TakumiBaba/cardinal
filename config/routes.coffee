@@ -22,6 +22,7 @@ module.exports = (app) ->
   app.get '/api/users/me/profile', User.profile.fetch
   app.post '/api/users/me/profile', User.profile.update
   app.get '/api/users/:user_id/followings.json', User.followings.fetch
+  app.get '/api/users/:user_id/followings/:facebook_id', User.followings.create
   app.get '/api/users/:user_id/followers.json', User.followers.fetch
   app.get '/api/users/:user_id/pending.json', User.pending.fetch
   app.get '/api/users/:user_id/request.json', User.request.fetch
@@ -41,8 +42,14 @@ module.exports = (app) ->
   app.post '/api/users/:user_id/:candidate_id/message', Message.create
 
   # LikeEvent
-  app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更
-  app.post '/api/users/:user_id/candidates/:candidate_id.json', Like.update
+  # app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更
+  # app.post '/api/users/:user_id/candidates/:candidate_id.json', Like.update
+  # app.post "/api/users/:user_id/candidates/:candidate_id/recommend", Like.recommend
+
+  app.get '/api/users/:user_id/candidates.json', Like.status.fetch
+  app.get '/api/users/:oneId/candidates/:twoId', Like.create
+  app.post '/api/users/:oneId/candidates/:twoId', Like.status.update
+  app.get '/api/users/:oneId/candidates/:twoId/:status', Like.status.update
 
   # DebugEvent
   app.get '/debug/api/users', Debug.user.fetchAll

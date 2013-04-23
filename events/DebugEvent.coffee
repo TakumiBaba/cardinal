@@ -7,8 +7,10 @@ exports.DebugEvent = (app) ->
   Talk = app.settings.models.Talk
   Comment = app.settings.models.Comment
   Follow = app.settings.models.Follow
+  Status = app.settings.models.Status
   MessageEvent = app.settings.events.MessageEvent app
   TalkEvent = app.settings.events.TalkEvent app
+  LikeEvent = app.settings.events.LikeEvent app
 
   user:
     fetchAll: (req, res)->
@@ -28,60 +30,40 @@ exports.DebugEvent = (app) ->
       _.each users, (u)=>
         shuffled = _.shuffle users
         _.each [0..40], (i)=>
-          if u.candidates.length < 30
-            status = 0
-            if i < 20
-              status = _.random(1,3)
-            else
-              status = 0
-            candidate = new Candidate
-              user: shuffled[i]._id
-              status: status
-              isSystemMatching: if i%2 is 0 then true else false
-            candidate.save ()=>
-              u.save()
-            # candidate =
-            #   user: shuffled[i]._id
-            #   status: status
-            #   isSystemMatching: if i%2 is 0 then true else false
-            u.candidates.push candidate._id
+          u.following = []
+          u.follower = []
+          if u.statuses.length < 30 && i < 30
+            req.params.oneId = u.id
+            req.params.twoId = shuffled[i].id
+            # LikeEvent.create req, res
+            # status = new Status
+            #   one: u._id
+            #   two: shuffled[i]._id
+            #   ids: [u.id, shuffled[i].id]
+            #   one_status: if _.random(0,1) is 0 then true else false
+            #   two_status: if _.random(0,1) is 0 then true else false
+            #   one_isSystemMathing: if _.random(0,3) < 1 then true else false
+            #   two_isSystemMathing: if _.random(0,3) < 1 then true else false
+            # u.statuses.push status
+            # shuffled[i].statuses.push status
+            # status.save()
+            # u.save()
+            # shuffled[i].save()
           else if i < 40
-            u.following.push shuffled[i]._id if u.following.length < 10
-            u.follower.push shuffled[i]._id if u.follower.length < 10
+            console.log i
+            following = new Follow
+              name: shuffled[i].name
+              id: shuffled[i].id
+              approval: if _.random(0,3) < 3 then true else false
+            follower = new Follow
+              name: shuffled[i].name
+              id: shuffled[i].id
+              approval: if _.random(0,3) < 3 then true else false
+            u.following.push following if u.following.length < 10
+            u.follower.push follower if u.follower.length < 10
+            following.save()
+            follower.save()
             u.save()
-        # _.each u.candidates, (mm, i)=>
-        #   Candidate.findOne({_id: mm}).populate('user', "id").exec (err, candidate)=>
-        #     throw err if err
-        #     _.each [0..20], (i)=>
-        #       if i%2 is 0
-        #         from = candidate.user.id
-        #         to = u.id
-        #       else
-        #         to = candidate.user.id
-        #         from = u.id
-        #       req.params =
-        #         from: from
-        #         to:   to
-        #       req.body =
-        #         text: "hoge#{_.random(0, 100)}fuga"
-        #       MessageEvent.create req, res
-        # _.each u.candidates, (mm, i)=>
-        #   User.findOne _id: mm.user, (err, temp)=>
-        #     throw err if err
-        #     _.each [0..5], (i)=>
-        #       if i%2 is 0
-        #         req.params =
-        #           from: u.id
-        #           to:   temp.id
-        #         req.body =
-        #           text: "hoge#{_.random(0, 100)}fuga"
-        #       else
-        #         req.params =
-        #           from: temp.id
-        #           to:   u.id
-        #         req.body =
-        #           text: "hoge#{_.random(0, 100)}fuga"
-        #       MessageEvent.create(req, res)
       return res.send 'setup'
 
   message: (req, res)->

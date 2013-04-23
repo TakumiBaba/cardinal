@@ -54,6 +54,12 @@ app.use express.session
   secret: 'keyboard cat'
   store: new connect.session mongoose_connection: mongoose.connections[0]
   cookie: maxAge: Date.now() + (config.maxage || 60*60*24*7)
+
+app.use (req, res, next)->
+  res.set "Access-Control-Allow-Origin", "*"
+  res.set "Access-Control-Allow-Headers", "X-Requested-With"
+  next()
+
 app.use app.router
 app.use connect.static
   path: path.resolve 'public'

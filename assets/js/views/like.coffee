@@ -29,17 +29,22 @@ class App.View.LikePage extends Backbone.View
 
   appendItem: (model)->
     user = model.get 'user'
-    status = model.get 'status'
+    yourStatus = model.get 'status'
+    myStatus = model.get 'myStatus'
     text = ""
-    if status is 1
+    status = ""
+    if myStatus && !yourStatus
       ul = $(@.el).find('div.my-like ul')
       text = "いいね取り消し"
-    else if status is 2
+      status = 1
+    else if !myStatus && yourStatus
       ul = $(@.el).find('div.your-like ul')
       text = "いいね！"
-    else if status is 3
+      status = 2
+    else if myStatus && yourStatus
       ul = $(@.el).find('div.each-like ul')
       text = "メッセージ送信"
+      status = 3
     attributes =
       id: user.id
       source: user.profile.image_url
@@ -51,6 +56,7 @@ class App.View.LikePage extends Backbone.View
     console.log model
 
   appendAllItem: (collection)->
+    console.log collection
     _.each collection.models, @.appendItem
 
   cancelLike: (e)->
@@ -59,19 +65,21 @@ class App.View.LikePage extends Backbone.View
     console.log @.collection.where({"user.id": target})
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
-    model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}.json"
-    model.set("status", 0)
+    model.urlRoot = "https://localhost:3001/api/users/me/candidates/#{model.get('user').id}"
+    model.set("nextStatus", "down")
+    console.log model
     model.save()
     $($(e.currentTarget).parent().parent()).remove()
   doLike: (e)->
     target = $($(e.currentTarget).parents()[1]).attr 'id'
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
-    model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}.json"
-    model.set("status", 3)
+    console.log model
+    model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}"
+    model.set("nextStatus", "up")
     model.save()
     li = $($(e.currentTarget).parent().parent()).clone()
-    @appendItem model
+    # @appendItem model
     # $("div.each-like ul").append li
     $($(e.currentTarget).parent().parent()).remove()
   sendMessage: (e)->

@@ -7,6 +7,7 @@ class App.View.CandidatePage extends Backbone.View
   events:
     "click button.like": "doLike"
     "click button.sendMessage": "sendMessage"
+    "click button.recommend": "recommend"
 
   constructor: (attrs, options)->
     super
@@ -24,6 +25,7 @@ class App.View.CandidatePage extends Backbone.View
     @.model.fetch()
     @.collection.fetch()
 
+
   render: (model)->
     user = model
     gender = if user.get('profile').gender is 'male' then "男性" else "女性"
@@ -35,6 +37,9 @@ class App.View.CandidatePage extends Backbone.View
       profile: user.get('profile')
     html = JST['candidate/page'](attributes)
     $(@.el).html html
+    @recommendButton = new App.View.FollowDropDownMenu
+      targetId: user.get('id')
+    @recommendButton.render()
 
   appendFollowers: (collection)->
     _.each collection.models, (model)=>
@@ -64,3 +69,6 @@ class App.View.CandidatePage extends Backbone.View
       success:(data)->
         if data
           location.href = "/#/message"
+
+  recommend: (e)->
+    console.log e
