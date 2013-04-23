@@ -153,6 +153,6 @@ class App.View.FollowDropDownMenu extends Backbone.View
     console.log @targetId, id
     $.ajax
       type: "POST"
-      url: "/api/users/#{id}/candidates/#{@targetId}/recommend"
+      url: App.BaseUrl+"/api/users/#{id}/candidates/#{@targetId}/recommend"
       success: (data)->
         console.log data

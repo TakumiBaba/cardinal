@@ -52,7 +52,7 @@ class Router extends Backbone.Router
           _.each res.to, (fbid)->
             $.ajax
               type: "POST"
-              url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+              url: App.BaseUrl+"/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
               success: (data)->
                 console.log data
           # console.log res
@@ -85,7 +85,7 @@ window.fbAsyncInit = ->
       FB.api 'me', (res)->
         $.ajax
           type: "POST"
-          url: "https://localhost:3001/api/login"
+          url: App.BaseUrl+"/api/login"
           data: res
           success: (id)->
             console.log id
@@ -99,6 +99,7 @@ window.fbAsyncInit = ->
             _.bindAll @, "start"
             App.User.bind 'change', @start
 
+            App.BaseUrl = "https://133.27.247.132:3001"
             router = new Router()
             App.User.fetch()
 
