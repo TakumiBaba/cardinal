@@ -17,6 +17,6 @@
     "direquire": "*",
     "moment": ">= 2.0.0",
     "mocha": "*",
-    "underscore": "*",
+    "underscore": "*"
   }
 }
