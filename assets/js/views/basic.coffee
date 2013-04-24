@@ -94,10 +94,17 @@ class App.View.ProfilePage extends Backbone.View
     if e.keyCode is 13
       text = $(e.currentTarget).val()
       label = $("<span>").addClass('label label-info')
+      label.html text
+      $(@.el).find('div.likelist').append label
+      $(e.currentTarget).val("")
 
   update: (e)->
     e.preventDefault()
     console.log 'update'
+    likelist = []
+    $('div.likelist').children().each ()->
+      likelist.push $(@).html()
+    console.log likelist
     detail =
       profile_image: $("#profile-image").attr 'src'
       martialHistory: parseInt($("#martialHistory").val())
@@ -115,7 +122,7 @@ class App.View.ProfilePage extends Backbone.View
       drinking: parseInt($("#drinking").val())
       smoking: parseInt($("#smoking").val())
       hoby: $("#hoby").val()
-      like: $("#like").val()
+      like: likelist
       message: $("#message").val()
       ageRangeMin: parseInt $("#age_range_min").val()
       ageRangeMax: parseInt $("#age_range_max").val()
@@ -178,3 +185,23 @@ class App.View.FollowDropDownMenu extends Backbone.View
         nextStatus: "promotion"
       success: (data)->
         console.log data
+
+class App.View.MePage extends Backbone.View
+  el: "div#main"
+
+  constructor : ->
+    super
+
+    @model = new App.Model.Profile()
+
+    _.bindAll @, "render"
+    @.model.bind 'change', @.render
+
+    @.model.fetch()
+
+  render: (model)->
+    console.log model
+    attributes = @.model.attributes
+    console.log @.model.attributes
+    html = App.JST['me/page'](attributes)
+    $(@.el).html html

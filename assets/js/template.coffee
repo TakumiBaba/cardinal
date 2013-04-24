@@ -110,7 +110,7 @@ JST['matching/thumbnail'] = _.template(
 JST['profile/page'] = _.template(
   """
   <div id='profile_page'>
-    <h3 class='title_box'>あなたのプロフィール</h3>
+    <h3 class='title_box'>プロフィールを編集する</h3>
     <div class='profile box-inner container'>
       <form class='form-horizontal'>
         <div class='control-group'>
@@ -336,6 +336,7 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='like' class='control-label'>好きなもの</label>
           <div class='controls'>
+            <div class='likelist'><% _.each(like, function(item){var label="<span class='label label-info'>"+item+"</span>"%><%= label %><%})%></div>
             <input type='text' id='like' name='like' value='' class='span2'>
           </div>
         </div>
@@ -382,16 +383,16 @@ JST['sidebar/following'] = _.template(
 JST['like/page'] = _.template(
   """
   <div id='like_page'>
-    <h3 class='title_box'>両思い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
     <div class='each-like info box-inner container likebox'>
+      <h3 class='title_box'>両思い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
-    <h3 class='title_box'>お相手が片思い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
     <div class='your-like info box-inner container likebox'>
+      <h3 class='title_box'>お相手が片思い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
-    <h3 class='title_box'>自分が片思い</h3>
     <div class='my-like info box-inner  container likebox'>
+      <h3 class='title_box'>自分が片思い</h3>
       <ul class='like-thumbnail'></ul>
     </div>
   </div>
@@ -1125,3 +1126,150 @@ JST['recommend/li'] = _.template(
     </a>
   </li>
   """)
+
+JST['me/page'] = _.template(
+  """
+  <div id='profile_page'>
+    <h3 class='title_box'>あなたのプロフィール</h3>
+    <div class='profile box-inner container'>
+      <form class='form-horizontal'>
+        <div class='control-group'>
+          <label for='profile-image' class='control-label'>プロフィール画像</label>
+          <div class='controls'>
+            <img id='profile-image' style='width:100px; height:100px' src='<%= image_url %>'>
+            <ul class='profile-image-list'>
+            </ul>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='address' class='control-label'>居住地</label>
+          <div class='controls'>
+            <% options = ['---','北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県',,'滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'] %>
+            <%= options[address] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='hometown' class='control-label'>出身地</label>
+          <div class='controls'>
+            <% options = ['---','北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県',,'滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'] %>
+            <%= options[hometown] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='job' class='control-label'>ご職業</label>
+          <div class='controls'>
+            <% options = ['---','会社員（営業）','会社員（技術）','会社員（企画）','会社員（サービス）','会社員（販売）','会社員（クリエイティブ）','会社員（事務）','会社員（IT）','会社員（その他）','会社役員','会社経営','国家公務員','地方公務員','自営業','専門職','団体職員','派遣社員','アルバイト','家事手伝い','学生','その他'] %>
+            <%= options[job] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='income' class='control-label'>年収</label>
+          <div class='controls'>
+            <%= income %>万円
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='education' class='control-label'>学歴</label>
+          <div class='controls'>
+            <% options = ['---','中学卒','高校卒','短大卒','大卒','大学院卒','その他','指定しない'] %>
+            <%= options[education] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='martialHistory' class='control-label'>婚姻歴</label>
+          <div class='controls'>
+            <% options = ['---','なし','あり'] %>
+            <%= options[martialHistory] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='wantChild' class='control-label'>子どもの希望</label>
+          <div class='controls'>
+            <% options = ['---','結婚したら欲しい','お相手と相談したい','いなくても構わない','欲しくない','特に決めてない'] %>
+            <%= options[wantChild] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='wantMarriage' class='control-label'>結婚希望時期</label>
+          <div class='controls'>
+            <% options = ['---','すぐにでも','2〜3年のうちに','お相手に合わせる','特に決めてない'] %>
+            <%= options[wantMarriage] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='hasChild' class='control-label'>子どもの有無</label>
+          <div class='controls'>
+            <% options = ['---','いない','いる(別居)','いる(同居)'] %>
+            <%= options[hasChild] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='bloodType' class='control-label'>血液型</label>
+          <div class='controls'>
+            <% options = ['---','A','B','O','AB'] %>
+            <%= options[bloodType] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='height' class='control-label'>身長</label>
+          <div class='controls'>
+            <%= height %>cm
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='shape' class='control-label'>体型</label>
+          <div class='controls'>
+            <% options = ['---','スリム','ふつう','ぽっちゃり','グラマー','ガッチリ','太め'] %>
+            <%= options[shape] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='drinking' class='control-label'>飲酒習慣</label>
+          <div class='controls'>
+            <% options = ['---','毎日飲む','週3～4日飲む','週1～2日程度','たまに飲む','全く飲まない'] %>
+            <%= options[drinking] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='smoking' class='control-label'>喫煙習慣</label>
+          <div class='controls'>
+            <% options = ['---','よく吸う','たまに吸う','まったく吸わない'] %>
+            <%= options[smoking] %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='hoby' class='control-label'>趣味</label>
+          <div class='controls'>
+            <%= hoby %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='like' class='control-label'>好きなもの</label>
+          <div class='controls'>
+            <div class='likelist'><% _.each(like, function(item){var label="<span class='label label-info'>"+item+"</span>"%><%= label %><%})%></div>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='message' class='control-label'>お相手へのメッセージ</label>
+          <div class='controls'>
+            <%= message %>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='age_range_min' class='control-label'>希望の年齢</label>
+          <div class='controls'>
+            <%= ageRangeMin %>歳から
+            <%= ageRangeMax %>歳まで
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='ideal_partner' class='control-label'>理想のパートナー像</label>
+          <div class='controls'>
+            <%= idealPartner %>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  """
+  )
