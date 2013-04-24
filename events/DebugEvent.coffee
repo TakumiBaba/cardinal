@@ -43,7 +43,7 @@ exports.DebugEvent = (app) ->
           if u.statuses.length < 30 && i < 30
             req.params.oneId = u.id
             req.params.twoId = shuffled[i].id
-            # LikeEvent.create req, res
+            LikeEvent.create req, res
             # status = new Status
             #   one: u._id
             #   two: shuffled[i]._id
@@ -222,3 +222,6 @@ exports.DebugEvent = (app) ->
           me.save (err)->
             throw err if err
             res.send @
+
+  setRandomName: (req, res)->
+

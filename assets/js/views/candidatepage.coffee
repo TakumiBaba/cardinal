@@ -46,7 +46,7 @@ class App.View.CandidatePage extends Backbone.View
       attributes =
         facebook_url: "https://facebook.com/#{model.facebook_id}"
         source: model.get('profile').image_url
-        name: "#{model.get('name')}さん"
+        name: "#{model.get('firstName')}さん"
       li = JST['matching/follower'](attributes)
       $(@.el).find('ul.follower-list').append li
       console.log model
@@ -55,7 +55,7 @@ class App.View.CandidatePage extends Backbone.View
     console.log e
     $.ajax
       type: "POST"
-      url: "/api/users/me/candidates/#{@model.get('id')}.json"
+      url: "/api/users/me/candidates/#{@model.get('id')}"
       data:
         status: "up"
       success:(data)->

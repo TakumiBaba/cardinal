@@ -29,7 +29,7 @@ JST['matching/page'] = _.template(
           <div class='profile-column'>
             <div class='profile-column-header'>
 
-              <h5>プロフィール詳細</5>
+              <h5>プロフィール <a href="">詳細をみる</a></5>
             </div>
             <div class='profile-column-body'>
               <table class='table'>
@@ -112,7 +112,7 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='profile-image' class='control-label'>プロフィール画像</label>
           <div class='controls'>
-            <img id='profile-image' style='width:100px; height:100px' src='/user/b08b809483972111e976e85e77ac7527add62ad3/picture'>
+            <img id='profile-image' style='width:100px; height:100px' src=''>
             <ul class='profile-image-list'>
             </ul>
           </div>
@@ -399,7 +399,7 @@ JST['like/thumbnail'] = _.template(
 JST['talk/page'] = _.template(
   """
   <div id='talk_page'>
-    <h4>応援トーク<span>'お気に入りの人について応援団と大いに語ろう！'</span></h4>
+    <h3 class='title_box'>応援トーク<small class=''>お気に入りの人について応援団と大いに語ろう！</small></h3>
     <ul class='talk_list'>
     </ul>
   </div>
@@ -552,7 +552,7 @@ JST['userpage/detailProfile'] = _.template(
   </tr>
   <% shapeArray = ['---','スリム','ふつう','ぽっちゃり','グラマー','ガッチリ','太め'] %>
   <tr>
-    <td class='key'>年収</td><td><%= height %>cm</td>
+    <td class='key'>身長</td><td><%= height %>cm</td>
     <td class='key'>体型</td><td><%= shapeArray[shape] %></td>
   </tr>
 

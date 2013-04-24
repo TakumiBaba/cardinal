@@ -65,7 +65,7 @@ class App.View.LikePage extends Backbone.View
     console.log @.collection.where({"user.id": target})
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
-    model.urlRoot = "https://localhost:3001/api/users/me/candidates/#{model.get('user').id}"
+    model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}"
     model.set("nextStatus", "down")
     console.log model
     model.save()
@@ -90,7 +90,7 @@ class App.View.LikePage extends Backbone.View
     console.log model
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{target}/message"
+      url: "/api/users/me/#{target}/message"
       success: (data)->
         if data
           location.href = "/#/message"
@@ -101,7 +101,7 @@ class App.View.LikePage extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/talks.json"
+      url: "/api/talks.json"
       data:
         one: "me"
         two: id

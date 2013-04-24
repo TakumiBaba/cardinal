@@ -72,13 +72,12 @@ app.use (require path.resolve 'config', 'routes') app
 if process.env.NODE_ENV is 'development'
   app.use express.errorHandler()
 
-
+secure_options =
+  key: fs.readFileSync("./server.key").toString()
+  cert: fs.readFileSync("./server.crt").toString()
 # server
 http.createServer(app).listen config.port, ->
-  console.log "HTTPS Server pid:#{process.pid} port:#{config.port}"
-# secure_options =
-#   key: fs.readFileSync("./server.key").toString()
-#   cert: fs.readFileSync("./server.crt").toString()
+  console.log "HTTP Server pid:#{process.pid} port:#{config.port}"
 # https.createServer(secure_options, app).listen config.port, ->
 #   console.log "HTTPS Server pid:#{process.pid} port:#{config.port}"
 # if cluster.isMaster

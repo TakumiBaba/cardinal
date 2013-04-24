@@ -91,7 +91,7 @@ class App.View.UserPageProfile extends Backbone.View
     attributes =
       image_source: user.get('profile').image_url
       name: user.get("name")
-      gender_birthday: "#{gender} #{user.get('profile').age}歳　#{b.getFullYear()}年#{b.getMonth()-1}月#{b.getDay()}日生まれ"
+      gender_birthday: "#{gender} #{user.get('profile').age}歳"
       follower: user.get("follower")
       profile: user.get('profile')
     @.el = JST['userpage/profile'](attributes)
@@ -130,6 +130,7 @@ class App.View.UserPageMatchingList extends Backbone.View
 
   appendItem: (model)->
     console.log model.get('user').name
+    console.log model
     if model.get('isSystemMatching')
       ul = $("div.system ul")
       text = "オススメする"
@@ -148,17 +149,16 @@ class App.View.UserPageMatchingList extends Backbone.View
     ul.append li
 
   appendAllItem: (collection)->
-    console.log collection.models.length
+    console.log collection
     _.each collection.models, @.appendItem
 
   recommend: (e)->
     id = $(e.currentTarget).parent().parent().attr 'id'
     $.ajax
       type: "POST"
-      url: "/api/users/#{@targetId}/candidates/#{id}.json"
+      url: "/api/users/#{@targetId}/candidates/#{id}"
       data:
-        status: 0
-        promotion: true
+        nextStatus: "promotion"
       success: (data)->
         console.log data
 

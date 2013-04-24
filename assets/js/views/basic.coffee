@@ -134,17 +134,17 @@ class App.View.FollowDropDownMenu extends Backbone.View
     @collection.fetch()
 
   appendItem: (model)->
-    console.log model, "hogefuga"
     if model.get('approval')
       f = model.get('following')
       attributes =
         id: f.id
         source: "/api/users/#{f.id}/picture"
-        name: f.name
+        name: f.firstName
       html = JST['recommend/li'](attributes)
       $(@.el).find('ul.recommend-following').append html
 
   appendAllItem: (collection)->
+    $(@.el).find('ul.recommend-following').empty()
     _.each collection.models, @.appendItem
 
   recommend: (e)->
@@ -153,6 +153,8 @@ class App.View.FollowDropDownMenu extends Backbone.View
     console.log @targetId, id
     $.ajax
       type: "POST"
-      url: "/api/users/#{id}/candidates/#{@targetId}/recommend"
+      url: "/api/users/#{id}/candidates/#{@targetId}"
+      data:
+        nextStatus: "promotion"
       success: (data)->
         console.log data

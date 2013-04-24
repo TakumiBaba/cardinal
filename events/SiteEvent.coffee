@@ -37,7 +37,8 @@ exports.SiteEvent = (app) ->
           console.log "StateZero is #{stateZero.length}"
           num = stateZero.length
           if num < 20
-            User.find({}).exec (err, users)->
+            exclusion.push user.id
+            User.find({}).where('id').nin(exclusion).exec (err, users)->
               throw err if err
               users = _.shuffle users
               _.each [num..20], (i)=>

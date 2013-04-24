@@ -41,10 +41,11 @@ exports.LikeEvent = (app) ->
       User.findOne({id: userId}).exec (err, user)->
         throw err if err
         statuses = user.statuses
-        Status.find({_id: {$in: statuses}}).populate('one', 'id name profile').populate('two', 'id name profile').exec (err, statuses)=>
+        Status.find({_id: {$in: statuses}}).populate('one', 'id name profile first_name last_name').populate('two', 'id name profile first_name last_name').exec (err, statuses)=>
           throw err if err
           list = []
           _.each statuses, (status)=>
+            console.log  status.one
             if status.one.id is user.id
               json =
                 user: status.two
@@ -76,7 +77,7 @@ exports.LikeEvent = (app) ->
       twoId = if req.params.twoId is 'me' then req.session.userid else req.params.twoId
       nextStatus = req.body.nextStatus || req.params.status
       console.log 'update!!'
-      console.log oneId, twoId
+      console.log oneId, twoId, nextStatus
       User.find({id: {$in:[oneId, twoId]}}).exec (err, users)->
         throw err if err
         one = {}
@@ -88,7 +89,16 @@ exports.LikeEvent = (app) ->
             two = u
         Status.findOne({ids: {$all:[one.id, two.id]}}).populate('one', "id name profile").populate("two", "id name profile").exec (err, status)=>
           throw err if err
-          console.log status
+          unless status
+            status = new Status()
+            status.one = one._id
+            status.two = two._id
+            status.ids = [one.id, two.id]
+            status.one_status = false
+            status.two_status = false
+            status.one_isSystemMatching = false
+            status.two_isSystemMatching = false
+
           if status.one.id is one.id
             if nextStatus is "up"
               status.one_status = true
@@ -103,8 +113,11 @@ exports.LikeEvent = (app) ->
               status.two_status = false
             else if nextStatus is "promotion"
               status.two_isSystemMatching = false
-          status.save()
-          return res.send status
+          console.log status
+          status.save (err)->
+            throw err if err
+            console.log @
+            return res.send status
 
   create: (req, res)->
     oneId = if req.params.oneId is 'me' then req.session.userid else req.params.oneId
@@ -191,25 +204,25 @@ exports.LikeEvent = (app) ->
         candidate.save()
         return res.send candidate
 
-  recommend: (req, res)->
-    oneId = req.params.user_id
-    twoId = req.params.candidate_id
-    User.findOne({id: oneId}).populate('candidate').exec (err, one)->
-      throw err if err
-      two = _.find one.candidates, (c)=>
-        return c.id is twoId
-      if !two
-        User.find({id: twoId}).exec (err, two)=>
-          candidate = new Candidate
-            user: two._id
-            isSystemMatching: false
-            status: 0
-          candidate.save()
-          one.candidates.push candidate
-          one.save()
-          return res.send candidate
-      else
-        two.isSystemMatching = false
-        two.save()
-        console.log two
-        return res.send two
+  # recommend: (req, res)->
+  #   oneId = req.params.user_id
+  #   twoId = req.params.candidate_id
+  #   User.findOne({id: oneId}).populate('candidate').exec (err, one)->
+  #     throw err if err
+  #     two = _.find one.candidates, (c)=>
+  #       return c.id is twoId
+  #     if !two
+  #       User.find({id: twoId}).exec (err, two)=>
+  #         candidate = new Candidate
+  #           user: two._id
+  #           isSystemMatching: false
+  #           status: 0
+  #         candidate.save()
+  #         one.candidates.push candidate
+  #         one.save()
+  #         return res.send candidate
+  #     else
+  #       two.isSystemMatching = false
+  #       two.save()
+  #       console.log two
+  #       return res.send two

@@ -29,7 +29,6 @@ class App.View.MatchingListView extends Backbone.View
     "click li.user-thumbnail": "changeModel"
     "click button.like": "doLike"
     "click button.sendMessage": "sendMessage"
-    "click button.recommend": "recommend"
 
   constructor: (attrs)->
     super
@@ -76,8 +75,13 @@ class App.View.MatchingListView extends Backbone.View
     gender = if user.profile.gender is 'male' then "男性" else "女性"
     birthday = new Date(user.profile.birthday)
     $(@.el).find('img.profile_image').attr('src', user.profile.image_url)
-    $(@.el).find('h5.simple_profile').html("#{gender}　#{user.profile.age}歳　#{birthday.getFullYear()}年#{birthday.getMonth()+1}月#{birthday.getDay()}日生まれ")
-    $(@.el).find('h4.name').html "#{user.name}さん"
+    $(@.el).find('h5.simple_profile').html("""
+      <p>#{user.name}さんはこんな人を探しています。</p>
+      <p>年齢22 ~ 44歳</p>
+      <p>理想パートナー像</p>
+      """)
+    console.log user
+    $(@.el).find('h4.name').html "#{user.first_name}さん　（#{user.profile.age}歳）"
     @.followers = new App.Collection.Followers
       userid: user.id
     @.followers.bind 'reset', @.setFollower
@@ -106,7 +110,7 @@ class App.View.MatchingListView extends Backbone.View
       data:
         nextStatus: "up"
       success: (data)->
-        # location.href = "/#/like"
+        location.href = "/#/like"
         console.log data
 
   sendMessage: (e)->
@@ -118,6 +122,3 @@ class App.View.MatchingListView extends Backbone.View
       success:(data)->
         if data
           location.href = "/#/message"
-
-  recommend: (e)->
-    console.log e
