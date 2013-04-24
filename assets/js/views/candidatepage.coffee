@@ -33,7 +33,8 @@ class App.View.CandidatePage extends Backbone.View
     attributes =
       image_source: model.get('profile').image_url
       name: model.get('name')
-      gender_birthday: "#{gender} #{user.get('profile').age}歳　#{b.getFullYear()}年#{b.getMonth()-1}月#{b.getDay()}日生まれ"
+      first_name: model.get('first_name')
+      gender_birthday: "#{gender} #{user.get('profile').age}歳"
       profile: user.get('profile')
     html = JST['candidate/page'](attributes)
     $(@.el).html html
@@ -43,13 +44,15 @@ class App.View.CandidatePage extends Backbone.View
 
   appendFollowers: (collection)->
     _.each collection.models, (model)=>
-      attributes =
-        facebook_url: "https://facebook.com/#{model.facebook_id}"
-        source: model.get('profile').image_url
-        name: "#{model.get('firstName')}さん"
-      li = JST['matching/follower'](attributes)
-      $(@.el).find('ul.follower-list').append li
-      console.log model
+      if model.get('approval')
+        f = model.get('follower')
+        console.log f
+        attributes =
+          facebook_url: "https://facebook.com/#{f.facebook_id}"
+          source: f.profile.image_url
+          name: "#{f.first_name}さん"
+        li = JST['matching/follower'](attributes)
+        $(@.el).find('ul.follower-list').append li
 
   doLike: (e)->
     console.log e

@@ -152,13 +152,15 @@ div#matching_page
             width: 100%
         div.profile-column
           float: left
-          height: 400px
+          height: 100%
           position: relative
           width: 70%
+          margin-bottom: 10px
           table
             width: 100%
             display: block
             overflow: auto
+            margin-bottom: 10px
             td.key
               word-wrap: break-word
               background-color: #f0fff0
@@ -420,15 +422,18 @@ div.profile_and_following_view
               width: 100%
           div.profile-column
             float: left
-            height: 400px
+            // height: 400px
+            height: 100%
             position: relative
             // height: 100%
             width: 70%
+            margin-bottom: 10px
             // プロフィール全体をスクロールできるようにする
             table
               width: 90%
               display: block
               overflow: auto
+              margin-bottom: 10px
               td.key
                 background-color: #f0fff0
         div#matchinglist
@@ -529,3 +534,6 @@ btn.green
   background-color: #1f8a76
 btn.yellow
   background-color: #e8bb58
+
+div.ideal-profile
+  height: auto

@@ -117,10 +117,8 @@ class App.View.ProfilePage extends Backbone.View
       hoby: $("#hoby").val()
       like: $("#like").val()
       message: $("#message").val()
-      # ageRangeMin: parseInt $("#age_range_min").val()
-      # ageRangeMax: parseInt $("#age_range_max").val()
-      ageRangeMin: 22
-      ageRangeMax: 30
+      ageRangeMin: parseInt $("#age_range_min").val()
+      ageRangeMax: parseInt $("#age_range_max").val()
       idealPartner: $("#ideal_partner").val()
     @.model.save detail
 

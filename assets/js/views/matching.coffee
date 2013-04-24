@@ -79,10 +79,11 @@ class App.View.MatchingListView extends Backbone.View
     gender = if user.profile.gender is 'male' then "男性" else "女性"
     birthday = new Date(user.profile.birthday)
     $(@.el).find('img.profile_image').attr('src', user.profile.image_url)
-    $(@.el).find('h5.simple_profile').html("""
-      <p>#{user.name}さんはこんな人を探しています。</p>
-      <p>年齢22 ~ 44歳</p>
-      <p>理想パートナー像</p>
+    $(@.el).find('div.ideal-profile').html("""
+      <p>#{user.first_name}さんはこんな人を探しています。</p>
+      <p>年齢#{user.profile.ageRangeMin} ~ #{user.profile.ageRangeMax}</p>
+      <p>理想のパートナー像</p>
+      <p>#{user.profile.idealPartner}</p>
       """)
     $(@.el).find('a.to-detail-profile').attr 'href', "/#/u/#{user.id}"
     $(@.el).find('h5.follower-title').html("#{user.first_name}さんの応援団")
@@ -93,6 +94,7 @@ class App.View.MatchingListView extends Backbone.View
     @.followers.bind 'reset', @.setFollower
     @.followers.fetch()
     @.setProfile user.profile
+
   setProfile: (profile)->
     html = JST['userpage/detailProfile'](profile)
     $(@.el).find('table.table').html(html)

@@ -29,9 +29,9 @@ JST['matching/page'] = _.template(
           <div class='detail_profile'>
             <div class='profile-column'>
               <div class='profile-column-header'>
-
                 <h5>プロフィール <a class="to-detail-profile" href="">詳細をみる</a></5>
               </div>
+              <div class='ideal-profile'></div>
               <div class='profile-column-body'>
                 <table class='table'>
                   <tbody>
@@ -742,7 +742,7 @@ JST['candidate/page'] = _.template(
       <div class='user_profiles main_box'>
         <div class='box_menu'>
           <img class='profile_image pull-left' src='<%= image_source %>' />
-          <h4 class='name'><%= name %>さん</h4>
+          <h4 class='name'><%= first_name || name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
           <button class='like btn btn-primary'>いいね！</button>
           <button class='sendMessage btn btn-success'>メッセージを送る</button>
@@ -758,6 +758,12 @@ JST['candidate/page'] = _.template(
           <div id='detailprofile'>
             <div class='profile_column pull-left'>
               <h5>プロフィール詳細</h5>
+              <div class='ideal-profile'>
+                <p><%= first_name %>さんはこんな人を探しています</p>
+                <h4>年齢 <%= profile.ageRangeMin %> ~ <%= profile.ageRangeMax %></h4>
+                <p>理想のパートナー像</p>
+                <h5><%= profile.idealPartner %></h5>
+              </div>
               <table class='table'>
                 <tbody>
                 <% html = App.JST['userpage/detailProfile'](profile) %>
