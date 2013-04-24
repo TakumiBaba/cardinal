@@ -18,5 +18,9 @@
     "moment": ">= 2.0.0",
     "mocha": "*",
     "underscore": "*"
+  },
+  "engines": {
+    "node": "0.9",
+    "npm": "1.1.44"
   }
 }

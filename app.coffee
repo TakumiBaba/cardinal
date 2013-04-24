@@ -74,11 +74,13 @@ if process.env.NODE_ENV is 'development'
 
 
 # server
-secure_options =
-  key: fs.readFileSync("./server.key").toString()
-  cert: fs.readFileSync("./server.crt").toString()
-https.createServer(secure_options, app).listen config.port, ->
+http.createServer(app).listen config.port, ->
   console.log "HTTPS Server pid:#{process.pid} port:#{config.port}"
+# secure_options =
+#   key: fs.readFileSync("./server.key").toString()
+#   cert: fs.readFileSync("./server.crt").toString()
+# https.createServer(secure_options, app).listen config.port, ->
+#   console.log "HTTPS Server pid:#{process.pid} port:#{config.port}"
 # if cluster.isMaster
 #   (require path.resolve 'config', 'migration') app, ->
 #     cluster.fork() for i in [0...os.cpus().length]
