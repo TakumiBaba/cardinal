@@ -1,5 +1,5 @@
 {
-  "port": 3001,
+  "port": 80,
   "env": "development",
   "maxage": 604800,
   "migration": true,
