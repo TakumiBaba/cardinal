@@ -65,7 +65,7 @@ class App.View.CandidatePage extends Backbone.View
     console.log @model.get('id')
     $.ajax
       type: "POST"
-      url: "/api/users/me/#{@model.get('id')}/message"
+      url: App.BaseUrl+"/api/users/me/#{@model.get('id')}/message"
       success:(data)->
         if data
           location.href = "/#/message"

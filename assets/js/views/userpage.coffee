@@ -167,7 +167,7 @@ class App.View.UserPageMatchingList extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: "/api/talks.json"
+      url: App.BaseUrl+"/api/talks.json"
       data:
         one: @targetId
         two: id
@@ -224,7 +224,7 @@ class App.View.UserPageLikeList extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: "/api/talks.json"
+      url: App.BaseUrl+"/api/talks.json"
       data:
         one: @targetId
         two: id
