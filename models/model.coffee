@@ -94,6 +94,15 @@ UserSchema = new Schema
     message:
       type: String
       default: ""
+    ageRangeMin:
+      type: Number
+      default: 22
+    ageRangeMax:
+      type: Number
+      default: 60
+    idealPartner:
+      type: String
+      default: ""
   candidates:
     type: [{type: ObjectId, ref: "Candidate"}]
     default: []

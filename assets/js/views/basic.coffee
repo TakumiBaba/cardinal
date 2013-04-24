@@ -43,7 +43,15 @@ class App.View.Sidebar extends Backbone.View
 
   appendAllFollowings: (collection)->
     console.log collection
-    _.each collection.models, @.appendFollowings
+    models = _.filter collection.models, (model)->
+      return model.get('approval') is true
+    console.log models.length, "models"
+    if models.length > 0
+      _.each collection.models, @.appendFollowings
+    else
+      console.log 'inai'
+      console.log $(@.el).find("li")
+      $(@.el).find("li.sidebar-followings").html("まだ応援している友達はいません")
 
 class App.View.ProfilePage extends Backbone.View
   el: "#main"
@@ -66,8 +74,8 @@ class App.View.ProfilePage extends Backbone.View
     # ここでProfileModelを...
 
   render: (model)->
-    console.log model
     attributes = @.model.attributes
+    console.log @.model.attributes
     html = App.JST['profile/page'](attributes)
     $(@.el).html html
 
@@ -89,9 +97,10 @@ class App.View.ProfilePage extends Backbone.View
 
   update: (e)->
     e.preventDefault()
+    console.log 'update'
     detail =
       profile_image: $("#profile-image").attr 'src'
-      martialHistory: parseInt($("#havingMarried").val())
+      martialHistory: parseInt($("#martialHistory").val())
       hasChild: parseInt($("#hasChild").val())
       wantMarriage: parseInt($("#wantMarriage").val())
       wantChild: parseInt($("#wantChild").val())
@@ -108,6 +117,11 @@ class App.View.ProfilePage extends Backbone.View
       hoby: $("#hoby").val()
       like: $("#like").val()
       message: $("#message").val()
+      # ageRangeMin: parseInt $("#age_range_min").val()
+      # ageRangeMax: parseInt $("#age_range_max").val()
+      ageRangeMin: 22
+      ageRangeMax: 30
+      idealPartner: $("#ideal_partner").val()
     @.model.save detail
 
   cancel: (e)->

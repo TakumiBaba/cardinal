@@ -29,6 +29,7 @@ class App.View.MatchingListView extends Backbone.View
     "click li.user-thumbnail": "changeModel"
     "click button.like": "doLike"
     "click button.sendMessage": "sendMessage"
+    "click button.talk": "talk"
 
   constructor: (attrs)->
     super
@@ -84,6 +85,7 @@ class App.View.MatchingListView extends Backbone.View
       <p>理想パートナー像</p>
       """)
     $(@.el).find('a.to-detail-profile').attr 'href', "/#/u/#{user.id}"
+    $(@.el).find('h5.follower-title').html("#{user.first_name}さんの応援団")
     console.log user
     $(@.el).find('h4.name').html "#{user.first_name}さん　（#{user.profile.age}歳）"
     @.followers = new App.Collection.Followers
@@ -126,3 +128,14 @@ class App.View.MatchingListView extends Backbone.View
       success:(data)->
         if data
           location.href = "/#/message"
+
+  talk: (e)->
+    $.ajax
+      type: "POST"
+      url: "/api/talks.json"
+      data:
+        one: "me"
+        two: @targetModel.get('user').id
+      success: (data)->
+        if data
+          location.href = "/#/talk"

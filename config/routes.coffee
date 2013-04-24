@@ -31,6 +31,7 @@ module.exports = (app) ->
   app.get '/api/users/:user_id/request.json', User.request.fetch
   app.post '/api/users/me/following/:follow_id', User.followings.create
   app.delete '/api/users/:user_id/following/:deleteId', User.followings.delete
+  app.delete '/api/users/:user_id/follower/:deleteId', User.followers.delete
   app.post '/api/signup', User.signup
   # app.get '/api/users/:user_id/follower.json', User.fetchFollower
 

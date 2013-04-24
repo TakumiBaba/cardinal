@@ -50,29 +50,6 @@ class App.Model.Profile extends Backbone.Model
     super
     @.urlRoot = "/api/users/me/profile"
 
-  # defaults:
-  #   image_url: "//graph.facebook.com/100001088919966/picture"
-  #   age: 22
-  #   gender: "male"
-  #   birthday: new Date()
-  #   martialHistory: 1
-  #   hasChild: 1
-  #   wantMarriage: 1
-  #   wantChild: 1
-  #   address: 1
-  #   hometown: 1
-  #   education: 1
-  #   job: 1
-  #   income: 0
-  #   height: 0
-  #   bloodType: 1
-  #   shape: 1
-  #   drinking: 1
-  #   smoking: 1
-  #   hoby: ["hoge", "fuga"]
-  #   like: ["アニメ", "ハンドボール"]
-  #   message: "hogefuga!"
-
 class App.Model.Candidates extends Backbone.Model
 
   constructor: (attrs, options)->

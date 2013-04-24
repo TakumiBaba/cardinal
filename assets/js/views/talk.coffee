@@ -29,7 +29,10 @@ class App.View.TalkPage extends Backbone.View
 
 
   appendAllItem: (collection)->
-    _.each collection.models, @.appendItem
+    if collection.models.length > 0
+      _.each collection.models, @.appendItem
+    else
+      $(@.el).find('ul.talk_list').append "<p>まだお相手からのメッセージがありません。</p><p>気になる人がいたら、あなたからも積極的にメッセージを送ってみましょう。</p>"
 
 class App.View.TalkUnit extends Backbone.View
   tagName: "li"
@@ -46,12 +49,13 @@ class App.View.TalkUnit extends Backbone.View
   render: ->
     c = @model.get('candidate')
     u = @model.get('user')
+    date = new Date(@model.get('updatedAt'))
     attributes =
       another_source: u.profile.image_url
       source: App.User.get('profile').image_url
       name: u.name
       candidate_name: c.name
-      last_update: @model.get('updatedAt')
+      last_update: "#{date.getMonth()+1}月#{date.getDate()}日"
       candidate_source: c.profile.image_url
       candidate_age: c.profile.age
       address: c.profile.address
@@ -80,9 +84,6 @@ class App.View.TalkUnit extends Backbone.View
         console.log model
         @.comments.collection.add model
         $(@.el).find('textarea.comment_area').val("")
-
-    # @.comments.collection.add model
-    # model.sync()
 
 class App.View.Comments extends Backbone.View
   tagName: "ul"

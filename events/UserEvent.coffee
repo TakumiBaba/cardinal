@@ -59,6 +59,7 @@ exports.UserEvent = (app) ->
     update: (req, res)->
       params = req.body
       id = req.session.userid
+      console.log params
       User.findOne id: id, (err, user)->
         throw err if err
         if user
@@ -205,16 +206,19 @@ exports.UserEvent = (app) ->
       id = req.session.userid
       # followingId
     delete: (req, res)->
-      console.log 'hoge'
       id = req.session.userid
       deleteId = req.params.deleteId
-      console.log id, deleteId
-      User.findOne({id: id}).populate("following").exec (err, user)->
+      Follow.findOne({ids: {$all: [id, deleteId]}}).exec (err, follow)->
         throw err if err
-        _.each user.following, (f, i)=>
-          if f.id.toString() is deleteId
-            user.following[i].remove()
-        res.send user.following
+        console.log follow
+        follow.remove()
+        res.send "delete"
+      # User.findOne({id: id}).populate("following").exec (err, user)->
+      #   throw err if err
+      #   _.each user.following, (f, i)=>
+      #     if f.id.toString() is deleteId
+      #       user.following[i].remove()
+      #   res.send user.following
 
   followers:
     fetch: (req, res)->
@@ -245,18 +249,34 @@ exports.UserEvent = (app) ->
               res.send "add"
     delete: (req, res)->
       id = req.session.userid
-      deleteId = req.body.deleteId
-      User.find({id: {$in: [id, deleteId]}}).populate('follower').exec (err, users)->
+      deleteId = req.params.deleteId
+      console.log 'delete', id, deleteId
+      Follow.findOne({ids: {$all: [id, deleteId]}}).exec (err, follow)->
         throw err if err
-        if user
-          me = _.filter users, (u)=>
-            return u.id is id
-          target = _.filter users, (u)=>
-            return u.id is deleteId
-          me.follower.remove target._id
-          me.save (err)->
-            throw err if err
-            res.send "delete"
+        console.log follow
+        follow.remove()
+        res.send "delete"
+      # User.find({id: {$in: [id, deleteId]}}).exec (err, users)->
+      #   throw err if err
+      #   if users
+      #     me = _.find users, (u)=>
+      #       return u.id is id
+      #     target = _.find users, (u)=>
+      #       return u.id is deleteId
+      #     _.each me.follower, (f, i)=>
+      #       if f.toString() is target._id.toString()
+      #         me.follower[i].remove()
+      #     _.each target.follower, (f, i)=>
+      #       if f.toString() is me._id.toString()
+      #         target.following[i].remove()
+      #     # me.follower.remove target._id
+      #     # target.following.remove me._id
+      #     me.save()
+      #     target.save()
+      #     res.send 'delete'
+          # me.save (err)->
+          #   throw err if err
+          #   res.send "delete"
 
   pending:
     fetch: (req, res)->

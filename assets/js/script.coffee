@@ -37,7 +37,7 @@ class Router extends Backbone.Router
         @now.render()
       when 'profile'
         @now = new App.View.ProfilePage()
-        @now.render()
+        # @now.render()
       # when 'me'
       when 'supporter'
         @now = new App.View.SupporterPage()

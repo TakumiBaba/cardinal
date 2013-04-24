@@ -15,16 +15,16 @@ JST['matching/page'] = _.template(
             <img class='profile_image pull-left' src='' />
             <h4 class='name'></h4>
             <h5 class='simple_profile'></h5>
-            <div class='btn-group'>
-              <button class='like btn pink'>いいね！</button>
-              <button class='sendMessage btn btn-success'>メッセージを送る</button>
-              <div class='btn-group recommend'>
-                <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
-                <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
-                  <li class='divider'></li>
-                </ul>
-              </div>
+            <button class='like btn pink'>いいね！</button>
+            <button class='sendMessage btn green'>メッセージを送る</button>
+            <button class='talk btn yellow'>応援団に相談</button>
+            <div class='btn-group recommend'>
+              <button class='btn dropdown-toggle btn-primary' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
+              <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
+                <li class='divider'></li>
+              </ul>
             </div>
+
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
@@ -41,7 +41,7 @@ JST['matching/page'] = _.template(
             </div>
             <div class='follower_column'>
               <div class='follower_column_header'>
-                <h5>応援団一覧</5>
+                <h5 class='follower-title'></5>
               </div>
               <div class='follower-column-body'>
                 <ul class='follower-list'>
@@ -85,7 +85,7 @@ JST['matching/page'] = _.template(
             </div>
             <div class='follower_column'>
               <div class='follower_column_header'>
-                <h5>応援団一覧</5>
+                <h5 class='follower-title'></5>
               </div>
               <div class='follower-column-body'>
                 <ul class='follower-list'>
@@ -110,79 +110,15 @@ JST['matching/thumbnail'] = _.template(
 JST['profile/page'] = _.template(
   """
   <div id='profile_page'>
-    <h3 class='title_box'>自分のプロフィール</h3>
+    <h3 class='title_box'>あなたのプロフィール</h3>
     <div class='profile box-inner container'>
       <form class='form-horizontal'>
         <div class='control-group'>
           <label for='profile-image' class='control-label'>プロフィール画像</label>
           <div class='controls'>
-            <img id='profile-image' style='width:100px; height:100px' src=''>
+            <img id='profile-image' style='width:100px; height:100px' src='<%= image_url %>'>
             <ul class='profile-image-list'>
             </ul>
-          </div>
-        </div>
-        <div class='control-group'>
-          <label for='marital' class='control-label'>婚姻歴</label>
-          <div class='controls'>
-            <select name='havingMarried' id='havingMarried'>
-            <% options = ['---','なし','あり'] %>
-            <% _.each(options, function(item, i){
-                if(martialHistory == i){
-                  var option = '<option selected value='+i+'>'+item+'</option>'
-                }else{
-                  var option = '<option value='+i+'>'+item+'</option>'
-                }%>
-                <%= option %>
-            <%}); %>
-            </select>
-          </div>
-        </div>
-        <div class='control-group'>
-          <label for='hasChild' class='control-label'>子どもの有無</label>
-          <div class='controls'>
-            <select name='hasChild' id='hasChild'>
-            <% options = ['---','いない','いる(別居)','いる(同居)'] %>
-            <% _.each(options, function(item, i){
-                if(hasChild == i){
-                  var option = '<option selected value='+i+'>'+item+'</option>'
-                }else{
-                  var option = '<option value='+i+'>'+item+'</option>'
-                }%>
-                <%= option %>
-            <%}); %>
-            </select>
-          </div>
-        </div>
-        <div class='control-group'>
-          <label for='preferredTime' class='control-label'>結婚希望時期</label>
-          <div class='controls'>
-            <select name='wantMarriage' id='wantMarriage'>
-            <% options = ['---','すぐにでも','2〜3年のうちに','お相手に合わせる','特に決めてない'] %>
-            <% _.each(options, function(item, i){
-                if(wantMarriage == i){
-                  var option = '<option selected value='+i+'>'+item+'</option>'
-                }else{
-                  var option = '<option value='+i+'>'+item+'</option>'
-                }%>
-                <%= option %>
-            <%}); %>
-            </select>
-          </div>
-        </div>
-        <div class='control-group'>
-          <label for='preferredChild' class='control-label'>子どもの希望</label>
-          <div class='controls'>
-            <select name='wantChild' id='wantChild'>
-            <% options = ['---','結婚したら欲しい','お相手と相談したい','いなくても構わない','欲しくない','特に決めてない'] %>
-            <% _.each(options, function(item, i){
-                if(wantChild == i){
-                  var option = '<option selected value='+i+'>'+item+'</option>'
-                }else{
-                  var option = '<option value='+i+'>'+item+'</option>'
-                }%>
-                <%= option %>
-            <%}); %>
-            </select>
           </div>
         </div>
         <div class='control-group'>
@@ -202,7 +138,7 @@ JST['profile/page'] = _.template(
           </div>
         </div>
         <div class='control-group'>
-          <label for='birthPlace' class='control-label'>出身地</label>
+          <label for='hometown' class='control-label'>出身地</label>
           <div class='controls'>
             <select name='hometown' id='hometown'>
             <% options = ['---','北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県',,'滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'] %>
@@ -246,6 +182,70 @@ JST['profile/page'] = _.template(
             <% options = ['---','中学卒','高校卒','短大卒','大卒','大学院卒','その他','指定しない'] %>
             <% _.each(options, function(item, i){
                 if(education == i){
+                  var option = '<option selected value='+i+'>'+item+'</option>'
+                }else{
+                  var option = '<option value='+i+'>'+item+'</option>'
+                }%>
+                <%= option %>
+            <%}); %>
+            </select>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='martialHistory' class='control-label'>婚姻歴</label>
+          <div class='controls'>
+            <select name='martialHistory' id='martialHistory'>
+            <% options = ['---','なし','あり'] %>
+            <% _.each(options, function(item, i){
+                if(martialHistory == i){
+                  var option = '<option selected value='+i+'>'+item+'</option>'
+                }else{
+                  var option = '<option value='+i+'>'+item+'</option>'
+                }%>
+                <%= option %>
+            <%}); %>
+            </select>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='wantChild' class='control-label'>子どもの希望</label>
+          <div class='controls'>
+            <select name='wantChild' id='wantChild'>
+            <% options = ['---','結婚したら欲しい','お相手と相談したい','いなくても構わない','欲しくない','特に決めてない'] %>
+            <% _.each(options, function(item, i){
+                if(wantChild == i){
+                  var option = '<option selected value='+i+'>'+item+'</option>'
+                }else{
+                  var option = '<option value='+i+'>'+item+'</option>'
+                }%>
+                <%= option %>
+            <%}); %>
+            </select>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='wantMarriage' class='control-label'>結婚希望時期</label>
+          <div class='controls'>
+            <select name='wantMarriage' id='wantMarriage'>
+            <% options = ['---','すぐにでも','2〜3年のうちに','お相手に合わせる','特に決めてない'] %>
+            <% _.each(options, function(item, i){
+                if(wantMarriage == i){
+                  var option = '<option selected value='+i+'>'+item+'</option>'
+                }else{
+                  var option = '<option value='+i+'>'+item+'</option>'
+                }%>
+                <%= option %>
+            <%}); %>
+            </select>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='hasChild' class='control-label'>子どもの有無</label>
+          <div class='controls'>
+            <select name='hasChild' id='hasChild'>
+            <% options = ['---','いない','いる(別居)','いる(同居)'] %>
+            <% _.each(options, function(item, i){
+                if(hasChild == i){
                   var option = '<option selected value='+i+'>'+item+'</option>'
                 }else{
                   var option = '<option value='+i+'>'+item+'</option>'
@@ -336,13 +336,26 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='like' class='control-label'>好きなもの</label>
           <div class='controls'>
-            <input type='text' id='like' name='like' value='hoge' class='span2'>
+            <input type='text' id='like' name='like' value='' class='span2'>
           </div>
         </div>
         <div class='control-group'>
           <label for='message' class='control-label'>お相手へのメッセージ</label>
           <div class='controls'>
-            <textarea rows='3' id='message' name='message' class='span5'>hello</textarea>
+            <textarea rows='3' id='message' name='message' class='span5'></textarea>
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='age_range_min' class='control-label'>希望の年齢</label>
+          <div class='controls'>
+            <input type='text' id='age_range_min' name='age_range_min' value='<%= ageRangeMin %>' class='span2' />歳から
+            <input type='text' id='age_range_max' name='age_range_max' value='<%= ageRangeMax %>' class='span2' />歳まで
+          </div>
+        </div>
+        <div class='control-group'>
+          <label for='ideal_partner' class='control-label'>理想のパートナー像</label>
+          <div class='controls'>
+            <textarea rows='3' id='ideal_partner' name='ideal_partner' class='span5'><%= idealPartner %></textarea>
           </div>
         </div>
         <div class='form-actions'>
@@ -816,7 +829,7 @@ JST['supporter/li'] = _.template(
         <img src=<%= source %> />
         <h5><%= name %></h5>
       </a>
-      <button class='btn btn-block following'>削除する</button>
+      <button class='btn btn-block delete <%= optionClass %>'>削除する</button>
     </div>
   </li>
   """
@@ -1041,9 +1054,10 @@ JST['sidebar/main'] = _.template(
       <li class='like'><a href='/#/like'> いいねリスト</a></li>
       <li class='talk'><a href='/#/talk'> 応援トーク</a></li>
       <li class='message'><a href='/#/message'> メッセージ</a></li>
+      <li class='divider'></li>
       <li class='test'><a href='/#/invite'> 応援団を増やす</a></li>
       <li class='supporter'><a href='/#/supporter'> あなたの婚活仲間</a></li>
-      <li class='nav-header'>あなたが応援している人</li>
+      <li class='nav-header sidebar-followings'>あなたが応援している人</li>
       <li>
         <ul class='nav nav-list following'></ul>
       </li>
@@ -1052,9 +1066,7 @@ JST['sidebar/main'] = _.template(
   <div id='sidebar-bottom' class='pull-left'>
     <ul class='breadcrumb'>
       <li><a>利用規約</a></li>
-      <li class='divider'>/</li>
       <li><a>プライバシーポリシー</a></li>
-      <li class='divider'>/</li>
       <li><a>運営チーム</a></li>
     </ul>
   </div>
@@ -1079,8 +1091,8 @@ JST['sidebar/supporter'] = _.template(
     <ul class='nav nav-list'>
       <li class='nav-header'>メニュー</li>
       <li class='supporter'><a href='/#/supporter'>あなたの婚活仲間</a></li>
-        <li class='signup'><a href='/#/signup'>婚活を始める</a></li>
-      <li class='nav-header'>あなたが応援している人</li>
+      <li class='signup'><a href='/#/signup'>婚活を始める</a></li>
+      <li class='nav-header sidebar-followings'>あなたが応援している人</li>
       <li>
         <ul class='nav nav-list following'></ul>
       </li>
