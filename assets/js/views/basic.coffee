@@ -145,12 +145,18 @@ class App.View.FollowDropDownMenu extends Backbone.View
 
   appendAllItem: (collection)->
     $(@.el).find('ul.recommend-following').empty()
-    _.each collection.models, @.appendItem
+    if collection.models.length > 0
+      _.each collection.models, @.appendItem
+    else
+      $(@.el).find('button').addClass 'disabled'
+
+  setTargetId: (id)->
+    @targetId = id
 
   recommend: (e)->
-    console.log e.currentTarget
     id = $(e.currentTarget).attr 'id'
     console.log @targetId, id
+    console.log 'recommend!'
     $.ajax
       type: "POST"
       url: "/api/users/#{id}/candidates/#{@targetId}"

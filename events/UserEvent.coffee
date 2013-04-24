@@ -83,7 +83,7 @@ exports.UserEvent = (app) ->
         id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
         User.findOne({id: id}).exec (err, user)->
           throw err if err
-          Follow.find({_id: {$in:user.follower}}).populate('follower', "id name profile").populate('follower', "id name profile").exec (err, follows)->
+          Follow.find({_id: {$in:user.follower}}).populate('follower', "id name last_name facebook_id profile").exec (err, follows)->
             throw err if err
             return res.send follows
     update: (req, res)->

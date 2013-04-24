@@ -3,90 +3,94 @@ JST = window.App.JST
 JST['matching/page'] = _.template(
   """
   <div id='matching_page' class='profile_and_following_view'>
-    <h3 class='title_box'>お相手リスト<small>ビビッと来たら『いいね』をプッシュ！</small></h2>
-    <div class='system_matching box'>
-      <div class='sm_side matching_side_div'>
-        <ul class='sm_user_list matching_side'>
-        </ul>
-      </div>
-      <div class='sm_main main_box'>
-        <div class='matchinguser_menu box_menu'>
-          <img class='profile_image pull-left' src='' />
-          <h4 class='name'></h4>
-          <h5 class='simple_profile'></h5>
-          <div class='btn-group'>
-            <button class='like btn pink'>いいね！</button>
-            <button class='sendMessage btn btn-success'>メッセージを送る</button>
-            <div class='btn-group recommend'>
-              <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
-              <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
-                <li class='divider'></li>
-              </ul>
-            </div>
-          </div>
+    <div class='system_matching'>
+      <h3 class='title_box'>お相手リスト<small>ビビッと来たら『いいね』をプッシュ！</small></h2>
+      <div class='box'>
+        <div class='sm_side matching_side_div'>
+          <ul class='sm_user_list matching_side'>
+          </ul>
         </div>
-        <div class='detail_profile'>
-          <div class='profile-column'>
-            <div class='profile-column-header'>
-
-              <h5>プロフィール <a href="">詳細をみる</a></5>
-            </div>
-            <div class='profile-column-body'>
-              <table class='table'>
-                <tbody>
-                </tbody>
-              </table>
+        <div class='sm_main main_box'>
+          <div class='matchinguser_menu box_menu'>
+            <img class='profile_image pull-left' src='' />
+            <h4 class='name'></h4>
+            <h5 class='simple_profile'></h5>
+            <div class='btn-group'>
+              <button class='like btn pink'>いいね！</button>
+              <button class='sendMessage btn btn-success'>メッセージを送る</button>
+              <div class='btn-group recommend'>
+                <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
+                <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
+                  <li class='divider'></li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div class='follower_column'>
-            <div class='follower_column_header'>
-              <h5>応援団一覧</5>
+          <div class='detail_profile'>
+            <div class='profile-column'>
+              <div class='profile-column-header'>
+
+                <h5>プロフィール <a class="to-detail-profile" href="">詳細をみる</a></5>
+              </div>
+              <div class='profile-column-body'>
+                <table class='table'>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class='follower-column-body'>
-              <ul class='follower-list'>
-              </ul>
+            <div class='follower_column'>
+              <div class='follower_column_header'>
+                <h5>応援団一覧</5>
+              </div>
+              <div class='follower-column-body'>
+                <ul class='follower-list'>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <h3 class='title_box'>応援団おすすめリスト<small>お相手にもあなたが紹介されています。</small></h3>
-    <div class='supporter_matching box'>
-      <div class='sp_side matching_side_div'>
-        <ul class='sp_user_list matching_side'>
+    <div class='supporter_matching'>
+      <h3 class='title_box'>応援団おすすめリスト<small>お相手にもあなたが紹介されています。</small></h3>
+      <div class='box'>
+        <div class='sp_side matching_side_div'>
+          <ul class='sp_user_list matching_side'>
 
-        </ul>
-      </div>
-      <div class='sp_main main_box'>
-        <div class='matchinguser_menu box_menu'>
-          <img class='profile_image pull-left' src='' />
-          <h4 class='name'></h4>
-          <h5 class='simple_profile'></h5>
-          <div class='btn-group'>
-            <button class='like btn btn-primary'>いいね！</button>
-            <button class='sendMessage btn btn-success'>メッセージを送る</button>
-            <button class='recommend btn btn-inverse'>友達に勧める</button>
-          </div>
+          </ul>
         </div>
-        <div class='detail_profile'>
-          <div class='profile-column'>
-            <div class='profile-column-header'>
-              <h5>プロフィール詳細</5>
-            </div>
-            <div class='profile-column-body'>
-              <table class='table'>
-                <tbody>
-                </tbody>
-              </table>
+        <div class='sp_main main_box'>
+          <div class='matchinguser_menu box_menu'>
+            <img class='profile_image pull-left' src='' />
+            <h4 class='name'></h4>
+            <h5 class='simple_profile'></h5>
+            <div class='btn-group'>
+              <button class='like btn btn-primary'>いいね！</button>
+              <button class='sendMessage btn btn-success'>メッセージを送る</button>
+              <button class='recommend btn btn-inverse'>友達に勧める</button>
             </div>
           </div>
-          <div class='follower_column'>
-            <div class='follower_column_header'>
-              <h5>応援団一覧</5>
+          <div class='detail_profile'>
+            <div class='profile-column'>
+              <div class='profile-column-header'>
+                <h5>プロフィール詳細</5>
+              </div>
+              <div class='profile-column-body'>
+                <table class='table'>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class='follower-column-body'>
-              <ul class='follower-list'>
-              </ul>
+            <div class='follower_column'>
+              <div class='follower_column_header'>
+                <h5>応援団一覧</5>
+              </div>
+              <div class='follower-column-body'>
+                <ul class='follower-list'>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -728,7 +732,7 @@ JST['candidate/page'] = _.template(
           <h4 class='name'><%= name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
           <button class='like btn btn-primary'>いいね！</button>
-          <button class='send-message btn btn-success'>メッセージを送る</button>
+          <button class='sendMessage btn btn-success'>メッセージを送る</button>
           <div class='btn-group recommend'>
             <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
             <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>

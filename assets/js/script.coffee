@@ -52,7 +52,7 @@ class Router extends Backbone.Router
           _.each res.to, (fbid)->
             $.ajax
               type: "POST"
-              url: App.BaseUrl+"/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+              url: +"/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
               success: (data)->
                 console.log data
           # console.log res
@@ -62,13 +62,17 @@ class Router extends Backbone.Router
 
   supporterpageAction: (id)->
     $("div#main").empty()
-    user = new App.View.UserPage
+    if @now
+      @now.undelegateEvents()
+    @now = new App.View.UserPage
       id: id
-    user.model.fetch()
+    @now.model.fetch()
 
   userpageAction: (id)->
     $("div#main").empty()
-    candidate = new App.View.CandidatePage
+    if @now
+      @now.undelegateEvents()
+    @now = new App.View.CandidatePage
       id: id
 
 window.fbAsyncInit = ->
@@ -99,7 +103,6 @@ window.fbAsyncInit = ->
             _.bindAll @, "start"
             App.User.bind 'change', @start
 
-            App.BaseUrl = "https://133.27.247.132:3001"
             router = new Router()
             App.User.fetch()
 

@@ -16,7 +16,9 @@ exports.SiteEvent = (app) ->
   login: (req, res)->
     params = req.body
     id = req.body.id
+    console.log params
     # User.findOne({facebook_id: id}).populate("candidates").exec (err, user)=>
+    console.log 'login'
     User.findOne({facebook_id: id}).exec (err, user)=>
       throw err if err
       console.log user
@@ -89,6 +91,7 @@ exports.SiteEvent = (app) ->
         user.last_name = params.last_name
         user.profile.gender = params.gender
         user.isSuppoter = true
+        user.isFirstLogin = false
         user.profile.image_url = "https://graph.facebook.com/#{params.id}/picture?type=large"
         user.save()
         req.session.userid = user.id

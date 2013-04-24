@@ -38,21 +38,26 @@ class App.View.MatchingListView extends Backbone.View
 
   appendItem: (model)->
     user = model.get('user')
-    console.log user
     attributes =
       id: user.id
       source: user.profile.image_url
     li = JST['matching/thumbnail'](attributes)
-    console.log $(@.el).find('ul.matching_side')
     $(@.el).find('ul.matching_side').append li
 
   appendAllItem: (collection)->
-    console.log collection
     flag = if $(@.el).hasClass 'system_matching' then true else false
     list = _.filter collection.models, (model)=>
       return model.get('isSystemMatching') is flag
-    _.each list, @appendItem
-    $(@.el).find('ul.matching_side li:first').click()
+    if list.length > 0
+      _.each list, @appendItem
+      @recommendButton = new App.View.FollowDropDownMenu
+        targetId: list[0].get('user').id
+      @recommendButton.render()
+      $(@.el).find('ul.matching_side li:first').click()
+    else
+      $(@.el).hide()
+
+
 
   changeModel: (e)->
     id = $(e.currentTarget).attr('id')
@@ -62,12 +67,10 @@ class App.View.MatchingListView extends Backbone.View
     $(e.currentTarget).addClass 'active'
     _.each @collection.models, (model)=>
       if model.get('user').id is id
-        console.log id
         @targetModel = model
         @setDetail model
-    @recommendButton = new App.View.FollowDropDownMenu
-      targetId: id
-    @recommendButton.render()
+        console.log @recommendButton
+        @recommendButton.setTargetId id
 
   setDetail: (model)->
     user = model.get('user')
@@ -80,6 +83,7 @@ class App.View.MatchingListView extends Backbone.View
       <p>年齢22 ~ 44歳</p>
       <p>理想パートナー像</p>
       """)
+    $(@.el).find('a.to-detail-profile').attr 'href', "/#/u/#{user.id}"
     console.log user
     $(@.el).find('h4.name').html "#{user.first_name}さん　（#{user.profile.age}歳）"
     @.followers = new App.Collection.Followers
@@ -106,7 +110,7 @@ class App.View.MatchingListView extends Backbone.View
     console.log @targetModel.get('user').id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/candidates/#{@targetModel.get('user').id}"
+      url: "/api/users/me/candidates/#{@targetModel.get('user').id}"
       data:
         nextStatus: "up"
       success: (data)->
@@ -118,7 +122,7 @@ class App.View.MatchingListView extends Backbone.View
     console.log @targetModel.get('user').id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{@targetModel.get('user').id}/message"
+      url: "/api/users/me/#{@targetModel.get('user').id}/message"
       success:(data)->
         if data
           location.href = "/#/message"

@@ -101,12 +101,13 @@ class App.View.UserPageProfile extends Backbone.View
     ul = $("ul.follower-list")
     console.log collection
     _.each collection.models, (model)=>
-      attributes =
-        facebook_url: "https://facebook.com/#{model.get('facebook_id')}"
-        source: model.get('profile').image_url
-        name: model.get('name')
-      li = JST['matching/follower'](attributes)
-      ul.append li
+      if model.get('approval')
+        attributes =
+          facebook_url: "https://facebook.com/#{model.get('follower').facebook_id}"
+          source: model.get('follower').profile.image_url
+          name: model.get('follower').last_name
+        li = JST['matching/follower'](attributes)
+        ul.append li
 
 class App.View.UserPageMatchingList extends Backbone.View
   el: "div#matchinglist"
@@ -167,13 +168,14 @@ class App.View.UserPageMatchingList extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/talks.json"
+      url: "/api/talks.json"
       data:
         one: @targetId
         two: id
       success:(data)->
         console.log data
-        window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
+        $("a[href='#supportertalk']").click()
+        # window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
 
 class App.View.UserPageLikeList extends Backbone.View
   el: "div#likelist"
@@ -199,14 +201,17 @@ class App.View.UserPageLikeList extends Backbone.View
     status = model.get('status')
     user  = model.get('user')
     text  = ""
-    if status is 1
+    console.log model
+    myStatus = model.get("myStatus")
+    status = model.get("status")
+    if myStatus is true && status is false
       ul = $('div.my-like ul')
-    else if status is 2
+    else if myStatus is false && status is true
       ul = $('div.your-like ul')
-    else if status is 3
+    else if myStatus is true && status is true
       ul = $('div.each-like ul')
     else
-      ul = ""
+      ul = $("")
     attributes =
       id: user.id
       source: user.profile.image_url
@@ -224,13 +229,14 @@ class App.View.UserPageLikeList extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/talks.json"
+      url: "/api/talks.json"
       data:
         one: @targetId
         two: id
       success:(data)=>
         console.log data
-        window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
+        $("a[href='#supportertalk']").click()
+        # window.alert("応援団トークのタブをクリックして#{data.candidate.name}さんについて話しましょう")
         location.href = "/#/s/#{@targetId}"
 
 

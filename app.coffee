@@ -72,9 +72,9 @@ app.use (require path.resolve 'config', 'routes') app
 if process.env.NODE_ENV is 'development'
   app.use express.errorHandler()
 
-secure_options =
-  key: fs.readFileSync("./server.key").toString()
-  cert: fs.readFileSync("./server.crt").toString()
+# secure_options =
+#   key: fs.readFileSync("./com.takumibaba.key").toString()
+#   cert: fs.readFileSync("./com.takumibaba.crt").toString()
 # server
 http.createServer(app).listen config.port, ->
   console.log "HTTP Server pid:#{process.pid} port:#{config.port}"

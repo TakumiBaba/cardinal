@@ -16,23 +16,6 @@ exports.LikeEvent = (app) ->
           return _.contains status, c.status.toString()
         return res.send list
 
-  # create: (req, res)->
-  #   oneId = req.params.oneId
-  #   twoId = req.params.twoId
-  #   User.find({id: {$in:[oneId, twoId]}}).populate('candidate').exec (err, users)->
-  #     throw err if err
-  #     one = {}
-  #     two = {}
-  #     _.each users, (u)=>
-  #       if u.id is oneId
-  #         one = u
-  #       else
-  #         two = u
-
-  #     Candidate.find().where('one').in([one._id, two._id]).where('two').in([one._id, two._id]).exec (err, candidate)->
-  #       # 共通のCandidateカラムを作っておいて、そこでStatusを変更させていく。
-  #     _.each one.candidates, (c)=>
-  #       if c.user is two._id
 
   status:
     fetch: (req, res)->
@@ -45,7 +28,6 @@ exports.LikeEvent = (app) ->
           throw err if err
           list = []
           _.each statuses, (status)=>
-            console.log  status.one
             if status.one.id is user.id
               json =
                 user: status.two
@@ -87,8 +69,9 @@ exports.LikeEvent = (app) ->
             one = u
           else
             two = u
-        Status.findOne({ids: {$all:[one.id, two.id]}}).populate('one', "id name profile").populate("two", "id name profile").exec (err, status)=>
+        Status.findOne({ids: {$all:[one.id, two.id]}}).exec (err, status)=>
           throw err if err
+          console.log status
           unless status
             status = new Status()
             status.one = one._id
@@ -96,27 +79,33 @@ exports.LikeEvent = (app) ->
             status.ids = [one.id, two.id]
             status.one_status = false
             status.two_status = false
-            status.one_isSystemMatching = false
-            status.two_isSystemMatching = false
-
-          if status.one.id is one.id
+            status.one_isSystemMatching = true
+            status.two_isSystemMatching = true
+            one.statuses.push status
+            two.statuses.push status
+          if status.one.toString() is one._id.toString()
+            console.log "one"
             if nextStatus is "up"
               status.one_status = true
             else if nextStatus is "down"
               status.one_status = false
             else if nextStatus is "promotion"
-              status.one_isSystemMatching = false
+              console.log 'promotion!!!!!!!!!!!!'
+              status.two_isSystemMatching = false
           else
+            console.log "two"
             if nextStatus is "up"
               status.two_status = true
             else if nextStatus is "down"
               status.two_status = false
             else if nextStatus is "promotion"
-              status.two_isSystemMatching = false
+              console.log 'promotion!!!!!!!!!!!!'
+              status.one_isSystemMatching = false
           console.log status
+          one.save()
+          two.save()
           status.save (err)->
             throw err if err
-            console.log @
             return res.send status
 
   create: (req, res)->

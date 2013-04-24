@@ -86,24 +86,26 @@ class App.View.Messages extends Backbone.View
   appendAllItem: (collection)->
     console.log 'messages set'
     $(@.el).find('div.message-body ul').empty()
-
-    _.each collection.models, (model)=>
-      @.appendItem model
+    if collection.models.length > 0
+      _.each collection.models, (model)=>
+        @.appendItem model
+    else
+      console.log 'hoge-'
 
   setModel: (model)->
     one = model.get('one')
     two = model.get('two')
     @target =  if one.id is App.User.get('id') then two else one
     $(@.el).find('div.message-body ul').empty()
+    $(@.el).find('div.message-header h5').html("#{@target.name}さんとのやりとり")
     _.each model.get('messages'), (message)=>
       @collection.add message
 
   postMessage: (e)->
-    console.log 'hei'
     text = $('textarea.message').val()
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{@target.id}/message"
+      url: "/api/users/me/#{@target.id}/message"
       data:
         text: text
       success: (data)=>

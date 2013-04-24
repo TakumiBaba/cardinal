@@ -20,7 +20,6 @@ exports.TalkEvent = (app) ->
       console.log users
       o = ""
       t = ""
-      console.log 'hoge', o
       _.each users, (user)=>
         o = user if user.id is one
         t = user if user.id is two
@@ -35,7 +34,10 @@ exports.TalkEvent = (app) ->
           o.save()
           console.log 'new'
         console.log 'old'
-        return res.send talk
+        list = talk
+        list.name = t.last_name
+        console.log list
+        return res.send list
 
     # Talk.findOne id: {$in: [one, two]}, (err, talk)->
     #   throw err if err

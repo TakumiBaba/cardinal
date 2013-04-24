@@ -71,7 +71,7 @@ class App.View.TalkUnit extends Backbone.View
     text = $(@.el).find('textarea.comment_area').val()
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/talks/#{@.talkId}/comment"
+      url: "/api/talks/#{@.talkId}/comment"
       data:
         user_id: "me"
         text: text
@@ -79,6 +79,7 @@ class App.View.TalkUnit extends Backbone.View
       success:(model)=>
         console.log model
         @.comments.collection.add model
+        $(@.el).find('textarea.comment_area').val("")
 
     # @.comments.collection.add model
     # model.sync()

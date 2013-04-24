@@ -67,7 +67,6 @@ class App.View.LikePage extends Backbone.View
       return model.get('user').id is target
     model.urlRoot = "/api/users/me/candidates/#{model.get('user').id}"
     model.set("nextStatus", "down")
-    console.log model
     model.save()
     $($(e.currentTarget).parent().parent()).remove()
   doLike: (e)->
@@ -79,7 +78,7 @@ class App.View.LikePage extends Backbone.View
     model.set("nextStatus", "up")
     model.save()
     li = $($(e.currentTarget).parent().parent()).clone()
-    # @appendItem model
+    @appendItem model
     # $("div.each-like ul").append li
     $($(e.currentTarget).parent().parent()).remove()
   sendMessage: (e)->
@@ -90,7 +89,7 @@ class App.View.LikePage extends Backbone.View
     console.log model
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{target}/message"
+      url: "/api/users/me/#{target}/message"
       success: (data)->
         if data
           location.href = "/#/message"
@@ -101,7 +100,7 @@ class App.View.LikePage extends Backbone.View
     console.log id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/talks.json"
+      url: "/api/talks.json"
       data:
         one: "me"
         two: id
