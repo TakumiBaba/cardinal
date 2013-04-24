@@ -26,6 +26,8 @@ class App.View.Sidebar extends Backbone.View
         name: model.get('first_name')
         source: model.get('profile').image_url
       html = JST['sidebar/supporter'](attributes)
+      location.href = "/#/supporter"
+      console.log 'hoge'
     $(@.el).html html
     @.followings.fetch()
 

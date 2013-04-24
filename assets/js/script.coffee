@@ -4,7 +4,6 @@ window.App = {
   Model: {}
   Collection: {}
 }
-baseUrl = "https://localhost:3001/"
 
 class Router extends Backbone.Router
 
@@ -78,7 +77,7 @@ class Router extends Backbone.Router
 window.fbAsyncInit = ->
   FB.init
     appId: 381551511881912
-    channelUrl: '//www.mag.keio.ac.jp/~bb/'
+    channelUrl: '//takumibaba.com'
     status: true
     cookie: true
     xfbml: true
@@ -105,7 +104,6 @@ window.fbAsyncInit = ->
 
             router = new Router()
             App.User.fetch()
-
 
     else
       FB.login()

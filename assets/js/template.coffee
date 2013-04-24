@@ -1062,7 +1062,7 @@ JST['sidebar/main'] = _.template(
   )
 JST['sidebar/supporter'] = _.template(
   """
-  <a href='/#/'>
+  <a href='/#/supporter'>
     <img class='logo' src='/image/logo.png' />
   </a>
   <div id='welcome_box' class='clearfix'>
