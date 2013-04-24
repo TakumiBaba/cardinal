@@ -42,6 +42,8 @@ exports.SiteEvent = (app) ->
             exclusion.push user.id
             User.find({}).where('id').nin(exclusion).exec (err, users)->
               throw err if err
+              if !users || users.length < 20-num
+                return false
               users = _.shuffle users
               _.each [num..20], (i)=>
                 console.log i
