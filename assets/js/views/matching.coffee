@@ -102,7 +102,7 @@ class App.View.MatchingListView extends Backbone.View
     console.log @targetModel.get('user').id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/candidates/#{@targetModel.get('user').id}"
+      url: "/api/users/me/candidates/#{@targetModel.get('user').id}"
       data:
         nextStatus: "up"
       success: (data)->
@@ -114,7 +114,7 @@ class App.View.MatchingListView extends Backbone.View
     console.log @targetModel.get('user').id
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{@targetModel.get('user').id}/message"
+      url: "/api/users/me/#{@targetModel.get('user').id}/message"
       success:(data)->
         if data
           location.href = "/#/message"

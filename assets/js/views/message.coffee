@@ -103,7 +103,7 @@ class App.View.Messages extends Backbone.View
     text = $('textarea.message').val()
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{@target.id}/message"
+      url: "/api/users/me/#{@target.id}/message"
       data:
         text: text
       success: (data)=>

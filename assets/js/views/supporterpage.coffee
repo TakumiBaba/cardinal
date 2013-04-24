@@ -92,7 +92,7 @@ class App.View.SupporterPage extends Backbone.View
     id = $(e.currentTarget).parent().parent().attr 'id'
     $.ajax
       type: "DELETE"
-      url: App.BaseUrl+"/api/users/me/following/#{id}"
+      url: "/api/users/me/following/#{id}"
       success:(data)=>
         $($(e.currentTarget).parent().parent()).remove()
         console.log data
@@ -102,6 +102,6 @@ class App.View.SupporterPage extends Backbone.View
     console.log id
     $.ajax
       type: "PUT"
-      url: App.BaseUrl+"/api/users/me/follow/#{id}"
+      url: "/api/users/me/follow/#{id}"
       success:(data)->
         console.log data

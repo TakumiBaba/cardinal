@@ -55,7 +55,7 @@ class App.View.CandidatePage extends Backbone.View
     console.log e
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/candidates/#{@model.get('id')}.json"
+      url: "/api/users/me/candidates/#{@model.get('id')}.json"
       data:
         status: "up"
       success:(data)->
@@ -65,7 +65,7 @@ class App.View.CandidatePage extends Backbone.View
     console.log @model.get('id')
     $.ajax
       type: "POST"
-      url: App.BaseUrl+"/api/users/me/#{@model.get('id')}/message"
+      url: "/api/users/me/#{@model.get('id')}/message"
       success:(data)->
         if data
           location.href = "/#/message"

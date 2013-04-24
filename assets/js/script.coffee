@@ -52,7 +52,7 @@ class Router extends Backbone.Router
           _.each res.to, (fbid)->
             $.ajax
               type: "POST"
-              url: App.BaseUrl+"/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+              url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
               success: (data)->
                 console.log data
           # console.log res
@@ -85,7 +85,7 @@ window.fbAsyncInit = ->
       FB.api 'me', (res)->
         $.ajax
           type: "POST"
-          url: App.BaseUrl+"/api/login"
+          url: "/api/login"
           data: res
           success: (id)->
             console.log id
