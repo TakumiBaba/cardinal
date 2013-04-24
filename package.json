@@ -20,7 +20,7 @@
     "underscore": "*"
   },
   "engines": {
-    "node": "0.9",
+    "node": "0.10",
     "npm": "1.1.44"
   }
 }
