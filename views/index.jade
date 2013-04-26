@@ -9,6 +9,7 @@ html
     script(src='/lib/underscore.min.js')
     script(src='/lib/backbone.min.js')
     script(src='/lib/bootstrap.min.js')
+
     !=js('script')
     !=js('views/basic')
     !=js('views/index')
@@ -23,8 +24,11 @@ html
     !=js('model')
     !=js('collection')
     !=js('template')
-    script(src='//connect.facebook.com/en_us/all.js')
+    script(src='/lib/connect.facebook.all.js')
+    //- script(src='//connect.facebook.com/en_us/all.js')
   body
     div#wrapper
       div#sidebar.pull-left.span3
       div#main.pull-left.span10
+
+  script(src='/lib/gatracking.js')

@@ -6,13 +6,8 @@ class App.View.Sidebar extends Backbone.View
   constructor: ->
     super
 
-    _.bindAll @, "render", "appendFollowings", "appendAllFollowings"
+    _.bindAll @, "render"
     @.model.bind 'change', @render
-
-    @.followings = new App.Collection.Followings
-      userid: "me"
-    @.followings.bind 'add', @.appendFollowings
-    @.followings.bind 'reset', @.appendAllFollowings
 
   render: (model)=>
     isSupporter = model.get('isSupporter')
@@ -27,31 +22,8 @@ class App.View.Sidebar extends Backbone.View
         source: model.get('profile').image_url
       html = JST['sidebar/supporter'](attributes)
       location.href = "/#/supporter"
-      console.log 'hoge'
     $(@.el).html html
-    @.followings.fetch()
 
-  appendFollowings: (model)->
-    if model.get 'approval'
-      f = model.get('following')
-      attributes =
-        id: f.id
-        source: "/api/users/#{f.id}/picture"
-        name: f.name
-      li = App.JST['sidebar/following'](attributes)
-      $(@.el).find('ul.following').append li
-
-  appendAllFollowings: (collection)->
-    console.log collection
-    models = _.filter collection.models, (model)->
-      return model.get('approval') is true
-    console.log models.length, "models"
-    if models.length > 0
-      _.each collection.models, @.appendFollowings
-    else
-      console.log 'inai'
-      console.log $(@.el).find("li")
-      $(@.el).find("li.sidebar-followings").html("まだ応援している友達はいません")
 
 class App.View.ProfilePage extends Backbone.View
   el: "#main"

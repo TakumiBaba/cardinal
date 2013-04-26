@@ -76,17 +76,124 @@ exports.UserEvent = (app) ->
         id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
         User.findOne({id: id}).exec (err, user)->
           throw err if err
-          Follow.find({_id: {$in:user.following}}).populate('following', "id name profile").populate('follower', "id name profile").exec (err, follows)->
+          console.log user.following
+          Follow.find({_id: {$in: user.following} }).populate('to', 'id first_name profile').exec (err, follows)->
             throw err if err
-            return res.send follows
+            list = []
+            _.each follows, (follow)=>
+              list.push
+                following: follow.to
+                approval: follow.approval
+            return res.send list
+      update: (req, res)->
+        fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
+        toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
+        User.findOne({id: fromId}).populate('following').exec (err, from)=>
+          throw err if err
+          follow = _.find from.following, (following)=>
+            return _.contains following.ids, toId
+          if follow
+            Follow.findOne({_id: follow._id}).exec (err, follow)->
+              throw err if err
+              if follow
+                follow.approval = true
+                follow.save()
+                return res.send follow
+              else
+                return res.send []
+          else
+            return res.send []
+
+      delete: (req, res)->
+        fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
+        toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
+        User.find({id: {$in : [fromId, toId]}}).populate('following').exec (err, users)=>
+          throw err if err
+          from = _.find users, (user)=>
+            return user.id is fromId
+          to = _.find users, (user)=>
+            return user.id is toId
+          follow = _.find from.following, (follow)=>
+            return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+          follow.remove()
+          return res.send follow
+
+      create: (req, res)->
+        fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
+        toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
+        User.find({id: {$in : [fromId, toId]}}).populate('following').exec (err, users)=>
+          throw err if err
+          from = _.find users, (user)=>
+            return user.id is fromId
+          to = _.find users, (user)=>
+            return user.id is toId
+          follow = _.find from.following, (follow)=>
+            return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+          unless follow
+            follow = new Follow
+              from: from._id
+              to: to._id
+              ids: [from.id, to.id]
+              approval: false
+            follow.save()
+            from.following.push follow
+            to.follower.push follow
+            from.save()
+            to.save()
+          return res.send follow || []
+
     follower:
       fetch: (req, res)->
         id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
         User.findOne({id: id}).exec (err, user)->
           throw err if err
-          Follow.find({_id: {$in:user.follower}}).populate('follower', "id name first_name facebook_id profile").exec (err, follows)->
+          Follow.find({_id: {$in:user.follower}}).populate('from', "id name first_name facebook_id profile").exec (err, follows)->
             throw err if err
-            return res.send follows
+            list = []
+            console.log follows
+            _.each follows, (follow)=>
+              list.push
+                follower: follow.from
+                approval: follow.approval
+            return res.send list
+      delete: (req, res)->
+        fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
+        toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
+        User.find({id: {$in : [fromId, toId]}}).populate('follower').exec (err, users)=>
+          throw err if err
+          from = _.find users, (user)=>
+            return user.id is fromId
+          to = _.find users, (user)=>
+            return user.id is toId
+          follow = _.find from.follower, (follow)=>
+            return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+          follow.remove()
+          return res.send follow
+
+    request:(req, res)->
+      # from is me , to is you
+      fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
+      toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
+      User.find({id: {$in: [fromId, toId]}}).exec (err, users)->
+        from = _.find users, (user)=>
+            return user.id is fromId
+        to = _.find users, (user)=>
+          return user.id is toId
+        follow = _.find from.following, (follow)=>
+          return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+        unless follow
+          follow = new Follow
+            from: to._id
+            to: from._id
+            ids: [to.id, from.id]
+            approval: false
+          follow.save()
+          from.follower.push follow
+          to.following.push follow
+          from.save()
+          to.save()
+        return res.send follow
+
     update: (req, res)->
       oneId = if req.params.oneId is "me" then req.session.userid else req.params.oneId
       twoId = if req.params.twoId is "me" then req.session.userid else req.params.twoId
@@ -161,6 +268,7 @@ exports.UserEvent = (app) ->
         if user
           following = []
           _.each user.following, (f)=>
+            console.log f
             following.push f.user
           res.send user.following
         else

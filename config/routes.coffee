@@ -23,9 +23,15 @@ module.exports = (app) ->
   app.post '/api/users/me/profile', User.profile.update
   app.get '/api/users/:user_id/followings', User.follow.following.fetch
   app.get '/api/users/:user_id/followers', User.follow.follower.fetch
-  app.put '/api/users/:oneId/follow/:twoId', User.follow.update
-  app.post '/api/users/:following/follow/:follower', User.follow.create
-  app.get '/api/users/:following/follow/:follower', User.follow.create #
+  app.get '/api/users/:from_id/request/:to_id', User.follow.request # get → post
+  app.put '/api/users/:from_id/followings/:to_id', User.follow.following.update # get → put
+  app.delete '/api/users/:from_id/following/:to_id', User.follow.following.delete
+  app.delete '/api/users/:from_id/followers/:to_id', User.follow.follower.delete
+  # app.put '/api/users/:oneId/follow/:twoId', User.follow.update
+  # app.post '/api/users/:following/follow/:follower', User.follow.create
+  # app.post '/api/users/:from_id/follow/:to_id', User.follow.following.create
+  # app.get '/api/users/:from_id/follow/:to_id', User.follow.following.create # post に
+  # app.get '/api/users/:following/follow/:follower', User.follow.create #
 
   app.get '/api/users/:user_id/pending.json', User.pending.fetch
   app.get '/api/users/:user_id/request.json', User.request.fetch

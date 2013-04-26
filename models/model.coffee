@@ -174,10 +174,10 @@ FollowSchema = new Schema
   # user:
   #   type: ObjectId
   #   ref: "User"
-  following:
+  from:
     type: ObjectId
     ref: "User"
-  follower:
+  to:
     type: ObjectId
     ref: "User"
   ids:

@@ -3,8 +3,11 @@ JST = window.App.JST
 JST['matching/page'] = _.template(
   """
   <div id='matching_page' class='profile_and_following_view'>
+    <ul class='nav nav-tabs matching-type-list'>
+      <li class='system active'><a>お相手リスト</a></li>
+      <li class='supporter'><a>応援団おすすめリスト</a></li>
+    </ul>
     <div class='system_matching'>
-      <h3 class='title_box'>お相手リスト<small>ビビッと来たら『いいね』をプッシュ！</small></h2>
       <div class='box'>
         <div class='sm_side matching_side_div'>
           <ul class='sm_user_list matching_side'>
@@ -53,7 +56,6 @@ JST['matching/page'] = _.template(
       </div>
     </div>
     <div class='supporter_matching'>
-      <h3 class='title_box'>応援団おすすめリスト<small>お相手にもあなたが紹介されています。</small></h3>
       <div class='box'>
         <div class='sp_side matching_side_div'>
           <ul class='sp_user_list matching_side'>
@@ -788,13 +790,13 @@ JST['candidate/page'] = _.template(
 JST['supporter/page'] = _.template(
   """
   <div id='supporter_list_page'>
-    <div id='following' class='thumbnail_box clearfix'>
-      <h3>応援中の仲間</h3>
+    <div id='follower' class='thumbnail_box clearfix'>
+      <h3>応援してくれている仲間</h3>
       <ul class='user_list'>
       </ul>
     </div>
-    <div id='follower' class='thumbnail_box clearfix'>
-      <h3>応援してくれている仲間</h3>
+    <div id='following' class='thumbnail_box clearfix'>
+      <h3>応援中の仲間</h3>
       <ul class='user_list'>
       </ul>
     </div>
@@ -803,11 +805,6 @@ JST['supporter/page'] = _.template(
       <ul class='user_list'>
       </ul>
     </div>
-    <!--<div id='pending' class='thumbnail_box clearfix'>
-      <h3>応援申請待ち</h3>
-      <ul class='user_list'>
-      </ul>
-    </div> -->
   </div>
   """
 )

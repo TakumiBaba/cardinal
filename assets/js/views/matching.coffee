@@ -4,6 +4,9 @@ JST = App.JST
 class App.View.MatchingPage extends Backbone.View
   el: "div#main"
 
+  events:
+    "click ul.matching-type-list li": "change"
+
   constructor: ->
     super
     @collection = new App.Collection.PreCandidates
@@ -15,14 +18,30 @@ class App.View.MatchingPage extends Backbone.View
     html = JST['matching/page']()
     $(@.el).html html
 
-    systemMatchingView = new App.View.MatchingListView
+    @systemMatchingView = new App.View.MatchingListView
       collection: @collection
       el: "div.system_matching"
-    supporterMatchingView = new App.View.MatchingListView
+    @supporterMatchingView = new App.View.MatchingListView
       collection: @collection
       el: "div.supporter_matching"
 
     @collection.fetch()
+
+    @supporterMatchingView.hide()
+
+  change: (e)->
+    $(@.el).find('ul.matching-type-list li').each ()->
+      if $(@).hasClass 'active'
+        $(@).removeClass 'active'
+    t = $(e.currentTarget)
+    t.addClass 'active'
+    if t.hasClass 'system'
+      @supporterMatchingView.hide()
+      @systemMatchingView.show()
+    else if t.hasClass 'supporter'
+      @supporterMatchingView.show()
+      @systemMatchingView.hide()
+
 
 class App.View.MatchingListView extends Backbone.View
   events:
@@ -55,10 +74,6 @@ class App.View.MatchingListView extends Backbone.View
         targetId: list[0].get('user').id
       @recommendButton.render()
       $(@.el).find('ul.matching_side li:first').click()
-    else
-      $(@.el).hide()
-
-
 
   changeModel: (e)->
     id = $(e.currentTarget).attr('id')
@@ -109,6 +124,12 @@ class App.View.MatchingListView extends Backbone.View
         name: "#{f.get('name')}さん"
       html = JST['matching/follower'](options)
       $(@.el).find('ul.follower-list').append html
+
+  show: ()->
+    $(@.el).show()
+
+  hide: ()->
+    $(@.el).hide()
 
   doLike: (e)=>
     console.log @targetModel.get('user').id

@@ -12,7 +12,7 @@ class App.View.SupporterPage extends Backbone.View
     super
     $(@.el).empty()
 
-    _.bindAll @, "appendFollowings", "appendFollowers", "appendPending", "appendRequest"
+    _.bindAll @, "appendFollowings", "appendFollowers"
 
     @followings = new App.Collection.Followings
       userid: "me"
@@ -34,6 +34,7 @@ class App.View.SupporterPage extends Backbone.View
       @followers.fetch()
 
   appendFollowings: (collection)->
+    console.log collection
     if collection.models.length > 0
       _.each collection.models, (model)=>
         console.log model
@@ -68,28 +69,6 @@ class App.View.SupporterPage extends Backbone.View
           li = JST['supporter/li'](attributes)
           $(@.el).find('div#follower ul').append li
 
-  appendPending: (collection)->
-    console.log collection
-    if collection.models.length > 0
-      _.each collection.models, (model)=>
-        attributes =
-          id: model.get('id')
-          source: model.get('profile').image_url
-          name: model.get('name')
-        li = JST['supporter/li'](attributes)
-        $(@.el).find('div#pending ul').append li
-
-  appendRequest: (collection)->
-    console.log collection
-    if collection.models.length > 0
-      _.each collection.models, (model)=>
-        attributes =
-          id: model.get('id')
-          source: model.get('profile').image_url
-          name: model.get('name')
-        li = JST['supporter/li'](attributes)
-        $(@.el).find('div#request ul').append li
-
   removeFollow: (e)->
     target = $(e.currentTarget)
     if !target.hasClass 'deleteFlag'
@@ -116,7 +95,7 @@ class App.View.SupporterPage extends Backbone.View
     id = $(e.currentTarget).parent().parent().attr 'id'
     $.ajax
       type: "DELETE"
-      url: "/api/users/me/follower/#{id}"
+      url: "/api/users/me/followers/#{id}"
       success:(data)=>
         $($(e.currentTarget).parent().parent()).remove()
         console.log data
@@ -126,6 +105,6 @@ class App.View.SupporterPage extends Backbone.View
     console.log id
     $.ajax
       type: "PUT"
-      url: "/api/users/me/follow/#{id}"
+      url: "/api/users/me/followings/#{id}"
       success:(data)->
         console.log data
