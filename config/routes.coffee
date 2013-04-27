@@ -5,6 +5,7 @@ module.exports = (app) ->
   Talk = app.settings.events.TalkEvent app
   Message = app.settings.events.MessageEvent app
   Like = app.settings.events.LikeEvent app
+  Follow = app.settings.events.FollowEvent app
   Debug = app.settings.events.DebugEvent app
 
   # {ensure}
@@ -13,7 +14,7 @@ module.exports = (app) ->
   app.get    '/',  log,  SiteEvent.index
   app.post   '/',  log,  SiteEvent.index
   app.post '/api/login', SiteEvent.login
-
+  app.post '/api/signup', User.signup
 
   # UserEvent
   app.get '/api/users/:user_id', User.fetch
@@ -21,24 +22,26 @@ module.exports = (app) ->
   app.put '/api/users/me', User.update
   app.get '/api/users/me/profile', User.profile.fetch
   app.post '/api/users/me/profile', User.profile.update
-  app.get '/api/users/:user_id/followings', User.follow.following.fetch
-  app.get '/api/users/:user_id/followers', User.follow.follower.fetch
-  app.get '/api/users/:from_id/request/:to_id', User.follow.request # get → post
-  app.put '/api/users/:from_id/followings/:to_id', User.follow.following.update # get → put
-  app.delete '/api/users/:from_id/following/:to_id', User.follow.following.delete
-  app.delete '/api/users/:from_id/followers/:to_id', User.follow.follower.delete
   # app.put '/api/users/:oneId/follow/:twoId', User.follow.update
   # app.post '/api/users/:following/follow/:follower', User.follow.create
   # app.post '/api/users/:from_id/follow/:to_id', User.follow.following.create
   # app.get '/api/users/:from_id/follow/:to_id', User.follow.following.create # post に
   # app.get '/api/users/:following/follow/:follower', User.follow.create #
 
-  app.get '/api/users/:user_id/pending.json', User.pending.fetch
-  app.get '/api/users/:user_id/request.json', User.request.fetch
-  app.post '/api/users/me/following/:follow_id', User.followings.create
-  app.delete '/api/users/:user_id/following/:deleteId', User.followings.delete
-  app.delete '/api/users/:user_id/follower/:deleteId', User.followers.delete
-  app.post '/api/signup', User.signup
+  # FollowEvent
+  app.get '/api/users/:user_id/followings', Follow.following.fetch
+  app.get '/api/users/:user_id/followers', Follow.follower.fetch
+  app.get '/api/users/:from_id/request/:to_id', Follow.request.normal # get → post
+  app.post '/api/users/:from_id/fbrequest/:to_facebook_id', Follow.request.facebook
+  app.put '/api/users/:from_id/followings/:to_id', Follow.following.update # get → put
+  app.delete '/api/users/:from_id/following/:to_id', Follow.following.delete
+  app.delete '/api/users/:from_id/followers/:to_id', Follow.follower.delete
+
+  # app.get '/api/users/:user_id/pending.json', User.pending.fetch
+  # app.get '/api/users/:user_id/request.json', User.request.fetch
+  # app.post '/api/users/me/following/:follow_id', User.followings.create
+  # app.delete '/api/users/:user_id/following/:deleteId', User.followings.delete
+  # app.delete '/api/users/:user_id/follower/:deleteId', User.followers.delete
   # app.get '/api/users/:user_id/follower.json', User.fetchFollower
 
   # TalkEvent

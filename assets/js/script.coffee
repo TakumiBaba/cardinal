@@ -52,7 +52,8 @@ class Router extends Backbone.Router
           _.each res.to, (fbid)->
             $.ajax
               type: "POST"
-              url: +"/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+              url: "/api/users/me/fbrequest/#{fbid}"
+              # url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
               success: (data)->
                 console.log data
           # console.log res
