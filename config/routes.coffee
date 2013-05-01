@@ -54,6 +54,11 @@ module.exports = (app) ->
   app.get '/api/users/:user_id/messages.json', Message.fetch
   app.post '/api/users/:user_id/:candidate_id/message', Message.create
 
+  # SupporterMessageEvent
+  app.get '/api/users/:user_id/supportermessages', User.supporterMessage.fetch
+  app.post '/api/users/:user_id/supportermessages/:supporter_id', User.supporterMessage.createOrUpdate
+  app.get '/api/users/:user_id/supportermessages/:supporter_id/:message', User.supporterMessage.createOrUpdate
+
   # LikeEvent
   # app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更
   # app.post '/api/users/:user_id/candidates/:candidate_id.json', Like.update
@@ -73,5 +78,6 @@ module.exports = (app) ->
   app.get '/debug/api/message/create', Debug.message.create
   app.get '/debug/api/message/reset', Debug.message.reset
   app.get '/debug/api/users/me/following/:followingId', Debug.followings.create
+  # app.get '/debug/api/users/me/sm/delete', User.supporterMessage.delete
 
   return SiteEvent.failure

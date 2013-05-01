@@ -2,6 +2,8 @@ exports.UserEvent = (app) ->
 
   User = app.settings.models.User
   Follow = app.settings.models.Follow
+  SupporterMessage = app.settings.models.SupporterMessage
+
   Crypto = require 'crypto'
 
   fetch: (req, res)->
@@ -457,3 +459,46 @@ exports.UserEvent = (app) ->
           throw err
         else
           res.redirect "/"
+
+  supporterMessage:
+    fetch: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      User.findOne({id: id}).populate("supporter_message").exec (err, user)->
+        throw err if err
+        console.log 'hogefuga'
+        console.log user.supporter_message
+        list = _.pluck user.supporter_message, "_id"
+        SupporterMessage.find({_id: {$in: list}}).populate('supporter').exec (err, message)->
+          throw err if err
+          return res.send message
+
+    createOrUpdate: (req, res)->
+      userId = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      supporterId   = if req.params.supporter_id is "me" then req.session.userid else req.params.supporter_id
+      messageText = req.body.message || req.params.message
+      User.find({id: {$in: [userId, supporterId]}}).populate('supporter_message').exec (err, users)=>
+        throw err if err
+        user = _.find users, (u)=>
+          return u.id is userId
+        supporter = _.find users, (u)=>
+          return u.id is supporterId
+        supporterMessage = _.find user.supporter_message, (message)->
+          return message.supporterId is supporter.id
+        unless supporterMessage
+          console.log 'unless'
+          supporterMessage = new SupporterMessage()
+          supporterMessage.supporterId = supporter.id
+          supporterMessage.supporter = supporter._id
+          user.supporter_message.push supporterMessage
+        supporterMessage.message = messageText
+        supporterMessage.save()
+        user.save()
+        return res.send supporterMessage
+
+    delete: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      SupporterMessage.find({}).exec (err, ms)->
+        throw err if err
+        _.each ms, (m)->
+          m.remove()
+        return res.send ms

@@ -62,3 +62,10 @@ class App.Collection.Comments extends Backbone.Collection
   constructor: (attrs, options)->
     super
     @.url = "/api/talks/#{attrs.talkid}/comments.json"
+
+class App.Collection.SupporterMessages extends Backbone.Collection
+  model: App.Model.SupporterMessage
+
+  constructor: (attrs, options)->
+    super
+    @.url = "/api/users/#{attrs.id}/supportermessages"

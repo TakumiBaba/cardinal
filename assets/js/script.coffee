@@ -3,6 +3,7 @@ window.App = {
   View: {}
   Model: {}
   Collection: {}
+  AccessToken: ""
 }
 
 class Router extends Backbone.Router
@@ -44,19 +45,21 @@ class Router extends Backbone.Router
         @now = new App.View.SupporterPage()
         @now.render()
       when "invite"
-        FB.ui
-          method: "apprequests"
-          message: "応援に参加してください！"
-          data: App.User.get('id')
-        , (res)->
-          _.each res.to, (fbid)->
-            $.ajax
-              type: "POST"
-              url: "/api/users/me/fbrequest/#{fbid}"
-              # url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
-              success: (data)->
-                console.log data
-          # console.log res
+        FB.api "/100001088919966/notifications?access_token=#{App.AccessToken}&href=/index.html&template=@[100001088919966] hogefuga", (res)->
+          console.log res
+        # FB.ui
+        #   method: "apprequests"
+        #   message: "応援に参加してください！"
+        #   data: App.User.get('id')
+        # , (res)->
+        #   _.each res.to, (fbid)->
+        #     $.ajax
+        #       type: "POST"
+        #       url: "/api/users/me/fbrequest/#{fbid}"
+        #       # url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+        #       success: (data)->
+        #         console.log data
+        #   # console.log res
       when "signup"
         @now = new App.View.SignupPage()
         @now.render()
@@ -86,13 +89,24 @@ window.fbAsyncInit = ->
 
   FB.getLoginStatus (response)->
     console.log response
+    # FB.ui
+    #   method: "permissions.request"
+    #   perms: "manage_notifications"
+    # , (res)->
+    #   console.log res
     if response.status is "connected"
+      App.AccessToken = response.authResponse.accessToken
       FB.api 'me', (res)->
         $.ajax
           type: "POST"
           url: "/api/login"
           data: res
-          success: (id)->
+          success: (data)->
+            # console.log data
+            # id = data.id
+            id = data
+            # if data.isCheck is true
+            #   window.alert("応援者か婚活者か聞く")
             console.log id
             App.User = new App.Model.User
               id: id

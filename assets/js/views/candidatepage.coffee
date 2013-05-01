@@ -18,12 +18,17 @@ class App.View.CandidatePage extends Backbone.View
     @.collection = new App.Collection.Followers
       userid: attrs.id
 
-    _.bindAll @, "render", "appendFollowers"
+    @.supporterMessages = new App.Collection.SupporterMessages
+      id: attrs.id
+
+    _.bindAll @, "render", "appendFollowers", "appendSupporterMessages"
     @.model.bind 'change', @render
     @.collection.bind 'reset', @appendFollowers
+    @.supporterMessages.bind 'reset', @appendSupporterMessages
 
     @.model.fetch()
     @.collection.fetch()
+    @.supporterMessages.fetch()
 
 
   render: (model)->
@@ -53,6 +58,16 @@ class App.View.CandidatePage extends Backbone.View
           name: "#{f.first_name}さん"
         li = JST['matching/follower'](attributes)
         $(@.el).find('ul.follower-list').append li
+
+  appendSupporterMessages: (collection)->
+    _.each collection.models, (model)=>
+      s = model.get('supporter')
+      attributes =
+        source: s.profile.image_url
+        name: s.first_name
+        message: model.get('message')
+      li = JST['supporter-message/li'](attributes)
+      $(@.el).find("div.supporter-message-list ul").append li
 
   doLike: (e)->
     console.log e

@@ -174,7 +174,7 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='income' class='control-label'>年収</label>
           <div class='controls'>
-            <input type='text' name='income' id='income' value='0'><span class='help-inline'>万円</span>
+            <input type='text' name='income' id='income' value='<%= income %>'><span class='help-inline'>万円</span>
           </div>
         </div>
         <div class='control-group'>
@@ -276,7 +276,7 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='height' class='control-label'>身長</label>
           <div class='controls'>
-            <input type='text' id='height' name='height' value='0'>
+            <input type='text' id='height' name='height' value='<%= height %>'>
             <span class='help-inline'>cm</span>
           </div>
         </div>
@@ -331,8 +331,7 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='hoby' class='control-label'>趣味</label>
           <div class='controls'>
-            <textarea rows='3' id='hoby' name='hoby' class='span4'>
-            </textarea>
+            <textarea rows='3' id='hoby' name='hoby' class='span4' value="<%= hoby %>"><%= hoby %></textarea>
           </div>
         </div>
         <div class='control-group'>
@@ -345,7 +344,7 @@ JST['profile/page'] = _.template(
         <div class='control-group'>
           <label for='message' class='control-label'>お相手へのメッセージ</label>
           <div class='controls'>
-            <textarea rows='3' id='message' name='message' class='span5'></textarea>
+            <textarea rows='3' id='message' name='message' class='span5' value="<%= message %>"><%= message %></textarea>
           </div>
         </div>
         <div class='control-group'>
@@ -624,7 +623,16 @@ JST['supporting/userpage/page'] = _.template(
             </ul>
             <div class='tab-content'>
               <!-- プロフィール -->
-              <div class='tab-pane active' id='detailprofile'></div>
+              <div class='tab-pane active' id='detailprofile'>
+                <div class='supporter-message-list'>
+                  <ul></ul>
+                </div>
+                <div class='supporter-message-post-view'>
+                  <textarea></textarea>
+                  <button class='btn'>応援メッセージを投稿する</button>
+                </div>
+              </div>
+
               <!-- マッチングリスト -->
               <div class='tab-pane' id='matchinglist'>
                 <h3 class='title_box'>マッチング情報</h3>
@@ -781,6 +789,9 @@ JST['candidate/page'] = _.template(
             </div>
           </div>
         </div>
+      </div>
+      <div class='supporter-message-list'>
+        <ul></ul>
       </div>
     </div>
   </div>
@@ -1039,40 +1050,36 @@ JST['signup/page'] = _.template(
 
 JST['sidebar/main'] = _.template(
   """
-  <a href='/#/'>
-    <img class='logo' src='/image/logo.png' />
-  </a>
-  <div id='welcome_box' class='clearfix'>
-    <a class='pull-left'>
-      <img class='user_profile_image' src='<%= source %>' />
+  <div class='sidebar-inner'>
+    <a href='/#/'>
+      <img class='logo' src='/image/logo.png' />
     </a>
-    <div>
-      <a class='user_name' href='/#/me'><%= name %>さん</a>
-      <a href='/#/profile'>プロフィールを編集する</a>
+    <div id='welcome_box' class='clearfix'>
+      <a class='pull-left'>
+        <img class='user_profile_image' src='<%= source %>' />
+      </a>
+      <div>
+        <a class='user_name' href='/#/me'><%= name %>さん</a>
+        <a href='/#/profile'>プロフィールを編集する</a>
+      </div>
     </div>
-  </div>
-  <a class='pull-right usage' href='/#/usage'><small>使い方</small></a>
-  <div id='navigation' class='clearfix'>
-    <ul class='nav nav-list'>
-      <li class='nav-header'>メニュー</li>
-      <li class='like'><a href='/#/like'> いいねリスト</a></li>
-      <li class='talk'><a href='/#/talk'> 応援トーク</a></li>
-      <li class='message'><a href='/#/message'> メッセージ</a></li>
-      <li class='divider'></li>
-      <li class='test'><a href='/#/invite'> 応援団を増やす</a></li>
-      <li class='supporter'><a href='/#/supporter'> あなたの婚活仲間</a></li>
-      <li class='nav-header sidebar-followings'>あなたが応援している人</li>
-      <li>
-        <ul class='nav nav-list following'></ul>
-      </li>
-    </ul>
-  </div>
-  <div id='sidebar-bottom' class='pull-left'>
-    <ul class='breadcrumb'>
-      <li><a>利用規約</a></li>
-      <li><a>プライバシーポリシー</a></li>
-      <li><a>運営チーム</a></li>
-    </ul>
+    <a class='pull-right usage' href='/#/usage'><small>使い方</small></a>
+    <div id='navigation' class='clearfix'>
+      <ul class='nav nav-list'>
+        <li class='nav-header'>メニュー</li>
+        <li class='like'><a href='/#/like'> いいねリスト</a></li>
+        <li class='talk'><a href='/#/talk'> 応援トーク</a></li>
+        <li class='message'><a href='/#/message'> メッセージ</a></li>
+        <li class='divider'></li>
+        <li class='test'><a href='/#/invite'> 応援団を増やす</a></li>
+        <li class='supporter'><a href='/#/supporter'> あなたの婚活仲間</a></li>
+      </ul>
+      <ul class='nav nav-list sidebar-bottom'>
+        <li class='use-policy'><a href="/#/usepolicy">利用規約</a></li>
+        <li><a href="/#/privacypolicy">プライバシーポリシー</a></li>
+        <li><a href="/#/team">運営チーム</a></li>
+      </ul>
+    </div>
   </div>
   """
   )
@@ -1095,10 +1102,6 @@ JST['sidebar/supporter'] = _.template(
       <li class='nav-header'>メニュー</li>
       <li class='supporter'><a href='/#/supporter'>あなたの婚活仲間</a></li>
       <li class='signup'><a href='/#/signup'>婚活を始める</a></li>
-      <li class='nav-header sidebar-followings'>あなたが応援している人</li>
-      <li>
-        <ul class='nav nav-list following'></ul>
-      </li>
     </ul>
   </div>
   <div id='sidebar-bottom' class='pull-left'>
@@ -1267,5 +1270,19 @@ JST['me/page'] = _.template(
       </form>
     </div>
   </div>
+  """
+  )
+
+JST['supporter-message/li'] = _.template(
+  """
+  <li>
+    <div class='s-message-left'>
+      <img src="<%= source %>" />
+    </div>
+    <div class='s-message-right'>
+      <div class='s-messge-header'><%= name %>さん</div>
+      <div class='s-message-body'><%= message %></div>
+    </div>
+  </li>
   """
   )

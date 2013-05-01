@@ -73,3 +73,9 @@ class App.Model.Comment extends Backbone.Model
   constructor: (attrs, options)->
     super
     @.urlRoot = "/api/talks/#{attrs.talk_id}/comment"
+
+class App.Model.SupporterMessage extends Backbone.Model
+
+  constructor: (attrs, options)->
+    super
+    @.urlRoot = "/api/talks/#{attrs.talk_id}/supportermessage"

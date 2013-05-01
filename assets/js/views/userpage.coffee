@@ -41,7 +41,11 @@ class App.View.UserPage extends Backbone.View
     if tab is "#detailprofile"
       if @profileView
         @profileView.undelegateEvents()
-      $("div#detailprofile").empty()
+        # $("div#detailprofile").empty()
+      $("div.profile_column").remove()
+      $("div.follower_column").remove()
+      $("div.supporter-message-list ul").empty()
+
       @profileView = new App.View.UserPageProfile
         id: @model.id
     else if tab is "#matchinglist"
@@ -68,6 +72,9 @@ class App.View.UserPage extends Backbone.View
 class App.View.UserPageProfile extends Backbone.View
   el: "div#detailprofile"
 
+  events:
+    "click div.supporter-message-post-view button": "postSupporterMessage"
+
   constructor: (attrs, options)->
     super
     _.bindAll @, "render", "appendFollower"
@@ -75,6 +82,10 @@ class App.View.UserPageProfile extends Backbone.View
     @model = new App.Model.User
       id: attrs.id
     @model.bind 'change', @.render
+
+    @supporterMessages = new App.Collection.SupporterMessages
+      id: attrs.id
+    @supporterMessages.bind 'reset', @appendSupporterMessages
 
     @model.fetch()
 
@@ -95,11 +106,11 @@ class App.View.UserPageProfile extends Backbone.View
       follower: user.get("follower")
       profile: user.get('profile')
     @.el = JST['userpage/profile'](attributes)
-    $('div#detailprofile').append @.el
+    $('div#detailprofile').prepend @.el
+    @supporterMessages.fetch()
 
   appendFollower: (collection)->
     ul = $("ul.follower-list")
-    console.log collection
     _.each collection.models, (model)=>
       if model.get('approval')
         attributes =
@@ -108,6 +119,33 @@ class App.View.UserPageProfile extends Backbone.View
           name: model.get('follower').last_name
         li = JST['matching/follower'](attributes)
         ul.append li
+
+  appendSupporterMessages: (collection)->
+
+    _.each collection.models, (model)=>
+      console.log model
+      s = model.get('supporter')
+      attributes =
+        source: s.profile.image_url
+        name: s.first_name
+        message: model.get('message')
+      li = JST['supporter-message/li'](attributes)
+      console.log li
+      $("div.supporter-message-list ul").append li
+      # $find("div.supporter-message-list ul").append li
+
+  postSupporterMessage: (e)->
+    text =  $('div.supporter-message-post-view textarea').val()
+    console.log text
+    console.log @model.get('id')
+    $.ajax
+      type: "POST"
+      url: "/api/users/#{@model.get('id')}/supportermessages/me"
+      data:
+        message: text
+      success:(data)=>
+        console.log data
+        @model.fetch()
 
 class App.View.UserPageMatchingList extends Backbone.View
   el: "div#matchinglist"

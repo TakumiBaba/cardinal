@@ -29,6 +29,7 @@ class App.View.MatchingPage extends Backbone.View
 
     @supporterMatchingView.hide()
 
+
   change: (e)->
     $(@.el).find('ul.matching-type-list li').each ()->
       if $(@).hasClass 'active'
@@ -66,8 +67,11 @@ class App.View.MatchingListView extends Backbone.View
 
   appendAllItem: (collection)->
     flag = if $(@.el).hasClass 'system_matching' then true else false
+    console.log flag
     list = _.filter collection.models, (model)=>
       return model.get('isSystemMatching') is flag
+    if flag is false
+      $(@.el).parent().find("li.supporter a").html "応援団おすすめリスト(#{list.length})"
     if list.length > 0
       _.each list, @appendItem
       @recommendButton = new App.View.FollowDropDownMenu

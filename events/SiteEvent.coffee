@@ -78,6 +78,9 @@ exports.SiteEvent = (app) ->
         #       shuffled[i].save()
         #       status.save()
         #     user.save()
+        json =
+          id: user.id
+          isCheck: false
         return res.send user.id
       else
         console.log 'create user'
@@ -97,6 +100,9 @@ exports.SiteEvent = (app) ->
         user.profile.image_url = "https://graph.facebook.com/#{params.id}/picture?type=large"
         user.save()
         req.session.userid = user.id
+        # json =
+        #   id: user.id
+        #   isCheck: true
         return res.send user.id
 
   failure: (req, res) ->

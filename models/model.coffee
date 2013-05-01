@@ -132,7 +132,8 @@ UserSchema = new Schema
     default: []
   messageLists: [{type: ObjectId, ref: "MessageList"}]
   supporter_message:
-    type: [SupporterMessageSchema]
+    type: [{type: ObjectId, ref: "SupporterMessage"}]
+    default: []
   updatedAt:
     type: Date
   news:
@@ -235,6 +236,10 @@ SupporterMessageSchema = new Schema
   supporter:
     type: ObjectId
     ref: "User"
+  # supporter:
+  #   type: String
+  supporterId:
+    type: String
   message:
     type: String
   count:

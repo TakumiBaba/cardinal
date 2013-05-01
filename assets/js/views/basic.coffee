@@ -86,7 +86,7 @@ class App.View.ProfilePage extends Backbone.View
       address: parseInt($("#address").val())
       hometown: parseInt($("#hometown").val())
       job: parseInt($("#job").val())
-      income: $("#income").val()
+      income: parseInt $("#income").val()
       bloodType: parseInt($("#bloodType").val())
       education: parseInt($("#education").val())
       shape: parseInt($("#shape").val())
@@ -100,6 +100,7 @@ class App.View.ProfilePage extends Backbone.View
       ageRangeMax: parseInt $("#age_range_max").val()
       idealPartner: $("#ideal_partner").val()
     @.model.save detail
+    console.log $("#hoby").val()
 
   cancel: (e)->
     @.render()
