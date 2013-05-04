@@ -3,6 +3,10 @@ JST = App.JST
 
 class App.View.Sidebar extends Backbone.View
   el: "div#sidebar"
+
+  events:
+    "click a.usage": "modalUsage"
+
   constructor: ->
     super
 
@@ -23,6 +27,12 @@ class App.View.Sidebar extends Backbone.View
       html = JST['sidebar/supporter'](attributes)
       location.href = "/#/supporter"
     $(@.el).html html
+
+  modalUsage: ->
+    console.log $("div.usage")
+    if $("div.usage").length < 1
+      $("body").append JST['usage/page']()
+    $("div.usage").modal()
 
 
 class App.View.ProfilePage extends Backbone.View

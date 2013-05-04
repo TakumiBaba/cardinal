@@ -1063,7 +1063,7 @@ JST['sidebar/main'] = _.template(
         <a href='/#/profile'>プロフィールを編集する</a>
       </div>
     </div>
-    <a class='pull-right usage' href='/#/usage'><small>使い方</small></a>
+    <a class='pull-right usage' data-toggle="modal" data-target="#usage"><small>使い方</small></a>
     <div id='navigation' class='clearfix'>
       <ul class='nav nav-list'>
         <li class='nav-header'>メニュー</li>
@@ -1284,5 +1284,35 @@ JST['supporter-message/li'] = _.template(
       <div class='s-message-body'><%= message %></div>
     </div>
   </li>
+  """
+  )
+
+JST['usage/page'] = _.template(
+  """
+  <div class="usage modal hide fade">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Ding-Dongの使い方</h3>
+    </div>
+    <div class="modal-body">
+      <h3 class='title_box'>1. 登録</h3>
+      <p>Ding-Dongは、結婚を真剣に考えている方のためのアプリです。Ding-Dongで婚活者として登録できるのは22～60歳までの独身の方です。性別と生年月日は、登録が完了しますと以後修正ができませんので、慎重に入力してください。</p>
+      <h3 class='title_box'>2. あなたのプロフィール入力</h3>
+      <p>あなたのプロフィールを入力してください。全項目を入力しなくても活動はできますが、入力項目が多いほどお相手の方にとっては判断材料が増えます。</p>
+      <h3 class='title_box'>3. 応援団依頼、登録</h3>
+      <p>「婚活の応援団を依頼する」をクリックすると、Facebookの友達一覧が表示されます。あなたの婚活について相談したい、あるいは相談できると思う親しいお友達を、応援団として登録しましょう。選択後、お友達に「○○さんから婚活の応援依頼が届いています」というメッセージが配信され、お友達が承認すると応援団登録が完了します。活動中も「応援団を増やす」をクリックして、応援団を増やすこともできます。</p>
+      <h3 class='title_box'>4．お相手を探す</h3>
+      <p>1～3が完了すると、いよいよ婚活開始です。「マッチング情報」にあなたにマッチングされた方のリストが表示されます。気になる方がいたら積極的に「いいね！」をクリックしましょう。「いいね！」はお相手にも通知されます。</p>
+      <h3 class='title_box'>5．迷ったら応援団に相談する</h3>
+      <p>気になるお相手が見つかったけど「いいね！」をクリックするか悩む、「いいね！」をクリックしたけどお相手から返事が来ないなど婚活に悩んだり迷ったりした時は、「応援団に相談する」をクリックして応援トークページで応援団と相談しましょう。</p>
+      <h3 class='title_box'>6．メッセージを送る</h3>
+      <p>「いいね！」だけでは先に進みません。気になるお相手にメッセージを送って、何度かお話ししてみましょう。お相手に直接メッセージを送る勇気が出ない時は、お相手の「応援団おすすめ情報」内にいる応援団にメッセージを送ることもできます。</p>
+      <h3 class='title_box'>7. お会いしてみる</h3>
+      <p>十分お相手のことを知ることができたら、会う約束をしてみましょう。最初は応援団のお友達と一緒に会ってみるのもいいかもしれませんね。初対面の場所や時間の設定は、お相手の都合をよく聞いて慎重にご検討ください。</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">戻る</a>
+    </div>
+  </div>
   """
   )
