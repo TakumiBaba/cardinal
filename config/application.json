@@ -4,7 +4,7 @@
   "maxage": 604800,
   "migration": false,
   "mongo": {
-    "development": "mongodb://localhost/condom-development",
+    "development": "mongodb://localhost/dingdong2-development",
     "production": "mongodb://localhost/condom-production"
   }
 }

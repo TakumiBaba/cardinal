@@ -13,8 +13,6 @@ class App.View.SignupPage extends Backbone.View
 
   render: ->
     FB.api "me", (res)=>
-      FB.api "/me/birthday", (res)->
-        console.log res
       console.log res
       attributes =
         fullName: res.name

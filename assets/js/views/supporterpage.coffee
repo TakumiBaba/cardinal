@@ -108,3 +108,5 @@ class App.View.SupporterPage extends Backbone.View
       url: "/api/users/me/followings/#{id}"
       success:(data)->
         console.log data
+        FB.api requestId, "delete", (res)->
+          console.log res

@@ -4,8 +4,8 @@ JST['matching/page'] = _.template(
   """
   <div id='matching_page' class='profile_and_following_view'>
     <ul class='nav nav-tabs matching-type-list'>
-      <li class='system active'><a>お相手リスト</a></li>
-      <li class='supporter'><a>応援団おすすめリスト</a></li>
+      <li class='supporter active'><a>応援団おすすめリスト</a></li>
+      <li class='system'><a>お相手リスト</a></li>
     </ul>
     <div class='system_matching'>
       <div class='box'>
@@ -393,7 +393,7 @@ JST['like/page'] = _.template(
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='my-like info box-inner  container likebox'>
-      <h3 class='title_box'>自分が片思い</h3>
+      <h3 class='title_box'>あなたが片思い</h3>
       <ul class='like-thumbnail'></ul>
     </div>
   </div>

@@ -27,7 +27,7 @@ class App.View.MatchingPage extends Backbone.View
 
     @collection.fetch()
 
-    @supporterMatchingView.hide()
+    @systemMatchingView.hide()
 
 
   change: (e)->
@@ -78,6 +78,8 @@ class App.View.MatchingListView extends Backbone.View
         targetId: list[0].get('user').id
       @recommendButton.render()
       $(@.el).find('ul.matching_side li:first').click()
+    else
+      $(@.el).find('div.box').html "<p>応援団からのオススメはありません。</p>" if !flag
 
   changeModel: (e)->
     id = $(e.currentTarget).attr('id')

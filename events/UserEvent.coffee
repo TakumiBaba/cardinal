@@ -35,10 +35,16 @@ exports.UserEvent = (app) ->
 
   signup: (req, res)->
     id = req.session.userid
+    console.log 'signup'
+    console.log req.body
+    console.log req.params
     User.findOne id: id, (err, user)->
       throw err if err
       user.isSupporter = false
-      user.save()
+      # user.profile.birthday = new Date("")
+      console.log user
+
+      # user.save()
       return res.send 'signup done'
 
   profile:
@@ -448,7 +454,7 @@ exports.UserEvent = (app) ->
     User.findOne id: id, (err, user)->
       throw err if err
       user.name = params.name
-      user.profile.birthday = new Date("#{params.birthday_month}/#{params.birthday_year}/#{params.birthday_day}")
+      user.profile.birthday = new Date("#{params.birthday_year}/#{params.birthday_month}/#{params.birthday_day}")
       user.username = params.username
       user.first_name = params.first_name
       user.last_name = params.last_name

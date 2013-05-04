@@ -32,7 +32,8 @@ class App.View.Sidebar extends Backbone.View
     console.log $("div.usage")
     if $("div.usage").length < 1
       $("body").append JST['usage/page']()
-    $("div.usage").modal()
+    $("div.usage").modal
+      keyboard: true
 
 
 class App.View.ProfilePage extends Backbone.View
