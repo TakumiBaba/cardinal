@@ -15,6 +15,7 @@ module.exports = (app) ->
   app.post   '/',  log,  SiteEvent.index
   app.post '/api/login', SiteEvent.login
   app.post '/api/signup', User.signup
+  app.get '/api/appaccesstoken', SiteEvent.appAccessToken.fetch
 
   # UserEvent
   app.get '/api/users/:user_id', User.fetch
@@ -22,6 +23,8 @@ module.exports = (app) ->
   app.put '/api/users/me', User.update
   app.get '/api/users/me/profile', User.profile.fetch
   app.post '/api/users/me/profile', User.profile.update
+  app.get '/api/users/:user_id/news', User.news.fetch
+  app.get '/api/users/me/news/delete', User.news.delete
   # app.put '/api/users/:oneId/follow/:twoId', User.follow.update
   # app.post '/api/users/:following/follow/:follower', User.follow.create
   # app.post '/api/users/:from_id/follow/:to_id', User.follow.following.create

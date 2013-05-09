@@ -6,6 +6,7 @@ class App.View.Sidebar extends Backbone.View
 
   events:
     "click a.usage": "modalUsage"
+    "click li.use-policy": "modalUsePolicy"
 
   constructor: ->
     super
@@ -29,10 +30,15 @@ class App.View.Sidebar extends Backbone.View
     $(@.el).html html
 
   modalUsage: ->
-    console.log $("div.usage")
     if $("div.usage").length < 1
       $("body").append JST['usage/page']()
     $("div.usage").modal
+      keyboard: true
+  modalUsePolicy: ->
+    console.log 'use policy'
+    if $("div.usepolicy").length < 1
+      $("body").append JST['usepolicy/page']()
+    $("div.usepolicy").modal
       keyboard: true
 
 
@@ -176,16 +182,9 @@ class App.View.MePage extends Backbone.View
   constructor : ->
     super
 
-    @model = new App.Model.Profile()
-
-    _.bindAll @, "render"
-    @.model.bind 'change', @.render
-
-    @.model.fetch()
+    @model = App.User
 
   render: (model)->
-    console.log model
     attributes = @.model.attributes
-    console.log @.model.attributes
     html = App.JST['me/page'](attributes)
     $(@.el).html html

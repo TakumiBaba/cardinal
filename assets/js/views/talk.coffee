@@ -32,7 +32,7 @@ class App.View.TalkPage extends Backbone.View
     if collection.models.length > 0
       _.each collection.models, @.appendItem
     else
-      $(@.el).find('ul.talk_list').append "<p>まだお相手からのメッセージがありません。</p><p>気になる人がいたら、あなたからも積極的にメッセージを送ってみましょう。</p>"
+      $(@.el).find('ul.talk_list').append "<p>まだ応援トークはできていません。</p><p>気になる人がいたら、積極的にトークしてみましょう。</p>"
 
 class App.View.TalkUnit extends Backbone.View
   tagName: "li"

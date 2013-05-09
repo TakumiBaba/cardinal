@@ -37,9 +37,17 @@ class App.View.MessagePage extends Backbone.View
     attributes =
       source: App.User.get('profile').image_url
     html = JST['message/page'](attributes)
-    $(@.el).html html
-    _.each collection.models, @.appendItem
-    $(@.el).find('ul.message-user-thumbnail li:first').click()
+    if collection.models.length > 0
+      $(@.el).html html
+      _.each collection.models, @.appendItem
+      $(@.el).find('ul.message-user-thumbnail li:first').click()
+    else
+      html = """
+      <h4>お相手からのメッセージ<small>'このページは応援団は閲覧できません'</small></h4>
+      <p>まだお相手からのメッセージがありません。</p>
+      <p>気になる人がいたら、あなたからも積極的にメッセージを送ってみましょう。</p>
+      """
+      $(@.el).html html
 
   changeModel: (e)->
     id = $(e.currentTarget).attr 'id'

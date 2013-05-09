@@ -508,3 +508,21 @@ exports.UserEvent = (app) ->
         _.each ms, (m)->
           m.remove()
         return res.send ms
+
+  news:
+    fetch: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      User.findOne({id: id}).populate('news').exec (err, user)->
+        throw err if err
+        news = _.filter user.news, (n)->
+          return !n.isRead
+        console.log news.length
+        return res.send news
+    delete: (req, res)->
+      id = req.session.userid
+      User.findOne id: id, (err, user)->
+        throw err if err
+        console.log user
+        user.save (err)->
+          throw err if err
+          return res.send user

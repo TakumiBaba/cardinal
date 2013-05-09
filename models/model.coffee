@@ -137,10 +137,9 @@ UserSchema = new Schema
   updatedAt:
     type: Date
   news:
-    type: [NewsSchema]
+    type: [{type: ObjectId, ref: "News"}]
   statuses:
     type: [{type: ObjectId, ref: "Status"}]
-
 
 
 StatusSchema = new Schema
@@ -220,6 +219,43 @@ TalkSchema = new Schema
     type: Date
     default: Date.now
 
+TalkSchema.post 'save', (next)->
+  User = mongoose.model 'User', UserSchema
+  News = mongoose.model 'News', NewsSchema
+  @updatedAt = Date.now()
+  userId = @user
+  candidateId = @candidate
+  User.findOne({_id: @user}).exec (err, user)->
+    throw err if err
+    if user
+      news = new News
+        type: "talk"
+        isRead: false
+      user.news.push news
+      news.save()
+      user.save()
+    next()
+  # User.find({_id: {$in: [@user, @candidate]}}).exec (err, users)=>
+  #   throw err if err
+  #   if users.length is 2
+  #     console.log 'generate news'
+  #     user = _.find users, (u)=>
+  #       return u._id is userId
+
+  #     news1 = new News
+  #       type: "talk"
+  #       isRead: false
+  #     news2 = new News
+  #       type: "talk"
+  #       isRead: false
+  #     users[0].news.push news1
+  #     users[1].news.push news2
+  #     news1.save()
+  #     news2.save()
+  #     users[0].save()
+  #     users[1].save()
+  #   next()
+
 CommentSchema = new Schema
   user:
     type: String
@@ -250,12 +286,11 @@ NewsSchema = new Schema
   created_at:
     type: Date
     default: new Date()
-  from:
-    type: String
   type:
     type: String
-  text:
-    type: String
+  isRead:
+    type: Boolean
+    default: false
 
 MessageSchema = new Schema
   created_at:
@@ -268,6 +303,9 @@ MessageSchema = new Schema
     ref: "User"
   from_name:
     type: String
+  parent:
+    type: ObjectId
+    ref: "MessageList"
 
 MessageListSchema = new Schema
   created_at:
@@ -285,9 +323,29 @@ MessageListSchema = new Schema
   lastUpdated:
     type: Date
 
-MessageSchema.pre 'save', (next)->
+MessageSchema.post 'save', (next)->
+  News = mongoose.model 'News', NewsSchema
+  User = mongoose.model 'User', UserSchema
+  MessageList = mongoose.model 'MessageList', MessageListSchema
   @lastUpdated = Date.now()
-  next()
+  fromId = @from
+  MessageList.findOne({_id: @parent}).populate('one', 'id _id').populate('two', 'id _id').exec (err, ml)=>
+    throw err if err
+    console.log "messge list"
+    console.log ml
+    candidateId = if ml.one._id is fromId then ml.one.id else ml.two.id
+    User.findOne {id: candidateId}, (err , user)=>
+      throw err if err
+      console.log user
+      if user
+        news = new News
+          type: "message"
+          isRead: false
+        user.news.push news
+        news.save()
+        user.save()
+      return false
+
 
 module.exports =
   User: mongoose.model 'User', UserSchema

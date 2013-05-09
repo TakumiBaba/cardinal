@@ -41,25 +41,28 @@ class Router extends Backbone.Router
         # @now.render()
       when 'me'
         @now = new App.View.MePage()
+        @now.render()
       when 'supporter'
         @now = new App.View.SupporterPage()
         @now.render()
       when "invite"
-        FB.api "/100001088919966/notifications?access_token=#{App.AccessToken}&href=/index.html&template=@[100001088919966] hogefuga", (res)->
+        # FB.api "/#{App.User.get('facebook_id')}/notifications?access_token=#{App.AccessToken}&href=/index.html&template=@[100001088919966] hogefuga", (res)->
+        #   console.log res
+        User AccessToken ?? App Access Token ？？どっちだろ？
+        FB.ui
+          method: "apprequests"
+          message: "応援に参加してください！"
+          data: App.User.get('id')
+        , (res)->
           console.log res
-        # FB.ui
-        #   method: "apprequests"
-        #   message: "応援に参加してください！"
-        #   data: App.User.get('id')
-        # , (res)->
-        #   _.each res.to, (fbid)->
-        #     $.ajax
-        #       type: "POST"
-        #       url: "/api/users/me/fbrequest/#{fbid}"
-        #       # url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
-        #       success: (data)->
-        #         console.log data
-        #   # console.log res
+          _.each res.to, (fbid)->
+            $.ajax
+              type: "POST"
+              url: "/api/users/me/fbrequest/#{fbid}"
+              # url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
+              success: (data)->
+                console.log data
+          # console.log res
       when "signup"
         @now = new App.View.SignupPage()
         @now.render()
@@ -78,6 +81,8 @@ class Router extends Backbone.Router
       @now.undelegateEvents()
     @now = new App.View.CandidatePage
       id: id
+  newsReload: ()->
+
 
 window.fbAsyncInit = ->
   FB.init
@@ -102,23 +107,47 @@ window.fbAsyncInit = ->
           url: "/api/login"
           data: res
           success: (data)->
-            # console.log data
-            # id = data.id
-            id = data
-            # if data.isCheck is true
-            #   window.alert("応援者か婚活者か聞く")
-            console.log id
+            id = data.id
+            if data.isFirst is true
+              window.alert("応援者か婚活者か聞く")
+
             App.User = new App.Model.User
               id: id
             sidebar = new App.View.Sidebar
               model: App.User
 
-            @start = ()->
+            @start = =>
               Backbone.history.start()
+              console.log @router
+              $.ajax
+                type: "GET"
+                url: "/api/users/me/news"
+                success: (data)->
+                  console.log 'succss'
+                  console.log data
+                  talks = _.filter data, (d)->
+                    return d.type is "talk"
+                  messages = _.filter data, (d)->
+                    return d.type is "message"
+                  $("li.talk a").html("応援トーク（#{talks.length}）")
+                  $("li.message a").html("メッセージ（#{messages.length}）")
+              setInterval ()->
+                console.log 'interval'
+                $.ajax
+                  type: "GET"
+                  url: "/api/users/me/news"
+                  success: (data)->
+                    talks = _.filter data, (d)->
+                      return d.type is "talk"
+                    messages = _.filter data, (d)->
+                      return d.type is "message"
+                    $("li.talk a").html("応援トーク（#{talks.length}）")
+                    $("li.message a").html("メッセージ（#{messages.length}）")
+              , 1000*60
             _.bindAll @, "start"
             App.User.bind 'change', @start
 
-            router = new Router()
+            @router = new Router()
             App.User.fetch()
 
     else

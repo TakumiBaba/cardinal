@@ -85,5 +85,5 @@ http.createServer(app).listen config.port, ->
 #     cluster.fork() for i in [0...os.cpus().length]
 #     cluster.on 'exit', cluster.fork
 # else
-#   https.createServer(secure_options, app).listen config.port, ->
-#     console.log "HTTPS Server pid:#{process.pid} port:#{config.port}"
+#   http.createServer(app).listen config.port, ->
+#     console.log "HTTP Server pid:#{process.pid} port:#{config.port}"
