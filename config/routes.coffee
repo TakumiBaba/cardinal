@@ -81,6 +81,9 @@ module.exports = (app) ->
   app.get '/debug/api/message/create', Debug.message.create
   app.get '/debug/api/message/reset', Debug.message.reset
   app.get '/debug/api/users/me/following/:followingId', Debug.followings.create
+  app.get '/debug/sdk/', Debug.facebooksdk.test
+  app.get '/debug/sdk/notification', Debug.facebooksdk.sendNotification
+  app.delete '/debug/sdk/request', Debug.facebooksdk.deleteRequest
   # app.get '/debug/api/users/me/sm/delete', User.supporterMessage.delete
 
   return SiteEvent.failure

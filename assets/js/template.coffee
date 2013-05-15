@@ -4,8 +4,8 @@ JST['matching/page'] = _.template(
   """
   <div id='matching_page' class='profile_and_following_view'>
     <ul class='nav nav-tabs matching-type-list'>
-      <li class='supporter active'><a>応援団おすすめリスト</a></li>
-      <li class='system'><a>お相手リスト</a></li>
+      <li class='system active'><a>お相手リスト</a></li>
+      <li class='supporter'><a>応援団おすすめリスト</a></li>
     </ul>
     <div class='system_matching'>
       <div class='box'>
@@ -602,7 +602,7 @@ JST['matching/follower'] = _.template(
 JST['supporting/userpage/page'] = _.template(
   """
   <div id='user_page' class='profile_and_following_view'>
-    <h3 class='title_box'>ユーザーページ</h2>
+    <h3 class='title_box'>プロフィールページ</h2>
     <div class='box'>
       <div class='user_profiles main_box'>
         <div class='box_menu'>
@@ -748,7 +748,7 @@ JST['userpage/like/thumbnail'] = _.template(
 JST['candidate/page'] = _.template(
   """
   <div id='user_page' class='profile_and_following_view'>
-    <h3 class='title_box'>ユーザーページ</h2>
+    <h3 class='title_box'>プロフィールページ</h2>
     <div class='box'>
       <div class='user_profiles main_box'>
         <div class='box_menu'>
@@ -1396,7 +1396,7 @@ JST['usepolicy/page'] = _.template(
 JST['me/page'] = _.template(
   """
   <div id='user_page' class='profile_and_following_view'>
-    <h3 class='title_box'>ユーザーページ</h2>
+    <h3 class='title_box'>プロフィールページ</h2>
     <div class='box'>
       <div class='user_profiles main_box'>
         <div class='box_menu'>

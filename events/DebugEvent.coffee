@@ -12,6 +12,11 @@ exports.DebugEvent = (app) ->
   TalkEvent = app.settings.events.TalkEvent app
   LikeEvent = app.settings.events.LikeEvent app
 
+  Config = app.settings.config
+  Facebook = require 'facebook-node-sdk'
+  # FB = new Facebook({appId: Config.appId, secret: Config.appSecret})
+  FB = require 'fb'
+
   user:
     fetchAll: (req, res)->
       User.find({}).exec (err, users)->
@@ -223,5 +228,42 @@ exports.DebugEvent = (app) ->
             throw err if err
             res.send @
 
-  setRandomName: (req, res)->
-
+  facebooksdk:
+    test: (req, res)->
+      FB.api "100001088919966", {}, (response)->
+        console.log(response.error) if !response or response.error
+        console.log response
+        return res.send response
+    sendNotification: (req, res)->
+      FB.api 'oauth/access_token',
+        client_id: Config.appId
+        client_secret: Config.appSecret
+        grant_type: 'client_credentials'
+      , (response)->
+        console.log(response.error) if !response or response.error
+        console.log response
+        FB.setAccessToken response.access_token
+        FB.api '100001088919966/notifications', 'post',
+          access_token: response.access_token
+          href: "https://takumiubaba.com"
+          template: "Hi! @[100001088919966] yeah!"
+        , (response)->
+          console.log(response.error) if !response or response.error
+          console.log response
+          return res.send response
+    deleteRequest: (req, res)->
+      request_id = req.body.reqId || ""
+      user_id    = req.body.userId || ""
+      console.log request_id, user_id
+      FB.api 'oauth/access_token',
+        client_id: Config.appId
+        client_secret: Config.appSecret
+        grant_type: 'client_credentials'
+      , (response)=>
+        console.log "#{request_id}_#{user_id}"
+        FB.api "#{request_id}_#{user_id}", "delete",
+          access_token: response.access_token
+        , (response)->
+          throw response.error if !response or response.error
+          console.log response
+          return res.send response

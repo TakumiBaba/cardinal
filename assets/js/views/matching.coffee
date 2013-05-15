@@ -27,7 +27,8 @@ class App.View.MatchingPage extends Backbone.View
 
     @collection.fetch()
 
-    @systemMatchingView.hide()
+    # @systemMatchingView.hide()
+    @supporterMatchingView.hide()
 
 
   change: (e)->

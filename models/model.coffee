@@ -182,6 +182,8 @@ FollowSchema = new Schema
     ref: "User"
   ids:
     type: [String]
+  request_id:
+    type: String
   approval:
     type: Boolean
     default: false

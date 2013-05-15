@@ -11,6 +11,12 @@ exports.SiteEvent = (app) ->
   https = require 'https'
 
   index: (req, res)->
+    console.log 'index'
+    console.log req.body
+    console.log req.params
+    console.log req.query
+    fbreq = req.query.request_ids || ""
+    req.session.fbreq = fbreq
     res.render 'index',
       req: req
 
@@ -23,7 +29,10 @@ exports.SiteEvent = (app) ->
       if user && !user.isFirstLogin
         console.log 'user is exist'
         req.session.userid = user.id
-        return res.send user.id if user.isSupporter
+        json =
+          id: user.id
+          isFirst: false
+        return res.send json if user.isSupporter
         exclusion = []
         Status.find({ids: {$in: [user.id]}}).exec (err, statuses)=>
           throw err if err

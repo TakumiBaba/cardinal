@@ -516,7 +516,6 @@ exports.UserEvent = (app) ->
         throw err if err
         news = _.filter user.news, (n)->
           return !n.isRead
-        console.log news.length
         return res.send news
     delete: (req, res)->
       id = req.session.userid

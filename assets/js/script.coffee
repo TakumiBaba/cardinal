@@ -46,23 +46,36 @@ class Router extends Backbone.Router
         @now = new App.View.SupporterPage()
         @now.render()
       when "invite"
-        # FB.api "/#{App.User.get('facebook_id')}/notifications?access_token=#{App.AccessToken}&href=/index.html&template=@[100001088919966] hogefuga", (res)->
-        #   console.log res
-        User AccessToken ?? App Access Token ？？どっちだろ？
+        # $.ajax
+        #   type: "GET"
+        #   url: "https://graph.facebook.com/oauth/access_token?client_id=381551511881912&client_secret=9da6d32dc52a4370fce032a86ab6ceda&grant_type=client_credentials"
+        #   success: (data)->
+        #     console.log data
+            # FB.api "/#{App.User.get('facebook_id')}/notifications?access_token=#{data}&href=/index.html&template=@[100001088919966] hogefuga", (res)->
+            #   console.log res
+        # User AccessToken ?? App Access Token ？？どっちだろ？
         FB.ui
           method: "apprequests"
           message: "応援に参加してください！"
           data: App.User.get('id')
         , (res)->
           console.log res
-          _.each res.to, (fbid)->
-            $.ajax
-              type: "POST"
-              url: "/api/users/me/fbrequest/#{fbid}"
-              # url: "/api/users/#{fbid}/follow/#{App.User.get('facebook_id')}"
-              success: (data)->
-                console.log data
-          # console.log res
+          request_id = res.request
+          _.each res.to, (fbid)=>
+            FB.api "/#{fbid}", (res)=>
+              console.log res
+              json =
+                name: res.name
+                first_name: res.first_name
+                last_name: res.last_name
+                gender: res.gender
+                request_id: request_id
+              $.ajax
+                type: "POST"
+                url: "/api/users/me/fbrequest/#{fbid}"
+                data: json
+                success: (data)->
+                  console.log data
       when "signup"
         @now = new App.View.SignupPage()
         @now.render()
@@ -94,11 +107,6 @@ window.fbAsyncInit = ->
 
   FB.getLoginStatus (response)->
     console.log response
-    # FB.ui
-    #   method: "permissions.request"
-    #   perms: "manage_notifications"
-    # , (res)->
-    #   console.log res
     if response.status is "connected"
       App.AccessToken = response.authResponse.accessToken
       FB.api 'me', (res)->
