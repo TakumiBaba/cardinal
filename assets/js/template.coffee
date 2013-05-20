@@ -21,13 +21,14 @@ JST['matching/page'] = _.template(
             <button class='like btn pink'>いいね！</button>
             <button class='sendMessage btn green'>メッセージを送る</button>
             <button class='talk btn yellow'>応援団に相談</button>
+            <!--
             <div class='btn-group recommend'>
               <button class='btn dropdown-toggle btn-primary' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
               <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
                 <li class='divider'></li>
               </ul>
             </div>
-
+            -->
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
@@ -70,7 +71,7 @@ JST['matching/page'] = _.template(
             <div class='btn-group'>
               <button class='like btn btn-primary'>いいね！</button>
               <button class='sendMessage btn btn-success'>メッセージを送る</button>
-              <button class='recommend btn btn-inverse'>友達に勧める</button>
+              <!-- <button class='recommend btn btn-inverse'>友達に勧める</button> -->
             </div>
           </div>
           <div class='detail_profile'>
@@ -609,9 +610,11 @@ JST['supporting/userpage/page'] = _.template(
           <img class='profile_image pull-left' src='<%= image_source %>' />
           <h4 class='name'><%= name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
+          <!--
           <div class='btn-group'>
             <button class='recommend btn btn-primary disabled'>友達に勧める</button>
           </div>
+          -->
         </div>
         <div class='detail_profile pull-left'>
           <div class='tabbable'>
@@ -757,12 +760,14 @@ JST['candidate/page'] = _.template(
           <h5 class='simple_profile'><%= gender_birthday %></h5>
           <button class='like btn btn-primary'>いいね！</button>
           <button class='sendMessage btn btn-success'>メッセージを送る</button>
+            <!--
           <div class='btn-group recommend'>
             <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
             <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
               <li class='divider'></li>
             </ul>
           </div>
+          -->
           <!-- <button class='recommend btn btn-primary'>友達に勧める</button> -->
         </div>
         <div class='detail_profile pull-left'>
@@ -1068,8 +1073,8 @@ JST['sidebar/main'] = _.template(
       <ul class='nav nav-list'>
         <li class='nav-header'>メニュー</li>
         <li class='like'><a href='/#/like'> いいねリスト</a></li>
-        <li class='talk'><a href='/#/talk'> 応援トーク</a></li>
-        <li class='message'><a href='/#/message'> メッセージ</a></li>
+        <li class='talk'><a class='talk-badge' href='/#/talk'> 応援トーク<span class='badge badge-important talk-badge'></span></a></li>
+        <li class='message'><a  class='message-badge' href='/#/message'> メッセージ<span class='badge badge-important message-badge'></span></a></li>
         <li class='divider'></li>
         <li class='test'><a href='/#/invite'> 応援団を増やす</a></li>
         <li class='supporter'><a href='/#/supporter'> あなたの婚活仲間</a></li>
@@ -1406,10 +1411,12 @@ JST['me/page'] = _.template(
           <button class='like btn btn-primary'>いいね！</button>
           <button class='sendMessage btn btn-success'>メッセージを送る</button>
           <div class='btn-group recommend'>
+            <!--
             <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
             <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
               <li class='divider'></li>
             </ul>
+            -->
           </div>
           <!-- <button class='recommend btn btn-primary'>友達に勧める</button> -->
         </div>

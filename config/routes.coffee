@@ -12,7 +12,7 @@ module.exports = (app) ->
   log = app.settings.helper.logger no
 
   app.get    '/',  log,  SiteEvent.index
-  app.post   '/',  log,  SiteEvent.index
+  app.post   '/',  log,  SiteEvent.postindex
   app.post '/api/login', SiteEvent.login
   app.post '/api/signup', User.signup
   app.get '/api/appaccesstoken', SiteEvent.appAccessToken.fetch
@@ -25,6 +25,8 @@ module.exports = (app) ->
   app.post '/api/users/me/profile', User.profile.update
   app.get '/api/users/:user_id/news', User.news.fetch
   app.get '/api/users/me/news/delete', User.news.delete
+  app.get '/api/users/facebook/:facebook_id', User.facebook.fetch
+
   # app.put '/api/users/:oneId/follow/:twoId', User.follow.update
   # app.post '/api/users/:following/follow/:follower', User.follow.create
   # app.post '/api/users/:from_id/follow/:to_id', User.follow.following.create
@@ -71,6 +73,10 @@ module.exports = (app) ->
   app.get '/api/users/:oneId/candidates/:twoId', Like.create
   app.post '/api/users/:oneId/candidates/:twoId', Like.status.update
   app.get '/api/users/:oneId/candidates/:twoId/:status', Like.status.update
+
+  # NotificationEvent
+  app.post '/api/users/:from/notification/:to/message', User.news.message
+  app.post '/api/users/:user_id/notification/talk', User.news.talk
 
   # DebugEvent
   app.get '/debug/api/users', Debug.user.fetchAll

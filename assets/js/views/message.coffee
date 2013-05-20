@@ -85,10 +85,10 @@ class App.View.Messages extends Backbone.View
       source: "/api/users/#{model.get('from')}/picture"
       name: model.get('from_name')
       text: model.get('text')
-      created_at: "#{d.getMonth()+1}月#{d.getDay()}日 #{hours}:#{minutes}"
+      created_at: "#{d.getMonth()+1}月#{d.getDate()}日 #{hours}:#{minutes}"
     li = JST['message/body'](attributes)
     $(@.el).find('div.message-header h5').html("#{@target.name}さんとのやりとり")
-    ul.append li
+    ul.prepend li
     # ここで、ul.message-listにliをぶち込む。
 
   appendAllItem: (collection)->
@@ -119,4 +119,9 @@ class App.View.Messages extends Backbone.View
       success: (data)=>
         $('textarea.message').val("")
         @.collection.add data
+        $.ajax
+          type: "POST"
+          url: "/api/users/me/notification/#{@target.id}/message"
+          success: (data)->
+            console.log data
     console.log text

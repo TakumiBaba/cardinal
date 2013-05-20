@@ -4,6 +4,8 @@ exports.TalkEvent = (app) ->
   User = app.settings.models.User
   Comment = app.settings.models.Comment
 
+  Utils = app.settings.helper.utils
+
   fetch: (req, res)->
     id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
     User.findOne({id: id}).populate("news").exec (err, user)->
@@ -16,14 +18,15 @@ exports.TalkEvent = (app) ->
         _.each news, (n)=>
           n.isRead = true
           n.save()
-        return res.send talks
+        sortedTalks = _.sortBy talks, (talk)->
+          return talk.updatedAt
+        return res.send sortedTalks
 
   create: (req, res)->
     one = if req.body.one is 'me' then req.session.userid else req.body.one
     two = if req.body.two is 'me' then req.session.userid else req.body.two
     User.find id: {$in: [one, two]}, (err, users)=>
       throw err if err
-      console.log users
       o = ""
       t = ""
       _.each users, (user)=>
@@ -38,37 +41,26 @@ exports.TalkEvent = (app) ->
           talk.save()
           o.talks.push talk
           o.save()
-          console.log 'new'
-        console.log 'old'
         list = talk
         list.name = t.last_name
-        console.log list
         return res.send list
-
-    # Talk.findOne id: {$in: [one, two]}, (err, talk)->
-    #   throw err if err
-    #   unless talk
-    #     talk = new Talk()
-    #     talk.save()
-    #     return res.send talk
-    #   return res.send talk
 
   comment:
     create: (req, res)->
       console.log req.params
       id = if req.body.user_id is 'me' then req.session.userid else req.body.user_id
       text = req.body.text
-      Talk.findOne({_id: req.params.talk_id}).exec (err, talk)->
+      Talk.findOne({_id: req.params.talk_id}).populate('user', "id facebook_id").populate("candidate", "id facebook_id").exec (err, talk)->
         throw err if err
         unless talk
           return res.send 'talk is not existed'
         comment = new Comment()
         comment.user = id
         comment.text = text
-        comment.save (err)->
+        comment.save (err)=>
           throw err if err
           talk.comments.push comment._id
-          talk.save (err)->
+          talk.save (err)=>
             throw err if err
             return res.send comment
     fetch: (req, res)->

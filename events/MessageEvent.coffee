@@ -8,14 +8,16 @@ exports.MessageEvent = (app) ->
     id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
     User.findOne({id: id}).populate('news').exec (err, user)->
       throw err if err
-      MessageList.find({_id: {$in: user.messageLists}}).populate("messages").populate("one").populate("two").exec (err, list)->
+      MessageList.find({_id: {$in: user.messageLists}}).populate("messages").populate("one").populate("two").exec (err, lists)->
         throw err if err
         news = _.filter user.news, (n)=>
           return !n.isRead && n.type is "message"
         _.each news, (n)->
           n.isRead = true
           n.save()
-        res.send list
+        sortedLists = _.sortBy lists, (list)->
+          return list.lastUpdated
+        res.send sortedLists
 
   create: (req, res)->
     userid = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
@@ -51,7 +53,6 @@ exports.MessageEvent = (app) ->
           list.messages.push message
           list.save()
           return res.send message
-
 
   comment:
     fetch: (req, res)->

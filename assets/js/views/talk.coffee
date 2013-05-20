@@ -25,7 +25,7 @@ class App.View.TalkPage extends Backbone.View
     talk = new App.View.TalkUnit
       model: model
     talk.render()
-    $(@.el).find('ul.talk_list').append talk.el
+    $(@.el).find('ul.talk_list').prepend talk.el
 
 
   appendAllItem: (collection)->
@@ -84,6 +84,11 @@ class App.View.TalkUnit extends Backbone.View
         console.log model
         @.comments.collection.add model
         $(@.el).find('textarea.comment_area').val("")
+        $.ajax
+          type: "POST"
+          url: "/api/users/me/notification/talk"
+          success: (data)->
+            console.log data
 
 class App.View.Comments extends Backbone.View
   tagName: "ul"
@@ -111,7 +116,7 @@ class App.View.Comments extends Backbone.View
       message: model.get('text')
       created_at: created_at
     html = JST['talk/comment'](attributes)
-    $(@.el).append html
+    $(@.el).prepend html
 
   appendAllItem: (collection)->
     _.each collection.models, @.appendItem

@@ -46,14 +46,6 @@ class Router extends Backbone.Router
         @now = new App.View.SupporterPage()
         @now.render()
       when "invite"
-        # $.ajax
-        #   type: "GET"
-        #   url: "https://graph.facebook.com/oauth/access_token?client_id=381551511881912&client_secret=9da6d32dc52a4370fce032a86ab6ceda&grant_type=client_credentials"
-        #   success: (data)->
-        #     console.log data
-            # FB.api "/#{App.User.get('facebook_id')}/notifications?access_token=#{data}&href=/index.html&template=@[100001088919966] hogefuga", (res)->
-            #   console.log res
-        # User AccessToken ?? App Access Token ？？どっちだろ？
         FB.ui
           method: "apprequests"
           message: "応援に参加してください！"
@@ -137,10 +129,9 @@ window.fbAsyncInit = ->
                     return d.type is "talk"
                   messages = _.filter data, (d)->
                     return d.type is "message"
-                  $("li.talk a").html("応援トーク（#{talks.length}）")
-                  $("li.message a").html("メッセージ（#{messages.length}）")
+                  $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
+                  $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
               setInterval ()->
-                console.log 'interval'
                 $.ajax
                   type: "GET"
                   url: "/api/users/me/news"
@@ -149,8 +140,8 @@ window.fbAsyncInit = ->
                       return d.type is "talk"
                     messages = _.filter data, (d)->
                       return d.type is "message"
-                    $("li.talk a").html("応援トーク（#{talks.length}）")
-                    $("li.message a").html("メッセージ（#{messages.length}）")
+                    $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
+                    $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
               , 1000*60
             _.bindAll @, "start"
             App.User.bind 'change', @start

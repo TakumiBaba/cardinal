@@ -146,6 +146,11 @@ class App.View.UserPageProfile extends Backbone.View
       success:(data)=>
         console.log data
         @model.fetch()
+        $.ajax
+          type: "POST"
+          url: "/api/users/#{@model.get('id')}/notification/talk"
+          success: (data)->
+            console.log data
 
 class App.View.UserPageMatchingList extends Backbone.View
   el: "div#matchinglist"

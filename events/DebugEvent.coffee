@@ -13,8 +13,6 @@ exports.DebugEvent = (app) ->
   LikeEvent = app.settings.events.LikeEvent app
 
   Config = app.settings.config
-  Facebook = require 'facebook-node-sdk'
-  # FB = new Facebook({appId: Config.appId, secret: Config.appSecret})
   FB = require 'fb'
 
   user:

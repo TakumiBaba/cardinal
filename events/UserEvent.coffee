@@ -3,8 +3,11 @@ exports.UserEvent = (app) ->
   User = app.settings.models.User
   Follow = app.settings.models.Follow
   SupporterMessage = app.settings.models.SupporterMessage
+  News = app.settings.models.News
 
   Crypto = require 'crypto'
+  Config = app.settings.config
+  FB = require 'fb'
 
   fetch: (req, res)->
     console.log req.session.userid
@@ -508,6 +511,18 @@ exports.UserEvent = (app) ->
         _.each ms, (m)->
           m.remove()
         return res.send ms
+  facebook:
+    fetch:(req, res)->
+      facebook_id = req.params.facebook_id
+      FB.api 'oauth/access_token',
+        client_id: Config.appId
+        client_secret: Config.appSecret
+        grant_type: 'client_credentials'
+      , (response)=>
+        return res.send response if !response or response.error
+        FB.api "#{facebook_id}", (response)=>
+          console.log response
+          return res.send response
 
   news:
     fetch: (req, res)->
@@ -525,3 +540,64 @@ exports.UserEvent = (app) ->
         user.save (err)->
           throw err if err
           return res.send user
+
+    message: (req, res)->
+      fromId = if req.params.from is "me" then req.session.userid else req.params.from
+      toId   = req.params.to
+      User.find {id: {$in:[fromId, toId]}}, (err, users)->
+        throw err if err
+        from = _.find users, (u)=>
+          return u.id is fromId
+        to   = _.find users, (u)=>
+          return u.id is toId
+        news = new News
+          type: "message"
+          isRead: false
+        to.news.push news
+        news.save()
+        to.save()
+        FB.api 'oauth/access_token',
+          client_id: Config.appId
+          client_secret: Config.appSecret
+          grant_type: 'client_credentials'
+        , (response)=>
+          console.log(response.error) if !response or response.error
+          FB.setAccessToken response.access_token
+          FB.api "#{to.facebook_id}/notifications", 'post',
+            access_token: response.access_token
+            href: "https://apps.facebook.com/test_ding_dong"
+            template: "#{from.first_name}さんからメッセージが来てます！"
+          , (response)->
+            console.log(response.error) if !response or response.error
+            return res.send response
+    talk: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      c_name = req.body.c_name
+      User.findOne({id: id}).populate('follower').exec (err, user)->
+        throw err if err
+        follower = _.filter user.follower, (f)->
+          return f.approval is true
+        ids = _.pluck follower, "from"
+        news = new News
+          type: "talk"
+          isRead: false
+        user.news.push news
+        news.save()
+        user.save()
+        console.log ids
+        User.find({_id: {$in: ids}}).exec (err, users)=>
+          throw err if err
+          FB.api 'oauth/access_token',
+            client_id: Config.appId
+            client_secret: Config.appSecret
+            grant_type: 'client_credentials'
+          , (response)=>
+            _.each users, (u)=>
+              console.log u.facebook_id
+              FB.api "#{u.facebook_id}/notifications", "post",
+                access_token: response.access_token
+                href: "https://apps.facebook.com/test_ding_dong"
+                template: "#{u.first_name}さんの候補者について話しあいましょう！"
+              , (response)->
+                return res.send response.error if !response or response.error
+                return res.send response
