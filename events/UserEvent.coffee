@@ -44,7 +44,6 @@ exports.UserEvent = (app) ->
     User.findOne id: id, (err, user)->
       throw err if err
       user.isSupporter = false
-      # user.profile.birthday = new Date("")
       console.log user
 
       # user.save()

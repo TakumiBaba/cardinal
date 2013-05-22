@@ -18,9 +18,9 @@ JST['matching/page'] = _.template(
             <img class='profile_image pull-left' src='' />
             <h4 class='name'></h4>
             <h5 class='simple_profile'></h5>
-            <button class='like btn pink'>いいね！</button>
-            <button class='sendMessage btn green'>メッセージを送る</button>
-            <button class='talk btn yellow'>応援団に相談</button>
+            <button class='like pink'>いいね！</button>
+            <button class='sendMessage green'>メッセージを送る</button>
+            <button class='talk yellow'>応援団に相談</button>
             <!--
             <div class='btn-group recommend'>
               <button class='btn dropdown-toggle btn-primary' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
@@ -71,11 +71,8 @@ JST['matching/page'] = _.template(
             <img class='profile_image pull-left' src='' />
             <h4 class='name'></h4>
             <h5 class='simple_profile'></h5>
-            <div class='btn-group'>
-              <button class='like btn btn-primary'>いいね！</button>
-              <button class='sendMessage btn btn-success'>メッセージを送る</button>
-              <!-- <button class='recommend btn btn-inverse'>友達に勧める</button> -->
-            </div>
+            <button class='like pink'>いいね！</button>
+            <button class='sendMessage green'>メッセージを送る</button>
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
@@ -398,15 +395,15 @@ JST['like/page'] = _.template(
   """
   <div id='like_page'>
     <div class='each-like info box-inner container likebox'>
-      <h3 class='title_box'>両思い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
+      <h5 class='title_box'>両思い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='your-like info box-inner container likebox'>
-      <h3 class='title_box'>お相手が片思い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
+      <h5 class='title_box'>お相手が片思い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='my-like info box-inner  container likebox'>
-      <h3 class='title_box'>あなたが片思い</h3>
+      <h5 class='title_box'>あなたが片思い</h3>
       <ul class='like-thumbnail'></ul>
     </div>
   </div>
@@ -474,7 +471,7 @@ JST['talk/unit'] = _.template(
       <img src='<%= source %>' class='com_img' />
     </div>
     <div class='reply_box'>
-      <input class='comment_area'></input>
+      <input placeholder='コメントする' class='comment_area'></input>
     </div>
   </div>
   """
@@ -513,7 +510,7 @@ JST['message/page'] = _.template(
       </div>
       <div class='message-footer'>
         <img src='<%= source %>' class='com_img' />
-        <input class='comment_area'></input>
+        <input placeholder='コメントする' class='comment_area'></input>
         <!-- <div class='reply_box'>
           <textarea class='message' />
           <button class='btn btn-primary send_message'>メッセージを送る</button>
@@ -1008,7 +1005,7 @@ JST['signup/page'] = _.template(
         <div class='control-group'>
           <div class='controls'>
             <label class='checkbox'>
-              <input type='checkbox' class='required_checkbox' required>22歳以上ですか?
+              <input type='checkbox' class='required_checkbox' required>21歳以上ですか?
             </label>
             <label class='checkbox'>
               <input type='checkbox' class='required_checkbox' required>あなたは独身ですか?
@@ -1447,8 +1444,6 @@ JST['me/page'] = _.template(
           <img class='profile_image pull-left' src='<%= profile.image_url %>' />
           <h4 class='name'><%= first_name || name %>さん</h4>
           <h5 class='simple_profile'><%= profile.birthday %></h5>
-          <button class='like btn btn-primary'>いいね！</button>
-          <button class='sendMessage btn btn-success'>メッセージを送る</button>
           <div class='btn-group recommend'>
             <!--
             <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
@@ -1465,9 +1460,9 @@ JST['me/page'] = _.template(
               <h5>プロフィール詳細</h5>
               <div class='ideal-profile'>
                 <p><%= first_name %>さんはこんな人を探しています</p>
-                <h4>年齢 <%= profile.ageRangeMin %> ~ <%= profile.ageRangeMax %></h4>
+                <h4>年齢 <%= profile.ageRangeMin %> ~ <%= profile.ageRangeMax %>歳</h4>
                 <p>理想のパートナー像</p>
-                <h5><%= profile.idealPartner %>歳</h5>
+                <h5><%= profile.idealPartner %></h5>
               </div>
               <table class='table'>
                 <tbody>

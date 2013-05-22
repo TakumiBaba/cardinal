@@ -37,7 +37,9 @@ exports.SiteEvent = (app) ->
       #   res.render 'index',
       #     req: req
   postindex: (req, res)->
-    return res.redirect '/'
+    return res.render "index",
+      req: req
+
     # console.log 'post-index'
     # res.render 'index',
     #   req: req
