@@ -1,8 +1,8 @@
 {
-  "port": 3000,
+  "port": 1218,
   "env": "development",
   "maxage": 604800,
-  "migration": true,
+  "migration": false,
   "appSecret": "9da6d32dc52a4370fce032a86ab6ceda",
   "appId":  381551511881912,
   "mongo": {
