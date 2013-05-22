@@ -39,7 +39,8 @@ class App.View.TalkUnit extends Backbone.View
   className: "talk clearfix"
 
   events:
-    "click button.send_comment": "postComment"
+    # "click button.send_comment": "postComment"
+    "keypress input.comment_area": "postComment"
 
   constructor: ->
     super
@@ -71,24 +72,26 @@ class App.View.TalkUnit extends Backbone.View
       id: @.talkId
     $(@.el).find('div.comments_box').html @.comments.el
 
+
+
   postComment: (e)->
-    text = $(@.el).find('textarea.comment_area').val()
-    $.ajax
-      type: "POST"
-      url: "/api/talks/#{@.talkId}/comment"
-      data:
-        user_id: "me"
-        text: text
-        talk_id: @.talkId
-      success:(model)=>
-        console.log model
-        @.comments.collection.add model
-        $(@.el).find('textarea.comment_area').val("")
-        $.ajax
-          type: "POST"
-          url: "/api/users/me/notification/talk"
-          success: (data)->
-            console.log data
+    if e.keyCode is 13
+      text = $(@.el).find('input.comment_area').val()
+      $.ajax
+        type: "POST"
+        url: "/api/talks/#{@.talkId}/comment"
+        data:
+          user_id: "me"
+          text: text
+          talk_id: @.talkId
+        success:(model)=>
+          @.comments.collection.add model
+          $(@.el).find('input.comment_area').val("")
+          $.ajax
+            type: "POST"
+            url: "/api/users/me/notification/talk"
+            success: (data)->
+              console.log data
 
 class App.View.Comments extends Backbone.View
   tagName: "ul"

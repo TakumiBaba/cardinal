@@ -162,7 +162,9 @@ exports.UserEvent = (app) ->
             throw err if err
             list = []
             console.log follows
-            _.each follows, (follow)=>
+            followers = _.filter follow, (f)->
+              return f.approval is true
+            _.each followers, (follow)=>
               list.push
                 follower: follow.from
                 approval: follow.approval
@@ -179,6 +181,7 @@ exports.UserEvent = (app) ->
           follow = _.find from.follower, (follow)=>
             return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
           follow.remove()
+          users.save()
           return res.send follow
 
     request:(req, res)->
@@ -505,12 +508,17 @@ exports.UserEvent = (app) ->
         return res.send supporterMessage
 
     delete: (req, res)->
-      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
-      SupporterMessage.find({}).exec (err, ms)->
+      sm_id = req.params.id
+      SupporterMessage.findOne _id: sm_id, (err, message)->
         throw err if err
-        _.each ms, (m)->
-          m.remove()
-        return res.send ms
+        message.remove()
+        return res.send true
+      # id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      # SupporterMessage.find({}).exec (err, ms)->
+      #   throw err if err
+      #   _.each ms, (m)->
+      #     m.remove()
+      #   return res.send ms
   facebook:
     fetch:(req, res)->
       facebook_id = req.params.facebook_id

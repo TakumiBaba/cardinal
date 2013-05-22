@@ -42,7 +42,7 @@ class App.View.SupporterPage extends Backbone.View
         attributes =
           id: f.id
           source: "/api/users/#{f.id}/picture"
-          name: f.name
+          name: f.first_name
           approval: model.get('approval')
           optionClass: "following"
         if model.get('approval') is false
@@ -63,7 +63,7 @@ class App.View.SupporterPage extends Backbone.View
         attributes =
           id: f.id
           source: "/api/users/#{f.id}/picture"
-          name: f.name
+          name: f.first_name
           optionClass: "follower"
         if model.get('approval')
           li = JST['supporter/li'](attributes)
@@ -75,8 +75,12 @@ class App.View.SupporterPage extends Backbone.View
       target.addClass 'deleteFlag'
       target.html "本当に削除しますか?"
       return false
+    console.log e.currentTarget
     if target.hasClass 'following'
       console.log 'delete following'
+      @removeFollowing(e)
+    else if target.hasClass 'delete-request'
+      console.log 'delete not approvaled following'
       @removeFollowing(e)
     else if target.hasClass 'follower'
       console.log 'delete follower'
@@ -90,6 +94,14 @@ class App.View.SupporterPage extends Backbone.View
       success:(data)=>
         $($(e.currentTarget).parent().parent()).remove()
         console.log data
+        $.ajax
+          type: "delete"
+          url: "/debug/sdk/request"
+          data:
+            reqId: data.request_id
+            userId: data.from.facebook_id
+          success: (d)->
+            console.log d
 
   removeFollower: (e)->
     id = $(e.currentTarget).parent().parent().attr 'id'
@@ -108,6 +120,14 @@ class App.View.SupporterPage extends Backbone.View
       url: "/api/users/me/followings/#{id}"
       success:(data)->
         console.log data
+        $($(e.currentTarget).parent().parent()).remove()
+        attributes =
+          id: data.to.id
+          source: "/api/users/#{id}/picture"
+          name: data.to.first_name
+          optionClass: "following"
+        li = JST['supporter/li'](attributes)
+        $("div#following ul").append li
         $.ajax
           type: "delete"
           url: "/debug/sdk/request"

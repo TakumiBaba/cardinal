@@ -51,7 +51,6 @@ class Router extends Backbone.Router
           message: "応援に参加してください！"
           data: App.User.get('id')
         , (res)->
-          console.log res
           request_id = res.request
           _.each res.to, (fbid)=>
             FB.api "/#{fbid}", (res)=>
@@ -98,7 +97,6 @@ window.fbAsyncInit = ->
     xfbml: true
 
   FB.getLoginStatus (response)->
-    console.log response
     if response.status is "connected"
       App.AccessToken = response.authResponse.accessToken
       FB.api 'me', (res)->
@@ -110,21 +108,16 @@ window.fbAsyncInit = ->
             id = data.id
             if data.isFirst is true
               window.alert("応援者か婚活者か聞く")
-
             App.User = new App.Model.User
               id: id
             sidebar = new App.View.Sidebar
               model: App.User
-
             @start = =>
               Backbone.history.start()
-              console.log @router
               $.ajax
                 type: "GET"
                 url: "/api/users/me/news"
                 success: (data)->
-                  console.log 'succss'
-                  console.log data
                   talks = _.filter data, (d)->
                     return d.type is "talk"
                   messages = _.filter data, (d)->
@@ -148,6 +141,5 @@ window.fbAsyncInit = ->
 
             @router = new Router()
             App.User.fetch()
-
     else
       FB.login()

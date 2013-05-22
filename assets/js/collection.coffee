@@ -69,3 +69,7 @@ class App.Collection.SupporterMessages extends Backbone.Collection
   constructor: (attrs, options)->
     super
     @.url = "/api/users/#{attrs.id}/supportermessages"
+
+  setId: (id)->
+    @id = id
+    @.url = "/api/users/#{id}/supportermessages"

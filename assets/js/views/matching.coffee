@@ -54,9 +54,13 @@ class App.View.MatchingListView extends Backbone.View
 
   constructor: (attrs)->
     super
-    _.bindAll @, "appendItem", "appendAllItem", "setFollower"
+    _.bindAll @, "appendItem", "appendAllItem", "setFollower", "setSupporterMessages"
     @.collection.bind "add", @appendItem
     @.collection.bind "reset", @appendAllItem
+
+    @supporterMessages = new App.Collection.SupporterMessages
+      id: ""
+    @supporterMessages.bind 'reset', @setSupporterMessages
 
   appendItem: (model)->
     user = model.get('user')
@@ -92,12 +96,13 @@ class App.View.MatchingListView extends Backbone.View
       if model.get('user').id is id
         @targetModel = model
         @setDetail model
-        console.log @recommendButton
-        @recommendButton.setTargetId id
+
+        # @supporterMessages.reset()
+        @supporterMessages.setId id
+        @supporterMessages.fetch()
 
   setDetail: (model)->
     user = model.get('user')
-    console.log user
     gender = if user.profile.gender is 'male' then "男性" else "女性"
     birthday = new Date(user.profile.birthday)
     $(@.el).find('img.profile_image').attr('src', user.profile.image_url)
@@ -123,7 +128,6 @@ class App.View.MatchingListView extends Backbone.View
 
   setFollower: (collection)->
     $(@.el).find('ul.follower-list').empty()
-    console.log collection
     _.each collection.models, (f)=>
       options =
         facebook_url: "https://facebook.com/#{f.facebook_id}"
@@ -132,9 +136,19 @@ class App.View.MatchingListView extends Backbone.View
       html = JST['matching/follower'](options)
       $(@.el).find('ul.follower-list').append html
 
+  setSupporterMessages: (collection)->
+    _.each collection.models, (model)=>
+      if model.get('approval') is true
+        s = model.get 'supporter'
+        attributes =
+          source: s.profile.image_url
+          name: "#{s.first_name}さん"
+          message: momdel.get 'message'
+        li = JST['supporter-message/li'](attributes)
+        $(@.el).find('div.supporter-message-list ul').append li
+
   show: ()->
     $(@.el).show()
-
   hide: ()->
     $(@.el).hide()
 

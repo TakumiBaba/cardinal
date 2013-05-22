@@ -63,6 +63,7 @@ module.exports = (app) ->
   app.get '/api/users/:user_id/supportermessages', User.supporterMessage.fetch
   app.post '/api/users/:user_id/supportermessages/:supporter_id', User.supporterMessage.createOrUpdate
   app.get '/api/users/:user_id/supportermessages/:supporter_id/:message', User.supporterMessage.createOrUpdate
+  app.delete '/api/supportermessages/:id', User.supporterMessage.delete
 
   # LikeEvent
   # app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更

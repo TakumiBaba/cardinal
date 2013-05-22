@@ -95,7 +95,6 @@ class App.View.UserPageProfile extends Backbone.View
     @.followers.fetch()
 
   render: (model)->
-    console.log 'profile render'
     user = model
     gender = if user.get('profile').gender is 'male' then "男性" else "女性"
     b = new Date(user.get('profile').birthday)
@@ -116,19 +115,19 @@ class App.View.UserPageProfile extends Backbone.View
         attributes =
           facebook_url: "https://facebook.com/#{model.get('follower').facebook_id}"
           source: model.get('follower').profile.image_url
-          name: model.get('follower').last_name
+          name: "#{model.get('follower').first_name}さん"
         li = JST['matching/follower'](attributes)
         ul.append li
 
   appendSupporterMessages: (collection)->
-
+    console.log collection
     _.each collection.models, (model)=>
-      console.log model
       s = model.get('supporter')
       attributes =
         source: s.profile.image_url
         name: s.first_name
         message: model.get('message')
+        message_id: false
       li = JST['supporter-message/li'](attributes)
       console.log li
       $("div.supporter-message-list ul").append li
@@ -136,15 +135,12 @@ class App.View.UserPageProfile extends Backbone.View
 
   postSupporterMessage: (e)->
     text =  $('div.supporter-message-post-view textarea').val()
-    console.log text
-    console.log @model.get('id')
     $.ajax
       type: "POST"
       url: "/api/users/#{@model.get('id')}/supportermessages/me"
       data:
         message: text
       success:(data)=>
-        console.log data
         @model.fetch()
         $.ajax
           type: "POST"

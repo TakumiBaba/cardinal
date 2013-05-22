@@ -11,55 +11,71 @@ exports.SiteEvent = (app) ->
   Config = app.settings.config
   https = require 'https'
 
+  FB = require 'fb'
+
   index: (req, res)->
-    console.log 'get-index'
-    console.log req.session
-    if req.session
-      facebook_id = req.session.facebook_id
-    else
-      facebook_id = ""
-    User.findOne facebook_id: facebook_id, (err, user)->
-      throw err if err
-      console.log user.isSupporter
-      if user.isSupporter
-        console.log "supporter"
-        res.render 'supporter-index',
-          req: req
-      else
-        res.render 'index',
-          req: req
+    return res.render "index",
+      req: req
+    # console.log 'get-index'
+    # console.log req.session
+    # if req.session
+    #   facebook_id = req.session.facebook_id
+    # else
+    #   facebook_id = ""
+    # User.findOne facebook_id: facebook_id, (err, user)->
+    #   throw err if err
+    #   unless user.isSupporter
+    #     return res.render 'supporter-index',
+    #       req: req
+    #   return res.render 'index',
+    #     req: req
+      # if user.isSupporter
+      #   console.log "supporter"
+      #   res.render 'supporter-index',
+      #     req: req
+      # else
+      #   res.render 'index',
+      #     req: req
   postindex: (req, res)->
-    console.log 'post-index'
-    fbreq = req.query.request_ids || ""
-    signed_request = req.body.signed_request
-    b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
-    facebook_id = b.user_id
-    User.findOne facebook_id: facebook_id, (err, user)=>
-      throw err if err
-      unless user
-        sha1_hash = Crypto.createHash 'sha1'
-        req.params.facebook_id = facebook_id
-        data = UserEvent.facebook.fetch(req, res)
-        user = new User
-          id: sha1_hash.digest 'hex'
-          facebook_id: data.id
-          name: data.name
-          first_name: data.first_name
-          last_name: data.last_name
-          profile:
-            gender: data.gender
-            image_url: "https://graph.facebook.com/#{data.id}/picture?type=large"
-          isSuppoter: true
-          isFirstLogin: false
-        user.save()
-      req.session.facebook_id = user.facebook_id
-      if user.isSupporter
-        # サポーター専用のindexを作る。
-        res.render 'supporter-index',
-          req: req
-      else
-        res.render 'index',
-          req: req
+    return res.redirect '/'
+    # console.log 'post-index'
+    # res.render 'index',
+    #   req: req
+    # fbreq = req.query.request_ids || ""
+    # signed_request = req.body.signed_request
+    # b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
+    # facebook_id = b.user_id
+    # console.log b.user_id
+    # console.log signed_request
+    # return res.redirect "/"
+    # User.findOne facebook_id: facebook_id, (err, user)=>
+    #   throw err if err
+    #   unless user
+    #     sha1_hash = Crypto.createHash 'sha1'
+    #     req.params.facebook_id = facebook_id
+    #     console.log facebook_id
+    #     FB.api "#{facebook_id}", (response)->
+    #       throw response.error if response.error
+    #       user = new User
+    #         id: sha1_hash.digest 'hex'
+    #         facebook_id: response.id
+    #         name: response.name
+    #         first_name: response.first_name
+    #         last_name: response.last_name
+    #         profile:
+    #           gender: response.gender
+    #           image_url: "https://graph.facebook.com/#{response.id}/picture?type=large"
+    #         isSuppoter: true
+    #         isFirstLogin: false
+    #       user.save()
+    #   req.session.facebook_id = user.facebook_id
+    #   if user.isSupporter
+    #     # サポーター専用のindexを作る。
+    #     res.render 'supporter-index',
+    #       req: req
+    #   else
+    #     res.render 'index',
+    #       req: req
 
   login: (req, res)->
     params = req.body

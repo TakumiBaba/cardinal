@@ -13,6 +13,9 @@ class App.View.Sidebar extends Backbone.View
 
     _.bindAll @, "render"
     @.model.bind 'change', @render
+    @followers = new App.Collection.Followers
+      userid: "me"
+    @followers.bind 'reset', @setFollower
 
   render: (model)=>
     isSupporter = model.get('isSupporter')
@@ -28,6 +31,15 @@ class App.View.Sidebar extends Backbone.View
       html = JST['sidebar/supporter'](attributes)
       location.href = "/#/supporter"
     $(@.el).html html
+    @followers.fetch()
+
+  setFollower: (collection)->
+    _.each collection.models, (model)=>
+      console.log model.get('follower').name
+      attributes =
+        id: model.get('follower').id
+      li = JST['sidebar/follower'](attributes)
+      $('ul.sidebar-follower-list').append li
 
   modalUsage: ->
     if $("div.usage").length < 1
@@ -48,25 +60,31 @@ class App.View.ProfilePage extends Backbone.View
     "keydown input#like": "addLikeList"
     "click button.cancel": "cancel"
     "click button.save": "update"
+    "click a.delete-supporter-message": "deleteSupporterMessage"
 
   constructor: (attrs, options)->
     super
     $(@.el).empty()
 
-    @.model = new App.Model.Profile()
+    @model = new App.Model.Profile()
+    @supporterMessages = new App.Collection.SupporterMessages
+      id: "me"
 
-    _.bindAll @, "render"
+
+    _.bindAll @, "render", "setSupporterMessages"
     @.model.bind 'change', @.render
-
     @.model.fetch()
 
-    # ここでProfileModelを...
+    @supporterMessages.bind 'reset', @setSupporterMessages
+
 
   render: (model)->
     attributes = @.model.attributes
     console.log @.model.attributes
     html = App.JST['profile/page'](attributes)
     $(@.el).html html
+
+    @supporterMessages.fetch()
 
   profileImageTemplate: (url)->
     return "<li><img src=#{url} /></li>"
@@ -93,7 +111,6 @@ class App.View.ProfilePage extends Backbone.View
     likelist = []
     $('div.likelist').children().each ()->
       likelist.push $(@).html()
-    console.log likelist
     detail =
       profile_image: $("#profile-image").attr 'src'
       martialHistory: parseInt($("#martialHistory").val())
@@ -117,10 +134,30 @@ class App.View.ProfilePage extends Backbone.View
       ageRangeMax: parseInt $("#age_range_max").val()
       idealPartner: $("#ideal_partner").val()
     @.model.save detail
-    console.log $("#hoby").val()
 
   cancel: (e)->
     @.render()
+
+  setSupporterMessages: (collection)->
+    _.each collection.models, (model)=>
+      s = model.get 'supporter'
+      attributes =
+        source: s.profile.image_url
+        name: s.first_name
+        message: model.get('message')
+        message_id: model.get('_id')
+      li = JST['supporter-message/li'](attributes)
+      $("div.supporter-message-list ul").append li
+
+  deleteSupporterMessage: (e)->
+    id = e.currentTarget.id
+    $.ajax
+      type: "DELETE"
+      url: "/api/supportermessages/#{id}"
+      success: (data)=>
+        if data is true
+          $(e.currentTarget).parent().parent().parent().remove()
+
 
 
 class App.View.FollowDropDownMenu extends Backbone.View
@@ -166,8 +203,6 @@ class App.View.FollowDropDownMenu extends Backbone.View
 
   recommend: (e)->
     id = $(e.currentTarget).attr 'id'
-    console.log @targetId, id
-    console.log 'recommend!'
     $.ajax
       type: "POST"
       url: "/api/users/#{id}/candidates/#{@targetId}"
@@ -183,8 +218,24 @@ class App.View.MePage extends Backbone.View
     super
 
     @model = App.User
+    @followers = new App.Collection.Followers
+      userid: "me"
+    _.bindAll @, "setSupporterMessages"
+    @followers.fetch()
+
 
   render: (model)->
     attributes = @.model.attributes
     html = App.JST['me/page'](attributes)
     $(@.el).html html
+
+  setSupporterMessages: (collection)->
+    _.each collection.models, (model)->
+      s = model.get 'supporter'
+      attributes =
+        source: s.profile.image_url
+        name: s.first_name
+        message: model.get('message')
+      li = JST['supporter-message/li'](attributes)
+      $("div.supporter-message-list ul").append li
+

@@ -4,6 +4,8 @@ exports.FollowEvent = (app) ->
   Follow = app.settings.models.Follow
   Crypto = require 'crypto'
 
+  FB = require 'fb'
+
   following:
     fetch: (req, res)->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
@@ -25,7 +27,7 @@ exports.FollowEvent = (app) ->
         follow = _.find from.following, (following)=>
           return _.contains following.ids, toId
         if follow
-          Follow.findOne({_id: follow._id}).populate('to', "facebook_id").populate('from', "facebook_id").exec (err, follow)->
+          Follow.findOne({_id: follow._id}).populate('to', "facebook_id").populate('from', "facebook_id first_name id").exec (err, follow)->
             throw err if err
             if follow
               follow.approval = true
@@ -108,44 +110,47 @@ exports.FollowEvent = (app) ->
       fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
       toFacebookId = req.params.to_facebook_id
       params = req.body
-      console.log params
-      User.findOne id: fromId, (err, from)=>
-        throw err if err
-        unless fromId
-          return res.send []
-        User.findOne({facebook_id: toFacebookId}).exec (err, to)=>
+      FB.api toFacebookId, (response)=>
+        return res.send false if !response or response.error
+        params = response
+        console.log params
+        User.findOne id: fromId, (err, from)=>
           throw err if err
-          console.log "if userdata exist then next log is to uesr data"
-          console.log to
-          unless to
-            sha1_hash = Crypto.createHash 'sha1'
-            sha1_hash.update toFacebookId
-            to = new User
-              id: sha1_hash.digest 'hex'
-              facebook_id: toFacebookId
-              name: params.name
-              first_name: params.first_name
-              last_name: params.last_name
-              isSuppoter: true
-              isFirstLogin: true
-              profile:
-                image_url: "https://graph.facebook.com/#{toFacebookId}/picture?type=large"
-                gender: params.gender
-            to.save()
-          follow = _.find from.following, (follow)=>
-            return (_.contains(follow.ids, fromId) && _.contains(follow.ids, to.id))
-          unless follow
-            follow = new Follow
-              from: to._id
-              to: from._id
-              ids: [to.id, from.id]
-              request_id: params.request_id
-              approval: false
-            follow.save()
-            from.follower.push follow
-            to.following.push follow
-            from.save()
-            to.save()
-          console.log follow
-          follow.cancel_request_facebook_id = to.facebook_id
-          return res.send follow
+          unless fromId
+            return res.send []
+          User.findOne({facebook_id: toFacebookId}).exec (err, to)=>
+            throw err if err
+            console.log "if userdata exist then next log is to uesr data"
+            console.log to
+            unless to
+              sha1_hash = Crypto.createHash 'sha1'
+              sha1_hash.update params.id
+              to = new User
+                id: sha1_hash.digest 'hex'
+                facebook_id: params.id
+                name: params.name
+                first_name: params.first_name
+                last_name: params.last_name
+                isSuppoter: true
+                isFirstLogin: true
+                profile:
+                  image_url: "https://graph.facebook.com/#{toFacebookId}/picture?type=large"
+                  gender: params.gender
+              to.save()
+            follow = _.find from.following, (follow)=>
+              return (_.contains(follow.ids, fromId) && _.contains(follow.ids, to.id))
+            unless follow
+              follow = new Follow
+                from: to._id
+                to: from._id
+                ids: [to.id, from.id]
+                request_id: params.request_id
+                approval: false
+              follow.save()
+              from.follower.push follow
+              to.following.push follow
+              from.save()
+              to.save()
+            console.log follow
+            follow.cancel_request_facebook_id = to.facebook_id
+            return res.send follow

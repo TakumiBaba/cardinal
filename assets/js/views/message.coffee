@@ -6,7 +6,8 @@ class App.View.MessagePage extends Backbone.View
 
   events:
     "click li.m_thumbnail_li": "changeModel"
-    "click button.send_message": "postMessage"
+    # "click button.send_message": "postMessage"
+    "keypress input.comment_area": "postMessage"
 
   constructor: ->
     super
@@ -31,7 +32,7 @@ class App.View.MessagePage extends Backbone.View
       id: other.id
       source: other.profile.image_url
     li = JST['message/user-thumbnail'](attributes)
-    ul.append li
+    ul.prepend li
 
   appendAllItem: (collection)->
     attributes =
@@ -60,7 +61,8 @@ class App.View.MessagePage extends Backbone.View
         @detaiView.setModel model
 
   postMessage: (e)->
-    @detaiView.postMessage e
+    if e.keyCode is 13
+      @detaiView.postMessage e
 
 class App.View.Messages extends Backbone.View
   el: "div#message-list-view"
@@ -110,18 +112,17 @@ class App.View.Messages extends Backbone.View
       @collection.add message
 
   postMessage: (e)->
-    text = $('textarea.message').val()
+    text = $('input.comment_area').val()
     $.ajax
       type: "POST"
       url: "/api/users/me/#{@target.id}/message"
       data:
         text: text
       success: (data)=>
-        $('textarea.message').val("")
+        $('input.comment_area').val("")
         @.collection.add data
         $.ajax
           type: "POST"
           url: "/api/users/me/notification/#{@target.id}/message"
           success: (data)->
             console.log data
-    console.log text

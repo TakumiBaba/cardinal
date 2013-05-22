@@ -52,6 +52,9 @@ JST['matching/page'] = _.template(
                 </ul>
               </div>
             </div>
+            <div class='supporter-message-list'>
+              <ul></ul>
+            </div>
           </div>
         </div>
       </div>
@@ -94,6 +97,9 @@ JST['matching/page'] = _.template(
                 <ul class='follower-list'>
                 </ul>
               </div>
+            </div>
+            <div class='supporter-message-list'>
+              <ul></ul>
             </div>
           </div>
         </div>
@@ -361,11 +367,17 @@ JST['profile/page'] = _.template(
             <textarea rows='3' id='ideal_partner' name='ideal_partner' class='span5'><%= idealPartner %></textarea>
           </div>
         </div>
-        <div class='form-actions'>
-          <button type='button' class='btn btn-primary save'>保存する</button>
-          <button type='button' class='btn cancel'>もとに戻す</button>
+        <!-- <div class='form-actions'> -->
+        <div class='control-group'>
+          <div class='controls'>
+            <button type='button' class='btn btn-primary save'>保存する</button>
+            <button type='button' class='btn cancel'>もとに戻す</button>
+          </div>
         </div>
       </form>
+      <div class='supporter-message-list'>
+        <ul></ul>
+      </div>
     </div>
   </div>
   """)
@@ -462,8 +474,7 @@ JST['talk/unit'] = _.template(
       <img src='<%= source %>' class='com_img' />
     </div>
     <div class='reply_box'>
-      <textarea class='comment_area' />
-      <button class='btn btn-primary send_comment'>コメントする</button>
+      <input class='comment_area'></input>
     </div>
   </div>
   """
@@ -502,10 +513,12 @@ JST['message/page'] = _.template(
       </div>
       <div class='message-footer'>
         <img src='<%= source %>' class='com_img' />
-        <div class='reply_box'>
+        <input class='comment_area'></input>
+        <!-- <div class='reply_box'>
           <textarea class='message' />
           <button class='btn btn-primary send_message'>メッセージを送る</button>
         </div>
+        -->
         <!-- メッセージポストView -->
     </div>
   </div>
@@ -712,7 +725,7 @@ JST['userpage/sys_matching/thumbnail'] = _.template(
   <li id='<%= id %>' >
     <div class='thumbnail'>
       <button class='close hide'>&times;</button>
-      <a href='/#/user/<%= id %>' class='to-user'>
+      <a href='/#/u/<%= id %>' class='to-user'>
         <img src=<%= source %> />
         <h5><%= name %></h5>
       </a>
@@ -847,7 +860,7 @@ JST['supporter/li'] = _.template(
       <button class='close hide'>&times;</button>
       <a href='/#/s/<%= id %>' class='to-user'>
         <img src=<%= source %> />
-        <h5><%= name %></h5>
+        <h5><%= name %>さん</h5>
       </a>
       <button class='btn btn-block delete <%= optionClass %>'>削除する</button>
     </div>
@@ -862,10 +875,10 @@ JST['supporter/request-li'] = _.template(
       <button class='close hide'>&times;</button>
       <a href='/#/s/<%= id %>' class='to-user'>
         <img src=<%= source %> />
-        <h5><%= name %></h5>
+        <h5><%= name %>さん</h5>
       </a>
       <button class='btn btn-block request'>応援する</button>
-      <button class='btn btn-danger btn-block delete'>削除する</button>
+      <button class='btn btn-danger btn-block delete delete-request'>削除する</button>
     </div>
   </li>
   """
@@ -877,11 +890,13 @@ JST['signup/page'] = _.template(
     <h3 class='title_box'>婚活者登録</h3>
     <div class='info box-inner container'>
       <form action='/api/signup' method='POST' class='form-horizontal'>
+        <img src="/image/facebook_bannar.png" class="signup-logo" />
         <div class='control-group'>
           <label for='name' class='control-label'>名前
           </label>
           <div class='controls'>
-            <input type='text' name='name' id='name' required value='<%= fullName %>'/>
+            <input type='text' name='name' id='name' required value='<%= lastName %>'/>
+            <input type='text' name='name' id='name' required value='<%= firstName %>'/>
             <div class='control-group'>
             </div>
           </div>
@@ -1000,6 +1015,13 @@ JST['signup/page'] = _.template(
             </label>
           </div>
         </div>
+        <p>本婚活支援システムは、慶應義塾大学大学院政策・メディア研究科</p>
+        <p>修士課程2年吉椿薫が婚活支援研究のために公開しています。</p>
+        <p>ご利用の方には 追ってアンケート調査もしくは</p>
+        <p>インタビューをお願いする場合があります。</p>
+        <p>あらかじめご了承いただける方のみご利用ください。</p>
+        <p>なお、調査結果は 個人を特定するものではなく、全て統計的に処理され、</p>
+        <p>研究の目的のみに使用されます。</p>
         <input type='hidden' name='id' id='id' value='<%= facebook_id %>' />
         <input type='hidden' name='username' id='username' value='<%= username %>' />
         <input type='hidden' name='first_name' id='first_name' value='<%= firstName %>' />
@@ -1038,7 +1060,7 @@ JST['signup/page'] = _.template(
       <div class='control-group'>
         <label class='checkbox'>
           <input type='checkbox' value='' id='over-age'/>
-          <p>22歳以上です
+          <p>21歳以上です
           </p>
         </label>
       </div>
@@ -1079,6 +1101,8 @@ JST['sidebar/main'] = _.template(
         <li class='test'><a href='/#/invite'> 応援団を増やす</a></li>
         <li class='supporter'><a href='/#/supporter'> あなたの婚活仲間</a></li>
       </ul>
+      <ul class="sidebar-follower-list">
+      </ul>
       <ul class='nav nav-list sidebar-bottom'>
         <li class='use-policy'><a data-toggle="modal" data-target="#usepolicy">利用規約</a></li>
         <li><a href="/#/privacypolicy">プライバシーポリシー</a></li>
@@ -1090,34 +1114,44 @@ JST['sidebar/main'] = _.template(
   )
 JST['sidebar/supporter'] = _.template(
   """
-  <a href='/#/supporter'>
-    <img class='logo' src='/image/logo.png' />
-  </a>
-  <div id='welcome_box' class='clearfix'>
-    <a class='pull-left'>
-      <img class='user_profile_image' src='<%= source %>' />
+  <div class='sidebar-inner'>
+    <a href='/#/supporter'>
+      <img class='logo' src='/image/logo.png' />
     </a>
-    <div>
-      <a class='user_name'><%= name %>さん</a>
+    <div id='welcome_box' class='clearfix'>
+      <a class='pull-left'>
+        <img class='user_profile_image' src='<%= source %>' />
+      </a>
+      <div>
+        <a class='user_name'><%= name %>さん</a>
+      </div>
+    </div>
+    <a class='pull-right usage' href='/#/usage'><small>使い方</small></a>
+    <div id='navigation' class='clearfix'>
+      <ul class='nav nav-list'>
+        <li class='nav-header'>メニュー</li>
+        <li class='supporter'><a href='/#/supporter'>あなたの婚活仲間</a></li>
+        <li class='signup'><a href='/#/signup'>婚活を始める</a></li>
+      </ul>
+    </div>
+    <div id='sidebar-bottom' class='pull-left'>
+      <ul class='breadcrumb'>
+        <li><a>利用規約</a></li>
+        <li class='divider'>/</li>
+        <li><a>プライバシーポリシー</a></li>
+        <li class='divider'>/</li>
+        <li><a>運営チーム</a></li>
+      </ul>
     </div>
   </div>
-  <a class='pull-right usage' href='/#/usage'><small>使い方</small></a>
-  <div id='navigation' class='clearfix'>
-    <ul class='nav nav-list'>
-      <li class='nav-header'>メニュー</li>
-      <li class='supporter'><a href='/#/supporter'>あなたの婚活仲間</a></li>
-      <li class='signup'><a href='/#/signup'>婚活を始める</a></li>
-    </ul>
-  </div>
-  <div id='sidebar-bottom' class='pull-left'>
-    <ul class='breadcrumb'>
-      <li><a>利用規約</a></li>
-      <li class='divider'>/</li>
-      <li><a>プライバシーポリシー</a></li>
-      <li class='divider'>/</li>
-      <li><a>運営チーム</a></li>
-    </ul>
-  </div>
+  """
+  )
+
+JST['sidebar/follower'] = _.template(
+  """
+  <li>
+    <img class='sidebar-follower-img' src='/api/users/<%= id %>/picture' />
+  </li>
   """
   )
 
@@ -1285,7 +1319,12 @@ JST['supporter-message/li'] = _.template(
       <img src="<%= source %>" />
     </div>
     <div class='s-message-right'>
-      <div class='s-messge-header'><%= name %>さん</div>
+      <% if(message_id != false){ %>
+        <div class='s-messge-header'><%= name %>さん <a id=<%= message_id %>class='delete-supporter-message'>この情報を削除する</a></div>
+      <% }else{ %>
+      <div class='s-messge-header'><%= name %>さん </div>
+      <% }%>
+
       <div class='s-message-body'><%= message %></div>
     </div>
   </li>
@@ -1337,7 +1376,7 @@ JST['usepolicy/page'] = _.template(
       <p>当サービスは、真剣に交際相手を探している独身の方が、お友達に応援してもらいながら将来のパートナーと知り合うチャンスを提供するサービスですが、不特定多数の方がご利用になっているために場合によってはサービスを悪用されたり、あるいは適切なコミュニケーションがとれない方が利用されたりする可能性もあります。</p>
       <p>そういった可能性を十分ご認識のうえ、当サービスのご利用に際して他人に対してどのような個人情報を開示するか、どのようなやりとりをするかについては、常に慎重にお考えください。</p>
       <h3 class='title_box'>第1条【サービス】</h3>
-      <p>1. 当サービスでは結婚について真剣に考えている22歳～60歳の独身の方（以下「婚活者」といいます）が、親しいお友達（以下「応援団」といいます）と情報を共有し応援してもらいながらパートナーを探すことができる婚活支援サービスです。</p>
+      <p>1. 当サービスでは結婚について真剣に考えている21歳～60歳の独身の方（以下「婚活者」といいます）が、親しいお友達（以下「応援団」といいます）と情報を共有し応援してもらいながらパートナーを探すことができる婚活支援サービスです。</p>
       <p>2. 当サービスの利用に際しては、利用者は自らの費用と責任に必要な機器・ソフトウェア・通信手段等を用意し適切に接続・操作することとします。
       <p>3. 当サービスは、Facebook会員向けのサービスです。婚活者および応援団は、あらかじめFacebookに加入およびログインし、プライバシー設定を行なった上でご利用ください。</p>
       <p>4. 将来、無料・有料を問わず様々なサービスを追加したり、または変更・削除することがあります。</p>
@@ -1351,7 +1390,7 @@ JST['usepolicy/page'] = _.template(
       <p>2．Ding-Dongの商標は、運営者に帰属しますので無断で使用することはできません。</p>
       <h3 class='title_box'>第5条【禁止事項】</h3>
       <p>1．運営者は、利用者が以下の行為を行うことを禁じます。</p>
-      <p>1）22歳未満で、独身でない方が婚活者として当サービスを利用すること</p>
+      <p>1）21歳未満で、独身でない方が婚活者として当サービスを利用すること</p>
       <p>2）運営者または第三者に損害を与える行為、または損害を与える恐れのある行為</p>
       <p>3）運営者または第三者の財産、名誉、プライバシー等を侵害する行為、または侵害する恐れのある行為</p>
       <p>4）公序良俗に反する行為、またはその恐れのある行為</p>
