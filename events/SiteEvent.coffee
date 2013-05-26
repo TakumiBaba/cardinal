@@ -86,7 +86,7 @@ exports.SiteEvent = (app) ->
           isFirst: false
         return res.send json if user.isSupporter
         exclusion = []
-        Status.find({ids: {$in: [user.id]}}).where("ids").in([user.id]).where("isRemoved").equals(false).exec (err, statuses)=>
+        Status.find({ids: {$in: [user.id]}, isRemoved: false}).exec (err, statuses)=>
           throw err if err
           if statuses.length > 0
             _.each statuses, (status)=>
@@ -98,7 +98,7 @@ exports.SiteEvent = (app) ->
           num = stateZero.length
           if num < 20
             exclusion.push user.id
-            User.find({}).where('id').nin(exclusion).where('isSupporter').equals(false).exec (err, users)->
+            User.find({}).where('id').nin(exclusion).where('isSupporter').equals(false).where("profile.gender").ne(user.profile.gender).exec (err, users)->
               throw err if err
               if !users || users.length < 20-num
                 return false
