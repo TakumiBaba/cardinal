@@ -267,7 +267,16 @@ exports.DebugEvent = (app) ->
           return res.send response
 
   rendertest: (req, res)->
-    res.render 'index',
+    res.render 'matching/index',
       req: req
     , (err, html)=>
-      return res.send [html]
+      return res.send html
+
+  reset:
+    statuses:(req, res)->
+      Statuses.find({}).exec (err, statuses)->
+        throw err if err
+        _.each statuses, (status)->
+          status.remove()
+        return res.send "status rset"
+

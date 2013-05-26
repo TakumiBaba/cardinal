@@ -6,6 +6,11 @@ window.App = {
   AccessToken: ""
 }
 
+requirejs.config
+  baseUrl: "/"
+  paths:
+    text: "/lib/text"
+
 class Router extends Backbone.Router
 
   constructor: ->

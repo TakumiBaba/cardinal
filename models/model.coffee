@@ -165,6 +165,9 @@ StatusSchema = new Schema
     default: true
   lastUpdated:
     type: Date
+  isRemoved:
+    type:Boolean
+    default: false
 
 StatusSchema.pre 'save', (next)->
   @lastUpdated = Date.now()
