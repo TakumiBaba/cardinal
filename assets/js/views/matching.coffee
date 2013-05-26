@@ -1,6 +1,11 @@
 App = window.App
 JST = App.JST
 
+
+requirejs ['text!/render/test'], (view)->
+  console.log view
+
+
 class App.View.MatchingPage extends Backbone.View
   el: "div#main"
 

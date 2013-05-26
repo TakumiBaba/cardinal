@@ -11,6 +11,8 @@ module.exports = (app) ->
   # {ensure}
   log = app.settings.helper.logger no
 
+
+
   app.get    '/',  log,  SiteEvent.index
   app.post   '/',  log,  SiteEvent.postindex
   app.post '/api/login', SiteEvent.login
@@ -32,6 +34,9 @@ module.exports = (app) ->
   # app.post '/api/users/:from_id/follow/:to_id', User.follow.following.create
   # app.get '/api/users/:from_id/follow/:to_id', User.follow.following.create # post に
   # app.get '/api/users/:following/follow/:follower', User.follow.create #
+
+  # ViewEvent
+  app.get '/render/test', Debug.rendertest
 
   # FollowEvent
   app.get '/api/users/:user_id/followings', Follow.following.fetch
@@ -91,6 +96,7 @@ module.exports = (app) ->
   app.get '/debug/sdk/', Debug.facebooksdk.test
   app.get '/debug/sdk/notification', Debug.facebooksdk.sendNotification
   app.delete '/debug/sdk/request', Debug.facebooksdk.deleteRequest
+  app.get '/debug/api/reset/statuses/:id', Debug.reset.statuses
   # app.get '/debug/api/users/me/sm/delete', User.supporterMessage.delete
 
   return SiteEvent.failure
