@@ -141,7 +141,6 @@ UserSchema = new Schema
   statuses:
     type: [{type: ObjectId, ref: "Status"}]
 
-
 StatusSchema = new Schema
   one:
     type: ObjectId
