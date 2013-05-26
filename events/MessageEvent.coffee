@@ -47,7 +47,8 @@ exports.MessageEvent = (app) ->
           message = new Message()
           message.text = text
           message.from = f._id
-          message.from_name = f.name
+          message.from_id = f.id
+          message.from_name = f.first_name
           message.parent = list._id
           message.save()
           list.messages.push message

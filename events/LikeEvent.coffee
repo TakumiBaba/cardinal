@@ -89,6 +89,7 @@ exports.LikeEvent = (app) ->
               status.one_status = true
             else if nextStatus is "down"
               status.one_status = false
+              status.isRemoved = true
             else if nextStatus is "promotion"
               console.log 'promotion!!!!!!!!!!!!'
               status.two_isSystemMatching = false
@@ -98,6 +99,7 @@ exports.LikeEvent = (app) ->
               status.two_status = true
             else if nextStatus is "down"
               status.two_status = false
+              status.isRemoved = true
             else if nextStatus is "promotion"
               console.log 'promotion!!!!!!!!!!!!'
               status.one_isSystemMatching = false

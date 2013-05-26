@@ -84,12 +84,12 @@ class App.View.Messages extends Backbone.View
     hours = if d.getHours() < 10 then "0#{d.getHours()}" else d.getHours()
     minutes = if d.getMinutes() < 10 then "0#{d.getMinutes()}" else d.getMinutes()
     attributes =
-      source: "/api/users/#{model.get('from')}/picture"
+      source: "/api/users/#{model.get('from_id')}/picture"
       name: model.get('from_name')
       text: model.get('text')
       created_at: "#{d.getMonth()+1}月#{d.getDate()}日 #{hours}:#{minutes}"
     li = JST['message/body'](attributes)
-    $(@.el).find('div.message-header h5').html("#{@target.name}さんとのやりとり")
+    $(@.el).find('div.message-header h5').html("#{@target.first_name}さんとのやりとり")
     ul.prepend li
     # ここで、ul.message-listにliをぶち込む。
 
@@ -106,8 +106,9 @@ class App.View.Messages extends Backbone.View
     one = model.get('one')
     two = model.get('two')
     @target =  if one.id is App.User.get('id') then two else one
+    console.log @target
     $(@.el).find('div.message-body ul').empty()
-    $(@.el).find('div.message-header h5').html("#{@target.name}さんとのやりとり")
+    $(@.el).find('div.message-header h5').html("#{@target.first_name}さんとのやりとり")
     _.each model.get('messages'), (message)=>
       @collection.add message
 

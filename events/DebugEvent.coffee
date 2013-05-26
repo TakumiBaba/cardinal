@@ -153,7 +153,7 @@ exports.DebugEvent = (app) ->
               message = new Message()
               message.text = "こんばんわ#{k*2}"
               message.from = if k%2 is 0 then c._id else main._id
-              message.from_name = if k%2 is 0 then c.name else main.name
+              message.from_name = if k%2 is 0 then c.first_name else main.first_name
               message.save()
               messageList.messages.push message
             messageList.save()

@@ -53,9 +53,11 @@ class Router extends Backbone.Router
       when "invite"
         FB.ui
           method: "apprequests"
-          message: "応援に参加してください！"
+          message: "私の婚活応援に参加してください！"
           data: App.User.get('id')
         , (res)->
+          if res is null
+            return location.href = "/#/"
           request_id = res.request
           _.each res.to, (fbid)=>
             FB.api "/#{fbid}", (res)=>
@@ -72,6 +74,7 @@ class Router extends Backbone.Router
                 data: json
                 success: (data)->
                   console.log data
+                  return location.href = "/#/"
       when "signup"
         @now = new App.View.SignupPage()
         @now.render()

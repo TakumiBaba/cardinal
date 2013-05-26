@@ -169,7 +169,7 @@ class App.View.UserPageMatchingList extends Backbone.View
     @.collection.fetch()
 
   appendItem: (model)->
-    console.log model.get('user').name
+    console.log model.get('user').fisrt_name
     console.log model
     if model.get('isSystemMatching')
       ul = $("div.system ul")
@@ -184,7 +184,7 @@ class App.View.UserPageMatchingList extends Backbone.View
       source: model.get('user').profile.image_url
       text: text
       status: model.get('status')
-      name: model.get('user').name
+      name: model.get('user').first_name
     li = render(attributes)
     ul.append li
 

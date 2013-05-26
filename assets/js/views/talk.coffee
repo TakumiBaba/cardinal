@@ -54,8 +54,8 @@ class App.View.TalkUnit extends Backbone.View
     attributes =
       another_source: u.profile.image_url
       source: App.User.get('profile').image_url
-      name: u.name
-      candidate_name: c.name
+      name: u.first_name
+      candidate_name: c.first_name
       last_update: "#{date.getMonth()+1}月#{date.getDate()}日"
       candidate_source: c.profile.image_url
       candidate_age: c.profile.age

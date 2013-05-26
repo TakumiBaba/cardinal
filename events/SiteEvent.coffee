@@ -98,22 +98,28 @@ exports.SiteEvent = (app) ->
           num = stateZero.length
           if num < 20
             exclusion.push user.id
+
             User.find({}).where('id').nin(exclusion).where('isSupporter').equals(false).where("profile.gender").ne(user.profile.gender).exec (err, users)->
               throw err if err
-              if !users || users.length < 20-num
+              console.log 'add status'
+              if !users
+                console.log 'return!'
                 return false
+              # console.log users
+              console.log num
               users = _.shuffle users
               _.each [num..20], (i)=>
-                console.log i
-                status = new Status()
-                status.one = user._id
-                status.two = users[i]._id
-                status.ids = [user.id, users[i].id]
-                status.save()
-                user.statuses.push status
-                users[i].statuses.push status
-                user.save()
-                users[i].save()
+                if num < users.length-1
+                  console.log i
+                  status = new Status()
+                  status.one = user._id
+                  status.two = users[i]._id
+                  status.ids = [user.id, users[i].id]
+                  status.save()
+                  user.statuses.push status
+                  users[i].statuses.push status
+                  user.save()
+                  users[i].save()
         json =
           id: user.id
           isFirst: false

@@ -134,10 +134,13 @@ class App.View.MatchingListView extends Backbone.View
   setFollower: (collection)->
     $(@.el).find('ul.follower-list').empty()
     _.each collection.models, (f)=>
+      console.log f
+      follower = f.get('follower')
+      console.log follower
       options =
-        facebook_url: "https://facebook.com/#{f.facebook_id}"
-        source: "/api/users/#{f.id}/picture"
-        name: "#{f.get('name')}さん"
+        facebook_url: "https://facebook.com/#{follower.facebook_id}"
+        source: "/api/users/#{follower.id}/picture"
+        name: "#{follower.first_name}さん"
       html = JST['matching/follower'](options)
       $(@.el).find('ul.follower-list').append html
 

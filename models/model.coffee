@@ -290,6 +290,8 @@ MessageSchema = new Schema
     ref: "User"
   from_name:
     type: String
+  from_id:
+    type: String
   parent:
     type: ObjectId
     ref: "MessageList"

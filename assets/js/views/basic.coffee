@@ -35,7 +35,7 @@ class App.View.Sidebar extends Backbone.View
 
   setFollower: (collection)->
     _.each collection.models, (model)=>
-      console.log model.get('follower').name
+      console.log model.get('follower').firstname
       attributes =
         id: model.get('follower').id
       li = JST['sidebar/follower'](attributes)
@@ -231,6 +231,7 @@ class App.View.MePage extends Backbone.View
 
   setSupporterMessages: (collection)->
     _.each collection.models, (model)->
+      console.log model
       s = model.get 'supporter'
       attributes =
         source: s.profile.image_url

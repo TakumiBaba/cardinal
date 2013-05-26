@@ -395,15 +395,15 @@ JST['like/page'] = _.template(
   """
   <div id='like_page'>
     <div class='each-like info box-inner container likebox'>
-      <h5 class='title_box'>両思い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
+      <h5 class='title_box'>両想い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='your-like info box-inner container likebox'>
-      <h5 class='title_box'>お相手が片思い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
+      <h5 class='title_box'>お相手が想い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='my-like info box-inner  container likebox'>
-      <h5 class='title_box'>あなたが片思い</h3>
+      <h5 class='title_box'>あなたが想い</h3>
       <ul class='like-thumbnail'></ul>
     </div>
   </div>
@@ -660,15 +660,15 @@ JST['supporting/userpage/page'] = _.template(
               </div>
               <!-- いいねリスト -->
               <div class='tab-pane' id='likelist'>
-                <h3 class='title_box'>両思い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
+                <h3 class='title_box'>両想い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
                 <div class='each-like info box-inner container likebox'>
                   <ul class='like-thumbnail'></ul>
                 </div>
-                <h3 class='title_box'>お相手が片思い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
+                <h3 class='title_box'>お相手が片想い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
                 <div class='your-like info box-inner container likebox'>
                   <ul class='like-thumbnail'></ul>
                 </div>
-                <h3 class='title_box'><%= name %>さんが片思い</h3>
+                <h3 class='title_box'><%= name %>さんが片想い</h3>
                 <div class='my-like info box-inner  container likebox'>
                   <ul class='like-thumbnail'></ul>
                 </div>

@@ -57,7 +57,7 @@ exports.FollowEvent = (app) ->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       User.findOne({id: id}).exec (err, user)->
         throw err if err
-        Follow.find({_id: {$in:user.follower}}).populate('from', "id name first_name facebook_id profile").exec (err, follows)->
+        Follow.find({_id: {$in:user.follower}, approval: true}).populate('from', "id name first_name facebook_id profile").exec (err, follows)->
           throw err if err
           list = []
           console.log follows

@@ -572,12 +572,13 @@ exports.UserEvent = (app) ->
           FB.setAccessToken response.access_token
           FB.api "#{to.facebook_id}/notifications", 'post',
             access_token: response.access_token
-            href: "https://apps.facebook.com/test_ding_dong"
+            href: "#/message"
             template: "#{from.first_name}さんからメッセージが来てます！"
           , (response)->
             console.log(response.error) if !response or response.error
             return res.send response
     talk: (req, res)->
+      ex_id = req.session.userid
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       c_name = req.body.c_name
       User.findOne({id: id}).populate('follower').exec (err, user)->
@@ -600,11 +601,11 @@ exports.UserEvent = (app) ->
             grant_type: 'client_credentials'
           , (response)=>
             _.each users, (u)=>
-              console.log u.facebook_id
-              FB.api "#{u.facebook_id}/notifications", "post",
-                access_token: response.access_token
-                href: "https://apps.facebook.com/test_ding_dong"
-                template: "#{u.first_name}さんの候補者について話しあいましょう！"
-              , (response)->
-                return res.send response.error if !response or response.error
-                return res.send response
+              if u.id isnt ex_id
+                FB.api "#{u.facebook_id}/notifications", "post",
+                  access_token: response.access_token
+                  href: ""
+                  template: "#{user.first_name}さんの候補者について話しあいましょう！"
+                , (response)->
+                  return res.send response.error if !response or response.error
+                  return res.send response
