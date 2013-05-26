@@ -8,6 +8,7 @@ exports.DebugEvent = (app) ->
   Comment = app.settings.models.Comment
   Follow = app.settings.models.Follow
   Status = app.settings.models.Status
+
   MessageEvent = app.settings.events.MessageEvent app
   TalkEvent = app.settings.events.TalkEvent app
   LikeEvent = app.settings.events.LikeEvent app
@@ -274,7 +275,7 @@ exports.DebugEvent = (app) ->
 
   reset:
     statuses:(req, res)->
-      Statuses.find({}).exec (err, statuses)->
+      Status.find({}).exec (err, statuses)->
         throw err if err
         _.each statuses, (status)->
           status.remove()
