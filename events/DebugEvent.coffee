@@ -265,3 +265,9 @@ exports.DebugEvent = (app) ->
           throw response.error if !response or response.error
           console.log response
           return res.send response
+
+  rendertest: (req, res)->
+    res.render 'index',
+      req: req
+    , (err, html)=>
+      return res.send [html]

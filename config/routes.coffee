@@ -11,6 +11,8 @@ module.exports = (app) ->
   # {ensure}
   log = app.settings.helper.logger no
 
+  app.get '/render/test', Debug.rendertest
+
   app.get    '/',  log,  SiteEvent.index
   app.post   '/',  log,  SiteEvent.postindex
   app.post '/api/login', SiteEvent.login
