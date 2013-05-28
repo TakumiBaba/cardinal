@@ -464,6 +464,7 @@ exports.UserEvent = (app) ->
       user.first_name = params.first_name
       user.last_name = params.last_name
       user.isSupporter = false
+      user.isFirstLogin = false
       user.save (err)->
         if err
           res.redirect "/signup/error"

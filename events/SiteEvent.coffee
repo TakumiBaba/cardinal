@@ -128,8 +128,9 @@ exports.SiteEvent = (app) ->
                 profile:
                   image_url: "https://graph.facebook.com/#{facebook_id}/picture"
                   gender: response.gender
-            # user.isSupporter = true
-            # user.save()
+            user.isFirstLogin = false
+            user.isSupporter = true
+            user.save()
             return res.redirect "/"
 
   login: (req, res)->
