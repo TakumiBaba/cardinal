@@ -120,7 +120,7 @@ exports.SiteEvent = (app) ->
               sha1_hash.update response.id
               user = new User
                 id: sha1_hash.digest 'hex'
-                facebook_id: req.session.facebook_id
+                facebook_id: response.id
                 name: response.last_name+response.first_name
                 first_name: response.first_name
                 last_name: response.last_name
