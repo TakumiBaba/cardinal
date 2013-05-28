@@ -48,9 +48,9 @@ class App.View.MatchingPage extends Backbone.View
 class App.View.MatchingListView extends Backbone.View
   events:
     "click li.user-thumbnail": "changeModel"
-    "click button.like": "doLike"
-    "click button.sendMessage": "sendMessage"
-    "click button.talk": "talk"
+    "click img.like": "doLike"
+    "click img.sendMessage": "sendMessage"
+    "click img.talk": "talk"
 
   constructor: (attrs)->
     super
@@ -129,7 +129,7 @@ class App.View.MatchingListView extends Backbone.View
   setFollower: (collection)->
     $(@.el).find('ul.follower-list').empty()
     _.each collection.models, (f)=>
-      console.log f
+
       follower = f.get('follower')
       console.log follower
       options =

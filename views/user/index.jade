@@ -5,7 +5,8 @@ div#user_page.profile_and_following_view
         div.box_menu
           img.profile_image.pull-left(src="#{profile.image_url}")
           h4.name #{first_name}さん
-          h5.simple_profile #{profile.birthday}
+          - age = moment().diff(moment(profile.birthday), "year")
+          h5.simple_profile #{age} 歳
         div.detail_profile.pull-left
           div#detailprofile
             div.profile_column.pull-left

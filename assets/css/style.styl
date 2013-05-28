@@ -120,6 +120,9 @@ div#matching_page
   h5.title_box
     background-color: #dc6b82
     display: block
+  h5.pink
+    color: white;
+    background-color: #DC6B82
   ul.matching_side
     list-style: none
     height: 100%
@@ -200,6 +203,21 @@ div#matching_page
 div#like_page
   div.likebox
     margin-bottom: 30px
+    h4
+      font-size: 14px
+      padding: 3px 0px 3px 10px
+      color: black
+      small
+        color: black
+    h4.pink
+      color: white
+      background-color: #DC6B82
+      small
+        color: white
+    h4.green
+      background-color: #99cccc
+    h4.yellow
+      background-color: #ffff99
   ul
     list-style: none
     li
@@ -209,13 +227,16 @@ div#like_page
       margin-top: 20px
       div.thumbnail
         margin-right: 10px
-        a
+        a.to-user
           display: block
           text-align: center
           img
             margin: 0 auto
             width: 110px
             height: 110px
+        a.action_button
+          img.action_button
+            width: 150px
 
 div#talk_page
   ul.talk_list

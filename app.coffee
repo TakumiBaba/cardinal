@@ -7,6 +7,7 @@ path = require 'path'
 os = require 'os'
 fs = require 'fs'
 global._ = require 'underscore'
+global.moment = require 'moment'
 
 express = require 'express'
 mongoose = require 'mongoose'

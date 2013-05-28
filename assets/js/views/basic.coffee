@@ -233,7 +233,6 @@ class App.View.MePage extends Backbone.View
 
   setSupporterMessages: (collection)->
     _.each collection.models, (model)->
-      console.log model
       s = model.get 'supporter'
       attributes =
         source: s.profile.image_url

@@ -5,9 +5,9 @@ class App.View.LikePage extends Backbone.View
   el: "div#main"
 
   events:
-    "click button.l_d_1": "cancelLike"
-    "click button.l_d_2": "doLike"
-    "click button.l_d_3": "sendMessage"
+    "click img.l_d_1": "cancelLike"
+    "click img.l_d_2": "doLike"
+    "click img.l_d_3": "sendMessage"
     "click a.to-talk": "talk"
 
   constructor: ->
@@ -33,24 +33,34 @@ class App.View.LikePage extends Backbone.View
     myStatus = model.get 'myStatus'
     text = ""
     status = ""
+    button_source = ""
+    href = ""
     if myStatus && !yourStatus
       ul = $(@.el).find('div.my-like ul')
+      button_source = "/image/o_button_mini.gif"
       text = "いいね取り消し"
+      href = "/#/like"
       status = 1
     else if !myStatus && yourStatus
       ul = $(@.el).find('div.your-like ul')
+      button_source = "/image/iine_button_mini.gif"
       text = "いいね！"
+      href = "/#/like"
       status = 2
     else if myStatus && yourStatus
       ul = $(@.el).find('div.each-like ul')
+      button_source = "/image/m_button_mini.gif"
       text = "メッセージ送信"
+      href = "/#/message"
       status = 3
     attributes =
       id: user.id
       source: user.profile.image_url
-      name: user.name
+      button_source: button_source
+      name: user.first_name
       status: status
       text: text
+      href: href
     li = JST['like/thumbnail'](attributes)
     ul.append li
     console.log model
@@ -61,7 +71,7 @@ class App.View.LikePage extends Backbone.View
 
   cancelLike: (e)->
     console.log 'cancel'
-    target = $($(e.currentTarget).parents()[1]).attr 'id'
+    target = $($(e.currentTarget).parents().parents()[1]).attr 'id'
     console.log @.collection.where({"user.id": target})
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
@@ -70,7 +80,7 @@ class App.View.LikePage extends Backbone.View
     model.save()
     $($(e.currentTarget).parent().parent()).remove()
   doLike: (e)->
-    target = $($(e.currentTarget).parents()[1]).attr 'id'
+    target = $($(e.currentTarget).parents().parents()[1]).attr 'id'
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
     console.log model
@@ -83,7 +93,8 @@ class App.View.LikePage extends Backbone.View
     $($(e.currentTarget).parent().parent()).remove()
   sendMessage: (e)->
     console.log 'send message'
-    target = $($(e.currentTarget).parents()[1]).attr 'id'
+    target = $($(e.currentTarget).parents().parents()[1]).attr 'id'
+    console.log target
     model = _.find @.collection.models, (model)->
       return model.get('user').id is target
     console.log model

@@ -18,17 +18,9 @@ JST['matching/page'] = _.template(
             <img class='profile_image pull-left' src='' />
             <h4 class='name'></h4>
             <h5 class='simple_profile'></h5>
-            <button class='like pink'>いいね！</button>
-            <button class='sendMessage green'>メッセージを送る</button>
-            <button class='talk yellow'>応援団に相談</button>
-            <!--
-            <div class='btn-group recommend'>
-              <button class='btn dropdown-toggle btn-primary' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
-              <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
-                <li class='divider'></li>
-              </ul>
-            </div>
-            -->
+            <img class='like' src="/image/iine_button.gif" />
+            <img class='sendMessage' src="/image/m_button.gif" />
+            <img class='talk' src="/image/o_button.gif" />
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
@@ -71,8 +63,8 @@ JST['matching/page'] = _.template(
             <img class='profile_image pull-left' src='' />
             <h4 class='name'></h4>
             <h5 class='simple_profile'></h5>
-            <button class='like pink'>いいね！</button>
-            <button class='sendMessage green'>メッセージを送る</button>
+            <img class='like' src="/image/iine_button.gif" />
+            <img class='sendMessage' src="/image/m_button.gif" />
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
@@ -394,16 +386,17 @@ JST['sidebar/following'] = _.template(
 JST['like/page'] = _.template(
   """
   <div id='like_page'>
+    <h3>いいねリスト<small>"ピピっと来たら『いいね』をプッシュ！メッセージを送信！"</small></h3>
     <div class='each-like info box-inner container likebox'>
-      <h5 class='title_box'>両想い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
+      <h4 class='title_box pink'>両想い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='your-like info box-inner container likebox'>
-      <h5 class='title_box'>お相手が想い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
+      <h4 class='title_box green'>お相手が片想い<small>'ピピっと来たら、『いいね』をプッシュ！'</small></h3>
       <ul class='like-thumbnail'></ul>
     </div>
     <div class='my-like info box-inner  container likebox'>
-      <h5 class='title_box'>あなたが想い</h3>
+      <h4 class='title_box yellow'>あなたが片想い</h3>
       <ul class='like-thumbnail'></ul>
     </div>
   </div>
@@ -417,9 +410,11 @@ JST['like/thumbnail'] = _.template(
       <button class='close hide'>&times;</button>
       <a href='/#/u/<%= id %>' class='to-user'>
         <img src=<%= source %> />
-        <h5><%= name %></h5>
+        <h5><%= name %> さん</h5>
       </a>
-      <button class='like-action btn-block btn btn-primary l_d_<%= status %>'><%= text %></button>
+      <a href="<%= href %>" class="action_button">
+        <img class="action_button l_d_<%= status %>" src=<%= button_source %> />
+      </a>
       <a class='to-talk'><span>応援トークをする</span></a></div>
   </li>
   """
@@ -511,12 +506,6 @@ JST['message/page'] = _.template(
       <div class='message-footer'>
         <img src='<%= source %>' class='com_img' />
         <input placeholder='コメントする' class='comment_area'></input>
-        <!-- <div class='reply_box'>
-          <textarea class='message' />
-          <button class='btn btn-primary send_message'>メッセージを送る</button>
-        </div>
-        -->
-        <!-- メッセージポストView -->
     </div>
   </div>
   """
@@ -620,11 +609,6 @@ JST['supporting/userpage/page'] = _.template(
           <img class='profile_image pull-left' src='<%= image_source %>' />
           <h4 class='name'><%= name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
-          <!--
-          <div class='btn-group'>
-            <button class='recommend btn btn-primary disabled'>友達に勧める</button>
-          </div>
-          -->
         </div>
         <div class='detail_profile pull-left'>
           <div class='tabbable'>
@@ -768,17 +752,8 @@ JST['candidate/page'] = _.template(
           <img class='profile_image pull-left' src='<%= image_source %>' />
           <h4 class='name'><%= first_name || name %>さん</h4>
           <h5 class='simple_profile'><%= gender_birthday %></h5>
-          <button class='like btn btn-primary'>いいね！</button>
-          <button class='sendMessage btn btn-success'>メッセージを送る</button>
-            <!--
-          <div class='btn-group recommend'>
-            <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
-            <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
-              <li class='divider'></li>
-            </ul>
-          </div>
-          -->
-          <!-- <button class='recommend btn btn-primary'>友達に勧める</button> -->
+            <img class='like' src="/image/iine_button.gif" />
+            <img class='sendMessage' src="/image/m_button.gif" />
         </div>
         <div class='detail_profile pull-left'>
           <div id='detailprofile'>
@@ -1444,15 +1419,6 @@ JST['me/page'] = _.template(
           <img class='profile_image pull-left' src='<%= profile.image_url %>' />
           <h4 class='name'><%= first_name || name %>さん</h4>
           <h5 class='simple_profile'><%= profile.birthday %></h5>
-          <div class='btn-group recommend'>
-            <!--
-            <button class='btn dropdown-toggle' data-toggle='dropdown' href='#'>友達に勧める<span class='caret'></span></button>
-            <ul class='dropdown-menu recommend-following' role='menu' aria-labelledby='dLabel'>
-              <li class='divider'></li>
-            </ul>
-            -->
-          </div>
-          <!-- <button class='recommend btn btn-primary'>友達に勧める</button> -->
         </div>
         <div class='detail_profile pull-left'>
           <div id='detailprofile'>
