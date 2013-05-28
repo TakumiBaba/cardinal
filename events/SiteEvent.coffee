@@ -55,7 +55,7 @@ exports.SiteEvent = (app) ->
       return res.redirect "/login"
     User.findOne facebook_id: facebook_id, (err, user)=>
       throw err if err
-      if !user || user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
+      if user is null || user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
         return res.redirect "/firstlogin"
         sha1_hash = Crypto.createHash 'sha1'
         req.params.facebook_id = facebook_id
