@@ -112,10 +112,10 @@ exports.SiteEvent = (app) ->
           console.log response
           User.findOne({facebook_id: req.session.facebook_id}).exec (err, user)=>
             throw err if err
+            console.log user
             unless user
-              console.log user
               sha1_hash = Crypto.createHash 'sha1'
-              sha1_hash.update req.session.facebook_id
+              sha1_hash.update req.session.facebook_id.toString()
               user = new User
                 id: sha1_hash.digest 'hex'
                 facebook_id: req.session.facebook_id
