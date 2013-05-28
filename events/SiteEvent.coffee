@@ -107,14 +107,15 @@ exports.SiteEvent = (app) ->
             username: response.username
       else if req.query.type is "supporter"
         console.log "supporter signup!"
+        facebook_id = req.session.facebook_id
         FB.api "#{req.session.facebook_id}", (response)=>
           throw response.error if response.error
           console.log response
-          User.findOne({facebook_id: req.session.facebook_id}).exec (err, user)=>
+          User.findOne({facebook_id: facebook_id}).exec (err, user)=>
             throw err if err
             console.log user
             unless user
-              console.log req.session.facebook_id
+              console.log facebook_id
               sha1_hash = Crypto.createHash 'sha1'
               sha1_hash.update req.session.facebook_id
               user = new User
@@ -127,8 +128,8 @@ exports.SiteEvent = (app) ->
                 profile:
                   image_url: "https://graph.facebook.com/#{facebook_id}/picture"
                   gender: response.gender
-            user.isSupporter = true
-            user.save()
+            # user.isSupporter = true
+            # user.save()
             return res.redirect "/"
 
   login: (req, res)->
