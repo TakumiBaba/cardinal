@@ -221,15 +221,12 @@ class App.View.MePage extends Backbone.View
     @followers = new App.Collection.Followers
       userid: "me"
     _.bindAll @, "setSupporterMessages"
-    # @followers.fetch()
+    @followers.fetch()
 
 
   render: (model)->
-    requirejs ["text!/views/profile/index.html"], (view)=>
+    requirejs ["text!/views/profile/index.html?time=#{Date.now()}"], (view)=>
       $(@.el).html view
-    # attributes = @.model.attributes
-    # html = App.JST['me/page'](attributes)
-    # $(@.el).html html
 
   setSupporterMessages: (collection)->
     _.each collection.models, (model)->

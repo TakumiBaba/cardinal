@@ -469,15 +469,13 @@ exports.UserEvent = (app) ->
           res.redirect "/signup/error"
           throw err
         else
-          res.redirect "/"
+          res.redirect "/#/profile"
 
   supporterMessage:
     fetch: (req, res)->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       User.findOne({id: id}).populate("supporter_message").exec (err, user)->
         throw err if err
-        console.log 'hogefuga'
-        console.log user.supporter_message
         list = _.pluck user.supporter_message, "_id"
         SupporterMessage.find({_id: {$in: list}}).populate('supporter').exec (err, message)->
           throw err if err
@@ -496,7 +494,6 @@ exports.UserEvent = (app) ->
         supporterMessage = _.find user.supporter_message, (message)->
           return message.supporterId is supporter.id
         unless supporterMessage
-          console.log 'unless'
           supporterMessage = new SupporterMessage()
           supporterMessage.supporterId = supporter.id
           supporterMessage.supporter = supporter._id

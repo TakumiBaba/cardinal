@@ -26,9 +26,8 @@ html
     !=js('collection')
     !=js('template')
     script(src='/lib/connect.facebook.all.js')
+
   body
-    div#wrapper
+    div#wrapper(class="#{id}")
       div#sidebar.pull-left.span3
       div#main.pull-left.span10
-
-  //- script(src='/lib/gatracking.js')

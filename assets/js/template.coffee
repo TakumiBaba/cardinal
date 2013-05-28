@@ -18,9 +18,9 @@ JST['matching/page'] = _.template(
             <img class='profile_image pull-left' src='' />
             <h4 class='name'></h4>
             <h5 class='simple_profile'></h5>
-            <img class='like' src="/image/iine_button.gif" />
-            <img class='sendMessage' src="/image/m_button.gif" />
-            <img class='talk' src="/image/o_button.gif" />
+            <a href="/#/like"><img class='like' src="/image/iine_button.gif" /></a>
+            <a href="/#/message"><img class='sendMessage' src="/image/m_button.gif" /></a>
+            <a href="/#/talk"><img class='talk' src="/image/o_button.gif" /></a>
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
@@ -101,7 +101,7 @@ JST['matching/page'] = _.template(
 JST['matching/thumbnail'] = _.template(
   """
   <li id=<%= id %> class='user-thumbnail'>
-    <img  src=<%= source %> class='img-rounded' />
+    <img src=<%= source %> class='img-rounded' />
   </li>
   """)
 

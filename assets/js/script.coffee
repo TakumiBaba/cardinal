@@ -105,50 +105,90 @@ window.fbAsyncInit = ->
     cookie: true
     xfbml: true
 
-  FB.getLoginStatus (response)->
-    if response.status is "connected"
-      App.AccessToken = response.authResponse.accessToken
-      FB.api 'me', (res)->
-        $.ajax
-          type: "POST"
-          url: "/api/login"
-          data: res
-          success: (data)->
-            id = data.id
-            if data.isFirst is true
-              window.alert("応援者か婚活者か聞く")
-            App.User = new App.Model.User
-              id: id
-            sidebar = new App.View.Sidebar
-              model: App.User
-            @start = =>
-              Backbone.history.start()
-              $.ajax
-                type: "GET"
-                url: "/api/users/me/news"
-                success: (data)->
-                  talks = _.filter data, (d)->
-                    return d.type is "talk"
-                  messages = _.filter data, (d)->
-                    return d.type is "message"
-                  $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
-                  $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
-              setInterval ()->
-                $.ajax
-                  type: "GET"
-                  url: "/api/users/me/news"
-                  success: (data)->
-                    talks = _.filter data, (d)->
-                      return d.type is "talk"
-                    messages = _.filter data, (d)->
-                      return d.type is "message"
-                    $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
-                    $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
-              , 1000*60
-            _.bindAll @, "start"
-            App.User.bind 'change', @start
+  id = $("div#wrapper").attr 'class'
+  $("div#wrapper").removeClass id
 
-            @router = new Router()
-            App.User.fetch()
-    else
-      FB.login()
+  App.User = new App.Model.User
+    id: id
+
+  sidebar = new App.View.Sidebar
+    model: App.User
+
+  @start = =>
+    Backbone.history.start()
+    $.ajax
+      type: "GET"
+      url: "/api/users/me/news"
+      success: (data)->
+        talks = _.filter data, (d)->
+          return d.type is "talk"
+        messages = _.filter data, (d)->
+          return d.type is "message"
+        $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
+        $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
+    setInterval ()->
+      $.ajax
+        type: "GET"
+        url: "/api/users/me/news"
+        success: (data)->
+          talks = _.filter data, (d)->
+            return d.type is "talk"
+          messages = _.filter data, (d)->
+            return d.type is "message"
+          $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
+          $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
+    , 1000*60
+  _.bindAll @, "start"
+  App.User.bind 'change', @start
+
+  @router = new Router()
+  App.User.fetch()
+
+
+  # FB.getLoginStatus (response)->
+  #   if response.status is "connected"
+  #     App.AccessToken = response.authResponse.accessToken
+  #     FB.api 'me', (res)->
+  #       $.ajax
+  #         type: "POST"
+  #         url: "/api/login"
+  #         data: res
+  #         success: (data)->
+  #           id = data.id
+  #           if data.isFirst is true
+  #             window.alert("応援者か婚活者か聞く")
+  #           App.User = new App.Model.User
+  #             id: id
+  #           sidebar = new App.View.Sidebar
+  #             model: App.User
+  #           @start = =>
+  #             Backbone.history.start()
+  #             $.ajax
+  #               type: "GET"
+  #               url: "/api/users/me/news"
+  #               success: (data)->
+  #                 talks = _.filter data, (d)->
+  #                   return d.type is "talk"
+  #                 messages = _.filter data, (d)->
+  #                   return d.type is "message"
+  #                 $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
+  #                 $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
+  #             setInterval ()->
+  #               $.ajax
+  #                 type: "GET"
+  #                 url: "/api/users/me/news"
+  #                 success: (data)->
+  #                   talks = _.filter data, (d)->
+  #                     return d.type is "talk"
+  #                   messages = _.filter data, (d)->
+  #                     return d.type is "message"
+  #                   $("li.talk a.talk-badge").html "応援トーク（ #{talks.length} ）"
+  #                   $("li.message a.message-badge").html("メッセージ（ #{messages.length} ）")
+  #             , 1000*60
+  #           _.bindAll @, "start"
+  #           App.User.bind 'change', @start
+
+  #           @router = new Router()
+  #           App.User.fetch()
+  #   else
+  #     FB.login()

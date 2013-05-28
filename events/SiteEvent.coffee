@@ -14,15 +14,16 @@ exports.SiteEvent = (app) ->
   FB = require 'fb'
 
   index: (req, res)->
-    fbreq = req.query.request_ids || ""
-    signed_request = req.body.signed_request
-    if signed_request
-      b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
-      facebook_id = b.user_id
-    if signed_request is "" || facebook_id = ""
-      return res.redirect "/login"
-    return res.render "index",
-      req: req
+    return res.redirect '/login'
+    # fbreq = req.query.request_ids || ""
+    # signed_request = req.body.signed_request
+    # if signed_request
+    #   b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
+    #   facebook_id = b.user_id
+    # if signed_request is "" || facebook_id = ""
+    #   return res.redirect "/login"
+    # return res.render "index",
+    #   req: req
     # console.log 'get-index'
     # console.log req.session
     # if req.session
@@ -47,13 +48,15 @@ exports.SiteEvent = (app) ->
     console.log 'post-index'
     fbreq = req.query.request_ids || ""
     signed_request = req.body.signed_request
+    console.log signed_request
     b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
     facebook_id = b.user_id
-    if signed_request is "" || facebook_id = ""
+    if signed_request is "" || facebook_id is ""
       return res.redirect "/login"
     User.findOne facebook_id: facebook_id, (err, user)=>
       throw err if err
-      unless user
+      if !user || user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
+        return res.redirect "/firstlogin"
         sha1_hash = Crypto.createHash 'sha1'
         req.params.facebook_id = facebook_id
         console.log facebook_id
@@ -67,22 +70,41 @@ exports.SiteEvent = (app) ->
             last_name: response.last_name
             profile:
               gender: response.gender
-              image_url: "https://graph.facebook.com/#{response.id}/picture?type=large"
+              image_url: "https://graph.facebook.com/#{response.id}/picture"
             isSuppoter: true
             isFirstLogin: false
           user.save()
-      req.session.facebook_id = user.facebook_id
+      req.session.facebook_id = facebook_id
+      req.session.userid = user.id
       if user.isSupporter
         # サポーター専用のindexを作る。
         res.render 'supporter-index',
           req: req
+          id: user.id
       else
         res.render 'index',
           req: req
+          id: user.id
 
-  firstLogin: (req, res)->
-    res.render 'login',
-      req: req
+  Login:
+    normal: (req, res)->
+      res.render 'login',
+        req: req
+    first: (req, res)->
+      return res.render 'firstlogin',
+        req: req
+    signup: (req, res)->
+      FB.api "#{req.session.facebook_id}", (response)=>
+        throw response.error if response.error
+        console.log response
+        return res.render 'signup',
+          req: req
+          first_name: response.first_name
+          last_name: response.last_name
+          gender: response.gender
+          facebook_id: req.session.facebook_id
+          username: response.username
+
 
   login: (req, res)->
     params = req.body

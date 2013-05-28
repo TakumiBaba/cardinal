@@ -306,3 +306,8 @@ exports.DebugEvent = (app) ->
             , (err, html)->
               throw err if err
               return res.send html
+  hogefuga: (req,res)->
+    console.log req.params
+    console.log req.body
+    console.log req.query
+    return "hoge"
