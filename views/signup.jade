@@ -1,0 +1,153 @@
+!!! 5
+html
+  head
+    title DingDong
+    !=css('bootstrap.min')
+    script(src='/lib/jquery-1.9.1.min.js')
+    script(src='/lib/bootstrap.min.js')
+    script(src='/lib/connect.facebook.all.js')
+  body
+    div.signup_page
+      h3.title_box 婚活者登録
+    div.info.box-inner.container
+      form.form-horizontal(action='/api/signup', method='POST')
+        img.signup-logo(src="/image/facebook_bannar.png")
+        div.control-group
+          label.control-label(for='name') 名前(名前がアプリ上の表示として使われます。)
+          div.controls
+            input(type='text', name='last_name', id='last_name', required, value="#{last_name}")
+            input(type='text', name='first_name', id='first_name', required, value="#{first_name}")
+            div.control-group
+          label.control-label(for='gender') 性別
+          div.controls
+            - if (gender == "male"){
+              label.radio.inline
+                input(type='radio', name='gender', id='gender_male', value='male', checked)
+                男
+              label.radio.inline
+                input(type='radio', name='gender', id='gender_female', value='female')
+                女
+            - }else{
+              label.radio.inline
+                input(type='radio', name='gender', id='gender_male', value='male') 男
+              label.radio.inline
+                input(type='radio', name='gender', id='gender_female', value='female', checked) 女
+            - }
+        div.control-group
+          label.control-label(for='birthday') 生年月日
+          div.controls
+            select.span2(name='birthday_year', id='birthday_year')
+              <option>1954</option>
+              <option>1955</option>
+              <option>1956</option>
+              <option>1957</option>
+              <option>1958</option>
+              <option>1959</option>
+              <option>1960</option>
+              <option>1961</option>
+              <option>1962</option>
+              <option>1963</option>
+              <option>1964</option>
+              <option>1965</option>
+              <option>1966</option>
+              <option>1967</option>
+              <option>1968</option>
+              <option>1969</option>
+              <option>1970</option>
+              <option>1971</option>
+              <option>1972</option>
+              <option>1973</option>
+              <option>1974</option>
+              <option>1975</option>
+              <option>1976</option>
+              <option>1977</option>
+              <option>1978</option>
+              <option>1979</option>
+              <option>1980</option>
+              <option>1981</option>
+              <option>1982</option>
+              <option>1983</option>
+              <option>1984</option>
+              <option>1985</option>
+              <option>1986</option>
+              <option>1987</option>
+              <option>1988</option>
+              <option>1989</option>
+              <option selected>1990</option>
+              <option>1991</option>
+              <option>1992</option>
+            年
+            select.span1(name='birthday_month', id='birthday_month')
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+            </select>月
+            select.span1(name='birthday_day', id='birthday_day')
+              <option selected>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+              <option>15</option>
+              <option>16</option>
+              <option>17</option>
+              <option>18</option>
+              <option>19</option>
+              <option>20</option>
+              <option>21</option>
+              <option>22</option>
+              <option>23</option>
+              <option>24</option>
+              <option>25</option>
+              <option>26</option>
+              <option>27</option>
+              <option>28</option>
+              <option>29</option>
+              <option>30</option>
+              <option>31</option>
+            日
+        div.control-group
+          div.controls
+            label.checkbox
+              input.required_checkbox(type='checkbox', required)
+              |21歳以上ですか?
+            label.checkbox
+              input.required_checkbox(type='checkbox', required)
+              |あなたは独身ですか?
+        div.control-group
+          div.controls
+            p 本婚活支援システムは、慶應義塾大学大学院政策・メディア研究科
+            p 修士課程2年吉椿薫が婚活支援研究のために公開しています。
+            p ご利用の方には 追ってアンケート調査もしくは
+            p インタビューをお願いする場合があります。
+            p あらかじめご了承いただける方のみご利用ください。
+            p なお、調査結果は 個人を特定するものではなく、全て統計的に処理され、
+            p 研究の目的のみに使用されます。
+        input#id(type='hidden', name='id', value="#{facebook_id}")
+        input#username(type='hidden', name='username', value="#{username}")
+        div.control-group
+          div.controls
+            button.btn.btn-primary.register(type='submit') 登録する
+            button.btn.cancel(type='button') キャンセル
+  :coffeescript
+    $ ->
+      $("button.cancel").click ()->
+        location.href = "https://facebook.com/"
