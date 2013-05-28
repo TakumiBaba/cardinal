@@ -36,12 +36,11 @@ class App.View.CandidatePage extends Backbone.View
     gender = if user.get('profile').gender is 'male' then "男性" else "女性"
     b = new Date(user.get('profile').birthday)
     age = moment().diff(moment(user.get('profile').birthday), "year")
-    console.log age
     attributes =
       image_source: model.get('profile').image_url
       name: model.get('name')
       first_name: model.get('first_name')
-      gender_birthday: "#{age}歳"
+      gender_birthday: "#{gender} #{age}歳"
       profile: user.get('profile')
     html = JST['candidate/page'](attributes)
     $(@.el).html html

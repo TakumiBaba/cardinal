@@ -22,10 +22,11 @@ class App.View.UserPage extends Backbone.View
     user = model
     gender = if user.get('profile').gender is 'male' then "男性" else "女性"
     b = new Date(user.get('profile').birthday)
+    age = moment().diff(moment(user.get('profile').birthday), "year")
     options =
       image_source: user.get('profile').image_url
       name: user.get('name')
-      gender_birthday: "#{gender} #{user.get('profile').age}歳　#{b.getFullYear()}年#{b.getMonth()-1}月#{b.getDay()}日生まれ"
+      gender_birthday: "#{gender} #{age}歳　#{b.getFullYear()}年#{b.getMonth()-1}月#{b.getDay()}日生まれ"
       follower: user.get('follower')
       profile: user.get('profile')
     html = JST['supporting/userpage/page'](options)
@@ -98,10 +99,11 @@ class App.View.UserPageProfile extends Backbone.View
     user = model
     gender = if user.get('profile').gender is 'male' then "男性" else "女性"
     b = new Date(user.get('profile').birthday)
+    age = moment().diff(moment(user.get('profile').birthday), "year")
     attributes =
       image_source: user.get('profile').image_url
       name: user.get("name")
-      gender_birthday: "#{gender} #{user.get('profile').age}歳"
+      gender_birthday: "#{gender} #{age}歳"
       follower: user.get("follower")
       profile: user.get('profile')
     @.el = JST['userpage/profile'](attributes)

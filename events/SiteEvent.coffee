@@ -14,6 +14,13 @@ exports.SiteEvent = (app) ->
   FB = require 'fb'
 
   index: (req, res)->
+    fbreq = req.query.request_ids || ""
+    signed_request = req.body.signed_request
+    if signed_request
+      b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
+      facebook_id = b.user_id
+    if signed_request is "" || facebook_id = ""
+      return res.redirect "/login"
     return res.render "index",
       req: req
     # console.log 'get-index'
@@ -42,7 +49,7 @@ exports.SiteEvent = (app) ->
     signed_request = req.body.signed_request
     b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
     facebook_id = b.user_id
-    if signed_request is ""
+    if signed_request is "" || facebook_id = ""
       return res.redirect "/login"
     User.findOne facebook_id: facebook_id, (err, user)=>
       throw err if err
@@ -72,6 +79,10 @@ exports.SiteEvent = (app) ->
       else
         res.render 'index',
           req: req
+
+  firstLogin: (req, res)->
+    res.render 'login',
+      req: req
 
   login: (req, res)->
     params = req.body

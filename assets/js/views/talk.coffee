@@ -51,6 +51,7 @@ class App.View.TalkUnit extends Backbone.View
     c = @model.get('candidate')
     u = @model.get('user')
     date = new Date(@model.get('updatedAt'))
+    c_age = moment().diff(moment(c.profile.birthday), "year")
     attributes =
       another_source: u.profile.image_url
       source: App.User.get('profile').image_url
@@ -58,7 +59,7 @@ class App.View.TalkUnit extends Backbone.View
       candidate_name: c.first_name
       last_update: "#{date.getMonth()+1}月#{date.getDate()}日"
       candidate_source: c.profile.image_url
-      candidate_age: c.profile.age
+      candidate_age: c_age
       address: c.profile.address
       blood: c.profile.bloodType
       candidate_id: c.id

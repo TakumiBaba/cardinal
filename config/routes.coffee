@@ -15,6 +15,7 @@ module.exports = (app) ->
 
   app.get    '/',  log,  SiteEvent.index
   app.post   '/',  log,  SiteEvent.postindex
+  app.get '/login', SiteEvent.firstLogin
   app.post '/api/login', SiteEvent.login
   app.post '/api/signup', User.signup
   app.get '/api/appaccesstoken', SiteEvent.appAccessToken.fetch
