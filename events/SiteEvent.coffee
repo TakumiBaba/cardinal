@@ -111,7 +111,7 @@ exports.SiteEvent = (app) ->
         FB.api "#{req.session.facebook_id}", (response)=>
           throw response.error if response.error
           console.log response
-          User.findOne({facebook_id: response.id}).exec (err, user)->
+          User.findOne({facebook_id: response.id}).exec (err, user)=>
             throw err if err
             console.log user
             unless user
@@ -130,9 +130,12 @@ exports.SiteEvent = (app) ->
                   gender: response.gender
             user.isFirstLogin = false
             user.isSupporter = true
-            user.save (err)->
+            user.save (err)=>
               throw err if err
-              return res.redirect "/"
+              return res.render "supporter-index",
+                req: req
+                id: user.id
+
 
   login: (req, res)->
     params = req.body
