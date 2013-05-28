@@ -36,18 +36,18 @@ exports.UserEvent = (app) ->
       else
         res.send "user data missing"
 
-  signup: (req, res)->
-    id = req.session.userid
-    console.log 'signup'
-    console.log req.body
-    console.log req.params
-    User.findOne id: id, (err, user)->
-      throw err if err
-      user.isSupporter = false
-      console.log user
+  # signup: (req, res)->
+  #   id = req.session.userid
+  #   console.log 'signup'
+  #   console.log req.body
+  #   console.log req.params
+  #   User.findOne id: id, (err, user)->
+  #     throw err if err
+  #     user.isSupporter = false
+  #     console.log user
 
-      # user.save()
-      return res.send 'signup done'
+  #     # user.save()
+  #     return res.send 'signup done'
 
   profile:
     picture: (req, res)->
@@ -241,7 +241,7 @@ exports.UserEvent = (app) ->
           following.profile.gender = ""
           following.isSuppoter = true
           following.isFirstLogin = true
-          following.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
+          following.profile.image_url = "https://graph.facebook.com/#{followingId}/picture"
         unless follower
           follower = new User()
           sha1_hash = Crypto.createHash 'sha1'
@@ -254,7 +254,7 @@ exports.UserEvent = (app) ->
           follower.profile.gender = ""
           follower.isSuppoter = true
           follower.isFirstLogin = true
-          follower.profile.image_url = "https://graph.facebook.com/#{followingId}/picture?type=large"
+          follower.profile.image_url = "https://graph.facebook.com/#{followingId}/picture"
         Follow.findOne({ids: {$all: [following.id, follower.id]}}).exec (err, follow)=>
           throw err if err
           unless follow

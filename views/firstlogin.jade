@@ -5,7 +5,6 @@ html
     !=css('bootstrap.min')
     script(src='/lib/jquery-1.9.1.min.js')
     script(src='/lib/bootstrap.min.js')
-    !=js('script')
     script(src='/lib/connect.facebook.all.js')
     :stylus
       div.shadow
@@ -90,9 +89,10 @@ html
         backdrop: false
         keyboard: false
       $("button.player").click (e)->
-        location.href = "/signup"
+        location.href = "/signup?type=player"
       $("button.supporter").click (e)->
         # 次はここ。ログインして、この時点でユーザを作ってしまうというのはアリかも。サポーターとしては。
+        location.href = "/signup?type=supporter"
         console.log e
       $("button.cancel").click (e)->
         location.href = "https://facebook.com"

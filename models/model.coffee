@@ -337,6 +337,11 @@ MessageListSchema.pre 'save', (next)->
 #         user.save()
 #       return false
 
+PreFollowListSchema = new Schema
+  facebook_id: type: String
+  pre_following_list: type: ObjectId, ref: "User"
+  pre_follower_list: type: ObjectId, ref: "User"
+
 module.exports =
   User: mongoose.model 'User', UserSchema
   UserSchema: UserSchema
@@ -358,3 +363,5 @@ module.exports =
   FollowSchema: FollowSchema
   Status: mongoose.model 'Status', StatusSchema
   StatusSchema: StatusSchema
+  PreFollowList: mongoose.model 'PreFollowList', PreFollowListSchema
+  PreFollowListSchema: PreFollowListSchema

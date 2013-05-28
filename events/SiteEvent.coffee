@@ -94,17 +94,41 @@ exports.SiteEvent = (app) ->
       return res.render 'firstlogin',
         req: req
     signup: (req, res)->
-      FB.api "#{req.session.facebook_id}", (response)=>
-        throw response.error if response.error
-        console.log response
-        return res.render 'signup',
-          req: req
-          first_name: response.first_name
-          last_name: response.last_name
-          gender: response.gender
-          facebook_id: req.session.facebook_id
-          username: response.username
-
+      if req.query.type is "player"
+        FB.api "#{req.session.facebook_id}", (response)=>
+          throw response.error if response.error
+          console.log response
+          return res.render 'signup',
+            req: req
+            first_name: response.first_name
+            last_name: response.last_name
+            gender: response.gender
+            facebook_id: req.session.facebook_id
+            username: response.username
+      else if req.query.type is "supporter"
+        console.log "supporter signup!"
+        FB.api "#{req.session.facebook_id}", (response)=>
+          throw response.error if response.error
+          console.log response
+          User.findOne({facebook_id: req.session.facebook_id}).exec (err, user)=>
+            throw err if err
+            unless user
+              console.log new user
+              sha1_hash = Crypto.createHash 'sha1'
+              sha1_hash.update req.session.facebook_id
+              user = new User
+                id: sha1_hash.digest 'hex'
+                facebook_id: req.session.facebook_id
+                name: response.last_name+response.first_name
+                first_name: response.first_name
+                last_name: response.last_name
+                username: response.username
+                profile:
+                  image_url: "https://graph.facebook.com/#{facebook_id}/picture"
+                  gender: response.gender
+            user.isSupporter = true
+            user.save()
+            return res.redirect "/"
 
   login: (req, res)->
     params = req.body
