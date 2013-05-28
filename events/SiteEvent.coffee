@@ -53,28 +53,28 @@ exports.SiteEvent = (app) ->
     facebook_id = b.user_id
     if signed_request is "" || facebook_id is ""
       return res.redirect "/login"
+    req.session.facebook_id = b.user_id
     User.findOne facebook_id: facebook_id, (err, user)=>
       throw err if err
-      if user is null || user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
+      if user is null or user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
         return res.redirect "/firstlogin"
-        sha1_hash = Crypto.createHash 'sha1'
-        req.params.facebook_id = facebook_id
-        console.log facebook_id
-        FB.api "#{facebook_id}", (response)->
-          throw response.error if response.error
-          user = new User
-            id: sha1_hash.digest 'hex'
-            facebook_id: response.id
-            name: response.name
-            first_name: response.first_name
-            last_name: response.last_name
-            profile:
-              gender: response.gender
-              image_url: "https://graph.facebook.com/#{response.id}/picture"
-            isSuppoter: true
-            isFirstLogin: false
-          user.save()
-      req.session.facebook_id = facebook_id
+        # sha1_hash = Crypto.createHash 'sha1'
+        # req.params.facebook_id = facebook_id
+        # console.log facebook_id
+        # FB.api "#{facebook_id}", (response)->
+        #   throw response.error if response.error
+        #   user = new User
+        #     id: sha1_hash.digest 'hex'
+        #     facebook_id: response.id
+        #     name: response.name
+        #     first_name: response.first_name
+        #     last_name: response.last_name
+        #     profile:
+        #       gender: response.gender
+        #       image_url: "https://graph.facebook.com/#{response.id}/picture"
+        #     isSuppoter: true
+        #     isFirstLogin: false
+        #   user.save()
       req.session.userid = user.id
       if user.isSupporter
         # サポーター専用のindexを作る。
