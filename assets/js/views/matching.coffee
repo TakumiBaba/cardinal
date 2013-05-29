@@ -107,16 +107,21 @@ class App.View.MatchingListView extends Backbone.View
     birthday = new Date(user.profile.birthday)
     age = moment().diff(moment(birthday), "year")
     $(@.el).find('img.profile_image').attr('src', user.profile.image_url)
-    $(@.el).find('div.ideal-profile').html("""
-      <p>#{user.first_name}さんはこんな人を探しています。</p>
-      <p>年齢#{user.profile.ageRangeMin} ~ #{user.profile.ageRangeMax}</p>
-      <p>理想のパートナー像</p>
-      <p>#{user.profile.idealPartner}</p>
+    $(@.el).find('table.sub').html("""
+      <tbody>
+        <tr><td class='key hoby'>趣味</td><td>#{user.profile.hoby}</td></tr>
+        <tr><td class='key like'>好きなもの</td><td>#{user.profile.like}</td></tr>
+        <tr><td class='key ideal-message'>理想のパートナー像</td><td>#{user.profile.idealPartner}</td></tr>
+        <tr><td class='key ideal-age'>お相手の希望年齢</td><td>#{user.profile.ageRangeMin} ~ #{user.profile.ageRangeMax}歳</td></tr>
+      </tbody>
       """)
     $(@.el).find('a.to-detail-profile').attr 'href', "/#/u/#{user.id}"
     $(@.el).find('h5.follower-title').html("#{user.first_name}さんの応援団")
     console.log user
     $(@.el).find('h4.name').html "#{user.first_name}さん　（#{age}歳）"
+    $(@.el).find('div.supporter-message-list h4').html "#{user.first_name}さんの応援団おすすめ情報"
+    $(@.el).find('div.profile-column-header h4').html "#{user.first_name}さんのプロフィール"
+    $(@.el).find('h5.message').html user.profile.message
     @.followers = new App.Collection.Followers
       userid: user.id
     @.followers.bind 'reset', @.setFollower
@@ -125,7 +130,7 @@ class App.View.MatchingListView extends Backbone.View
 
   setProfile: (profile)->
     html = JST['userpage/detailProfile'](profile)
-    $(@.el).find('table.table').html(html)
+    $(@.el).find('table.main').html(html)
 
   setFollower: (collection)->
     $(@.el).find('ul.follower-list').empty()
@@ -136,20 +141,21 @@ class App.View.MatchingListView extends Backbone.View
       options =
         facebook_url: "https://facebook.com/#{follower.facebook_id}"
         source: "/api/users/#{follower.id}/picture"
-        name: "#{follower.first_name}さん"
+        name: "#{follower.first_name}"
       html = JST['matching/follower'](options)
       $(@.el).find('ul.follower-list').append html
 
   setSupporterMessages: (collection)->
     _.each collection.models, (model)=>
-      if model.get('approval') is true
-        s = model.get 'supporter'
-        attributes =
-          source: s.profile.image_url
-          name: "#{s.first_name}さん"
-          message: momdel.get 'message'
-        li = JST['supporter-message/li'](attributes)
-        $(@.el).find('div.supporter-message-list ul').append li
+      console.log model
+      s = model.get 'supporter'
+      attributes =
+        source: s.profile.image_url
+        name: "#{s.first_name}"
+        message: model.get 'message'
+        message_id: false
+      li = JST['supporter-message/li'](attributes)
+      $(@.el).find('div.supporter-message-list ul').append li
 
   show: ()->
     $(@.el).show()

@@ -45,6 +45,7 @@ exports.SiteEvent = (app) ->
       #   res.render 'index',
       #     req: req
   postindex: (req, res)->
+    console.log req.headers
     console.log 'post-index'
     fbreq = req.query.request_ids || ""
     signed_request = req.body.signed_request
