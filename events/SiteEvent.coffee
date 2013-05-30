@@ -297,7 +297,8 @@ exports.SiteEvent = (app) ->
         return res.send false
       follows = _.filter user.follower, (f)->
         return f.approval is true
-      followIds = _.pluck follows, "_ids"
+      followIds = _.pluck follows, "_id"
+      console.log followIds
       SupporterMessage.find({_id: {$in: user.supporter_message}}).populate("supporter", "first_name id").exec (err, messages)=>
         throw err if err
         Follow.find({_id: {$in: followIds}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
