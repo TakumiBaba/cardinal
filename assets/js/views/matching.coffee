@@ -64,6 +64,7 @@ class App.View.MatchingListView extends Backbone.View
 
   appendItem: (model)->
     user = model.get('user')
+    console.log user
     attributes =
       id: user.id
       source: user.profile.image_url
@@ -72,7 +73,6 @@ class App.View.MatchingListView extends Backbone.View
 
   appendAllItem: (collection)->
     flag = if $(@.el).hasClass 'system_matching' then true else false
-    console.log flag
     list = _.filter collection.models, (model)=>
       return model.get('isSystemMatching') is flag
     if flag is false
