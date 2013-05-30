@@ -221,7 +221,7 @@ class App.View.MePage extends Backbone.View
     @followers = new App.Collection.Followers
       userid: "me"
     _.bindAll @, "setSupporterMessages"
-    @followers.fetch()
+    # @followers.fetch()
 
 
   render: (model)->

@@ -291,14 +291,16 @@ exports.SiteEvent = (app) ->
   candidate:(req, res)->
     id = if req.params.id is 'me' then req.session.userid else req.params.id
     isMe = id is req.params.id
-    User.findOne({id: id}).exec (err, user)->
+    User.findOne({id: id}).populate("follower", "approval _id").exec (err, user)->
       throw err if err
       unless user
         return res.send false
-      follows = user.follower
+      follows = _.filter user.follower, (f)->
+        return f.approval is true
+      followIds = _.pluck follows, "_ids"
       SupporterMessage.find({_id: {$in: user.supporter_message}}).populate("supporter", "first_name id").exec (err, messages)=>
         throw err if err
-        Follow.find({_id: {$in: follows}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
+        Follow.find({_id: {$in: followIds}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
           throw err if err
           return res.render 'candidate',
             req: req
@@ -312,15 +314,16 @@ exports.SiteEvent = (app) ->
   profile:
     index: (req, res)->
       id = req.session.userid
-      User.findOne({id: id}).exec (err, user)->
+      User.findOne({id: id}).populate("follower", "approval _id").exec (err, user)->
         throw err if err
         unless user
           return res.send false
         follows = _.filter user.follower, (f)->
           return f.approval is true
+        followIds = _.pluck follows, "_id"
         SupporterMessage.find({_id: {$in: user.supporter_message}}).populate("supporter", "first_name id").exec (err, messages)=>
           throw err if err
-          Follow.find({_id: {$in: follows}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
+          Follow.find({_id: {$in: followIds}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
             throw err if err
             return res.render 'candidate',
               req: req
