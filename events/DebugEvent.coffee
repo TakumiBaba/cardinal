@@ -311,3 +311,11 @@ exports.DebugEvent = (app) ->
     console.log req.body
     console.log req.query
     return "hoge"
+  removeCancel: (req, res)->
+    id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+    User.findOne({id: id}).populate('statuses').exec (err, user)->
+      throw err if err
+      _.each user.statuses, (status)->
+        status.isRemoved = false
+        status.save()
+      return res.send 'ok'

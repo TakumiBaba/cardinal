@@ -1084,7 +1084,7 @@ JST['sidebar/main'] = _.template(
       </ul>
       <ul class='nav nav-list sidebar-bottom'>
         <li class='use-policy'><a data-toggle="modal" data-target="#usepolicy">利用規約</a></li>
-        <li><a href="/#/privacypolicy">プライバシーポリシー</a></li>
+        <li><a href="https://www.facebook.com/about/privacy/" target="_blank">プライバシーポリシー</a></li>
         <li><a href="/#/team">運営チーム</a></li>
       </ul>
     </div>
