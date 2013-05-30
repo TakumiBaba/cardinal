@@ -4,6 +4,7 @@ exports.SiteEvent = (app) ->
   Candidate = app.settings.models.Candidate
   Follow = app.settings.models.Follow
   Status = app.settings.models.Status
+  SupporterMessage = app.settings.models.SupporterMessage
   helper = app.settings.helper
   Crypto = require 'crypto'
   DebugEvent = app.settings.events.DebugEvent
@@ -14,7 +15,17 @@ exports.SiteEvent = (app) ->
   FB = require 'fb'
 
   index: (req, res)->
-    return res.redirect '/login'
+    if !req.session.userid
+      return res.redirect '/login'
+    if req.session.isSupporter
+      return res.render "supporter-index",
+        req: req
+        id: req.session.userid
+    else
+      return res.render "index",
+        req: req
+        id: req.session.userid
+
     # fbreq = req.query.request_ids || ""
     # signed_request = req.body.signed_request
     # if signed_request
@@ -52,6 +63,25 @@ exports.SiteEvent = (app) ->
     console.log signed_request
     b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
     facebook_id = b.user_id
+    FB.api "oauth/access_token",
+      client_id: Config.appId
+      client_secret: Config.appSecret
+      grant_type: 'client_credentials'
+    , (response)=>
+      return res.send response if !response or response.error
+      access_token = response.access_token
+      FB.api "#{facebook_id}/apprequests",
+        access_token: access_token
+      , (response)=>
+        _.each response.data, (data)=>
+          if data.application.namespace is "ding_dong"
+            FB.api "#{data.id}", "delete",
+              access_token: access_token
+            , (response)->
+              throw response.error if !response or response.error
+              console.log response
+              return res.send response
+
     if signed_request is "" || facebook_id is ""
       return res.redirect "/login"
     req.session.facebook_id = b.user_id
@@ -59,33 +89,51 @@ exports.SiteEvent = (app) ->
       throw err if err
       if user is null or user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
         return res.redirect "/firstlogin"
-        # sha1_hash = Crypto.createHash 'sha1'
-        # req.params.facebook_id = facebook_id
-        # console.log facebook_id
-        # FB.api "#{facebook_id}", (response)->
-        #   throw response.error if response.error
-        #   user = new User
-        #     id: sha1_hash.digest 'hex'
-        #     facebook_id: response.id
-        #     name: response.name
-        #     first_name: response.first_name
-        #     last_name: response.last_name
-        #     profile:
-        #       gender: response.gender
-        #       image_url: "https://graph.facebook.com/#{response.id}/picture"
-        #     isSuppoter: true
-        #     isFirstLogin: false
-        #   user.save()
       req.session.userid = user.id
+      req.session.isSupporter = user.isSupporter
       if user.isSupporter
         # サポーター専用のindexを作る。
-        res.render 'supporter-index',
+        return res.render 'supporter-index',
           req: req
           id: user.id
       else
-        res.render 'index',
-          req: req
-          id: user.id
+        exclusion = []
+        Status.find({ids: {$in: [user.id]}}).exec (err, statuses)=>
+          throw err if err
+          if statuses.length > 0
+            _.each statuses, (status)=>
+              id = if status.ids[0] is user.id then status.ids[1] else status.ids[0]
+              exclusion.push id
+          stateZero = _.filter statuses, (status)=>
+            return (status.one_status is false) and (status.two_status is false) and (status.isRemoved is false)
+          console.log "StateZero is #{stateZero.length}"
+          num = stateZero.length
+          if num < 20
+            exclusion.push user.id
+            User.find({}).where('id').nin(exclusion).where('isSupporter').equals(false).where("profile.gender").ne(user.profile.gender).exec (err, users)=>
+              throw err if err
+              if !users
+                return false
+              users = _.shuffle users
+              _.each [num..20], (i)=>
+                if num < users.length-1
+                  console.log i
+                  status = new Status()
+                  status.one = user._id
+                  status.two = users[i]._id
+                  status.ids = [user.id, users[i].id]
+                  status.save()
+                  user.statuses.push status
+                  users[i].statuses.push status
+                  user.save()
+                  users[i].save()
+              return res.render 'index',
+                req: req
+                id: user.id
+          else
+            return res.render 'index',
+              req: req
+              id: user.id
 
   Login:
     normal: (req, res)->
@@ -240,3 +288,46 @@ exports.SiteEvent = (app) ->
         console.log "error: #{e}"
         return res.send e
       ).end()
+  candidate:(req, res)->
+    id = if req.params.id is 'me' then req.session.userid else req.params.id
+    isMe = id is req.params.id
+    User.findOne({id: id}).exec (err, user)->
+      throw err if err
+      unless user
+        return res.send false
+      follows = user.follower
+      SupporterMessage.find({_id: {$in: user.supporter_message}}).populate("supporter", "first_name id").exec (err, messages)=>
+        throw err if err
+        Follow.find({_id: {$in: follows}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
+          throw err if err
+          return res.render 'candidate',
+            req: req
+            image_url: user.profile.image_url
+            name: user.first_name
+            profile: user.profile
+            messages: messages
+            followers: followers
+          , (err, html)->
+            return res.send html
+  profile:
+    index: (req, res)->
+      id = req.session.userid
+      User.findOne({id: id}).exec (err, user)->
+        throw err if err
+        unless user
+          return res.send false
+        follows = _.filter user.follower, (f)->
+          return f.approval is true
+        SupporterMessage.find({_id: {$in: user.supporter_message}}).populate("supporter", "first_name id").exec (err, messages)=>
+          throw err if err
+          Follow.find({_id: {$in: follows}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
+            throw err if err
+            return res.render 'candidate',
+              req: req
+              image_url: user.profile.image_url
+              name: user.first_name
+              profile: user.profile
+              messages: messages
+              followers: followers
+            , (err, html)->
+              return res.send html

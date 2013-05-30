@@ -40,18 +40,19 @@ exports.LikeEvent = (app) ->
                 status: status.one_status
                 myStatus: status.two_status
                 isSystemMatching: status.one_isSystemMatching
-            if _.contains query, "0"
-              if json.status is false && json.myStatus is false
-                list.push json
-            if _.contains query, "1"
-              if json.status is false && json.myStatus is true
-                list.push json
-            if _.contains query, "2"
-              if json.status is true && json.myStatus is false
-                list.push json
-            if _.contains query, "3"
-              if json.status is true && json.myStatus is true
-                list.push json
+            if status.isRemoved is false
+              if _.contains query, "0"
+                if json.status is false && json.myStatus is false
+                  list.push json
+              if _.contains query, "1"
+                if json.status is false && json.myStatus is true
+                  list.push json
+              if _.contains query, "2"
+                if json.status is true && json.myStatus is false
+                  list.push json
+              if _.contains query, "3"
+                if json.status is true && json.myStatus is true
+                  list.push json
           return res.send list
 
     update: (req, res)->

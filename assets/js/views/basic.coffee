@@ -225,7 +225,7 @@ class App.View.MePage extends Backbone.View
 
 
   render: (model)->
-    requirejs ["text!/views/profile/index.html?time=#{Date.now()}"], (view)=>
+    requirejs ["text!/views/profile/index?time=#{Date.now()}"], (view)=>
       $(@.el).html view
 
   setSupporterMessages: (collection)->

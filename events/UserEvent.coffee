@@ -454,23 +454,32 @@ exports.UserEvent = (app) ->
             res.send 'add following'
 
   signup: (req, res)->
-    id = req.session.userid
+    facebook_id = req.body.id
     params = req.body
-    User.findOne id: id, (err, user)->
+    User.findOne facebook_id: facebook_id, (err, user)->
       throw err if err
-      user.name = params.name
+      unless user
+        user = new User()
+      sha1_hash = Crypto.createHash 'sha1'
+      sha1_hash.update facebook_id
+      user.id = sha1_hash.digest 'hex'
+      user.facebook_id = facebook_id
+      user.name = "#{params.last_name}#{params.first_name}"
       user.profile.birthday = new Date("#{params.birthday_year}/#{params.birthday_month}/#{params.birthday_day}")
       user.username = params.username
       user.first_name = params.first_name
       user.last_name = params.last_name
       user.isSupporter = false
       user.isFirstLogin = false
-      user.save (err)->
+      user.save (err)=>
         if err
-          res.redirect "/signup/error"
+          return res.redirect "/signup/error"
           throw err
         else
-          res.redirect "/#/profile"
+          return res.render "index",
+            req: req
+            id: user.id
+            href: "/#/profile"
 
   supporterMessage:
     fetch: (req, res)->
@@ -566,6 +575,7 @@ exports.UserEvent = (app) ->
           client_secret: Config.appSecret
           grant_type: 'client_credentials'
         , (response)=>
+          console.log response
           console.log(response.error) if !response or response.error
           FB.setAccessToken response.access_token
           FB.api "#{to.facebook_id}/notifications", 'post',
