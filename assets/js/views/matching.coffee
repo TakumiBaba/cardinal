@@ -75,7 +75,7 @@ class App.View.MatchingListView extends Backbone.View
     console.log collection
     flag = if $(@.el).hasClass 'system_matching' then true else false
     list = _.filter collection.models, (model)=>
-      return model.get('  isSystemMatching') is flag
+      return model.get('isSystemMatching') is flag
     if flag is false
       $(@.el).parent().find("li.supporter a").html "応援団おすすめリスト(#{list.length})"
     if list.length > 0

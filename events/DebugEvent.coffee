@@ -315,7 +315,8 @@ exports.DebugEvent = (app) ->
     id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
     User.findOne({id: id}).populate('statuses').exec (err, user)->
       throw err if err
+      console.log user.statuses
       _.each user.statuses, (status)->
         status.isRemoved = false
-        status.save()
+        # status.save()
       return res.send 'ok'
