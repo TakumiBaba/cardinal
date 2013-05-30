@@ -14,8 +14,8 @@ div#wrapper
   // width: 98%
   width: 760px
   padding-left: 1%
-  min-height: 500px
-  max-height: 2000px
+  // min-height: 500px
+  // max-height: 2000px
   border-left: 1px solid #ccc
 
 div#sidebar
@@ -23,7 +23,7 @@ div#sidebar
   position: fixed
   float: left
   height: 100%
-  width: 190px
+  width: 200px
   padding-top: 10px
   padding-right: 10px
   border-right: 1px solid #ccc
@@ -106,14 +106,14 @@ div#main
   position: absolute
   float: left
   left: 200px
-  width: 560px
+  width: 559px
   padding-left : 10px
 //
 //  マッチングページ
 //
 div#matching_page
   height: 100%
-  width: 100%
+  width: 559px
   ul.matching-type-list
     margin-top: 20px
   h3.title_box
@@ -141,8 +141,11 @@ div#matching_page
     margin-left: 0px
     padding: 3px
     width: 100%
+    font-size: 14px
     // float: left
     display: block
+  h4.name
+    margin-left: 100px
   h5.pink
     color: white;
     background-color: #DC6B82
@@ -150,16 +153,17 @@ div#matching_page
   //   clear: left
   div.btns
     float: right
+
   ul.matching_side
     list-style: none
     height: 100%
     max-height: 700px
     overflow: auto
     display: block
-    margin-left: 5px
-    margin-right: 10px
+    // margin-left: 5px
+    // margin-right: 10px
     li
-      margin-right: 15px
+      // margin-right: 15px
       margin-bottom: 5px
       img
         border: 4px solid white
@@ -171,23 +175,22 @@ div#matching_page
   div.box
     // height: 500px
     height: 100%
-    width: 100%
-    min-width: 650px
+    width: 599px
     margin-bottom: 20px
     div.matching_side_div
       height: inherit
       max-height: 700px
-      width: 5%
-      min-width: 100px
       float: left
     div.main_box
       float: left
-      width: 85%
+      width: 499px
       div.box_menu
         float: left
         img.profile_image
-          max-width: 90px
-          max-height: 90px
+          width: 90px
+          height: 90px
+          margin-left: 5px
+          margin-top: 5px
           margin-right: 20px
       div.detail_profile
         float: left
@@ -230,6 +233,30 @@ div#matching_page
           position: relative
           width: 100%
           margin-bottom: 10px
+          table.sub
+            width 494px
+            tr
+              height: 5px
+            td.key
+              background-color: #ccffcc
+              width: 130px
+            td.value
+              width: 364px
+          table.main
+            width: 494px
+            tr
+              height: 5px
+            td.left-key
+              background-color: #ccffcc
+              width: 60px
+            td.left-value
+              width: 100px
+            td.right-key
+              background-color: #ccffcc
+              width: 100px
+            td.right-value
+              width: 134px
+
           table
             width: 100%
             display: block
