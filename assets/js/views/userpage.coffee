@@ -25,7 +25,7 @@ class App.View.UserPage extends Backbone.View
     age = moment().diff(moment(user.get('profile').birthday), "year")
     options =
       image_source: user.get('profile').image_url
-      name: user.get('name')
+      name: user.get('first_name')
       gender_birthday: "#{gender} #{age}歳　#{b.getFullYear()}年#{b.getMonth()-1}月#{b.getDay()}日生まれ"
       follower: user.get('follower')
       profile: user.get('profile')
