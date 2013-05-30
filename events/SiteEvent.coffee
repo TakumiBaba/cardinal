@@ -322,7 +322,7 @@ exports.SiteEvent = (app) ->
           throw err if err
           Follow.find({_id: {$in: follows}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
             throw err if err
-            return res.render 'candidate',
+            return res.render 'user/profile',
               req: req
               image_url: user.profile.image_url
               name: user.first_name
