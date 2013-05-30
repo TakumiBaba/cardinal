@@ -12,41 +12,44 @@ class App.View.CandidatePage extends Backbone.View
   constructor: (attrs, options)->
     super
     $(@.el).children().remove()
-    @.model = new App.Model.User
-      id: attrs.id
+    @render(attrs)
+    # @.model = new App.Model.User
+    #   id: attrs.id
 
-    @.collection = new App.Collection.Followers
-      userid: attrs.id
+    # @.collection = new App.Collection.Followers
+    #   userid: attrs.id
 
-    @.supporterMessages = new App.Collection.SupporterMessages
-      id: attrs.id
+    # @.supporterMessages = new App.Collection.SupporterMessages
+    #   id: attrs.id
 
-    _.bindAll @, "render", "appendFollowers", "appendSupporterMessages"
-    @.model.bind 'change', @render
-    @.collection.bind 'reset', @appendFollowers
-    @.supporterMessages.bind 'reset', @appendSupporterMessages
+    # _.bindAll @, "render", "appendFollowers", "appendSupporterMessages"
+    # @.model.bind 'change', @render
+    # @.collection.bind 'reset', @appendFollowers
+    # @.supporterMessages.bind 'reset', @appendSupporterMessages
 
-    @.model.fetch()
-    @.collection.fetch()
-    @.supporterMessages.fetch()
+    # @.model.fetch()
+    # @.collection.fetch()
+    # @.supporterMessages.fetch()
 
 
-  render: (model)->
-    user = model
-    gender = if user.get('profile').gender is 'male' then "男性" else "女性"
-    b = new Date(user.get('profile').birthday)
-    age = moment().diff(moment(user.get('profile').birthday), "year")
-    attributes =
-      image_source: model.get('profile').image_url
-      name: model.get('name')
-      first_name: model.get('first_name')
-      gender_birthday: "#{gender} #{age}歳"
-      profile: user.get('profile')
-    html = JST['candidate/page'](attributes)
-    $(@.el).html html
-    @recommendButton = new App.View.FollowDropDownMenu
-      targetId: user.get('id')
-    @recommendButton.render()
+  render: (attrs)->
+    requirejs ["text!/views/candidate/#{attrs.id}?time=#{Date.now()}"], (view)=>
+      $(@.el).html view
+    # user = model
+    # gender = if user.get('profile').gender is 'male' then "男性" else "女性"
+    # b = new Date(user.get('profile').birthday)
+    # age = moment().diff(moment(user.get('profile').birthday), "year")
+    # attributes =
+    #   image_source: model.get('profile').image_url
+    #   name: model.get('name')
+    #   first_name: model.get('first_name')
+    #   gender_birthday: "#{gender} #{age}歳"
+    #   profile: user.get('profile')
+    # html = JST['candidate/page'](attributes)
+    # $(@.el).html html
+    # @recommendButton = new App.View.FollowDropDownMenu
+    #   targetId: user.get('id')
+    # @recommendButton.render()
 
   appendFollowers: (collection)->
     _.each collection.models, (model)=>

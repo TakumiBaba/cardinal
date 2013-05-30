@@ -51,6 +51,12 @@ div#sidebar
           text-decoration: none
           display: block
           word-wrap: break-word
+    ul.sidebar-bottom
+      position: fixed
+      bottom: 0px
+      a
+        text-decoration: none;
+        color: gray;
     div#sidebar-bottom
       a
         text-decoration: none;
@@ -99,7 +105,7 @@ div#main
   position: absolute
   float: left
   left: 200px
-  max-width: 700px
+  max-width: 800px
   padding-left : 10px
 //
 //  マッチングページ
@@ -117,12 +123,32 @@ div#matching_page
     clear: left
     small
       padding-left: 1.5em
-  h5.title_box
-    background-color: #dc6b82
+  div.thumbnail_box
+    float: left
+  h4.pink
+    color: white
+    background-color: #DC6B82
+    small
+      color: white
+  h4.green
+    background-color: #99cccc
+  h4.yellow
+    background-color: #ffff99
+  h4.title_box
+    color: black
+    background-color: #99cccc
+    margin-left: 0px
+    padding: 3px
+    width: 100%
+    // float: left
     display: block
   h5.pink
     color: white;
     background-color: #DC6B82
+  // h5.message
+  //   clear: left
+  div.btns
+    float: right
   ul.matching_side
     list-style: none
     height: 100%
@@ -145,11 +171,12 @@ div#matching_page
     // height: 500px
     height: 100%
     width: 100%
+    min-width: 650px
     margin-bottom: 20px
     div.matching_side_div
       height: inherit
       max-height: 700px
-      width: 10%
+      width: 5%
       min-width: 100px
       float: left
     div.main_box
@@ -173,23 +200,34 @@ div#matching_page
           li
             margin: 0px 0px -1px 0px
         div.follower_column
-          width: 20%
+          width: 100%
           height: 100%
           float: left
           ul.follower-list
-            height: 400px
             width: 100%
             overflow: auto
             display: block
             li
-              width: 100%
+              width: 15%
+              float: left
+              text-align: center
+              div.thumbnail
+                border: 0px
+                box-shadow: 0px 0px 0px #000
+              a
+                word-wrap: break
+                img
+                  display: block
+                  margin: 0 auto
+                  width: 50px
+                  height: 50px
           div.follower-column-body
             width: 100%
         div.profile-column
           float: left
           height: 100%
           position: relative
-          width: 70%
+          width: 100%
           margin-bottom: 10px
           table
             width: 100%
@@ -353,7 +391,7 @@ div#message_page
     div.message-body
       float: left
       min-width: 100%
-      height: 400px
+      height: 100%
       border: 1px solid #ccc
       margin-bottom: 10px
       overflow: auto
@@ -387,6 +425,8 @@ div#message_page
     div.message-footer
       clear: left
       width: 100%
+      // position: fixed
+      // bottom: 10px
       img
         float: left
         width: 32px
@@ -607,7 +647,7 @@ div.likelist
 
 div.supporter-message-list
   float: left
-  border-top: 1px solid #ccc
+  // border-top: 1px solid #ccc
   width: 100%
   margin-bottom: 30px
   ul
@@ -631,11 +671,11 @@ div.supporter-message-list
         float: left
         div.s-message-header
           height: 20%
-          width: 100%
+          width: 90%
           float: left
-        div.s-message-header
+        div.s-message-body
           height: 80%
-          width: 100%
+          width: 90%
           float: left
 
 div.supporter-message-post-view

@@ -41,16 +41,21 @@ exports.FollowEvent = (app) ->
     delete: (req, res)->
       fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
       toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
-      User.find({id: {$in : [fromId, toId]}}).populate('following').exec (err, users)=>
+      User.findOne(id: req.session.userid).populate("following").exec (err, user)=>
         throw err if err
-        from = _.find users, (user)=>
-          return user.id is fromId
-        to = _.find users, (user)=>
-          return user.id is toId
-        follow = _.find from.following, (follow)=>
-          return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+        follow = _.find user.following, (follow)=>
+          return _.contains(follow.ids, fromId) and _.contains(follow.ids, toId)
         follow.remove()
-        return res.send follow
+      # User.find({id: {$in : [fromId, toId]}}).populate('following').exec (err, users)=>
+      #   throw err if err
+      #   from = _.find users, (user)=>
+      #     return user.id is fromId
+      #   to = _.find users, (user)=>
+      #     return user.id is toId
+      #   follow = _.find from.following, (follow)=>
+      #     return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+      #   follow.remove()
+      #   return res.send follow
 
   follower:
     fetch: (req, res)->
@@ -70,16 +75,24 @@ exports.FollowEvent = (app) ->
     delete: (req, res)->
       fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
       toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
-      User.find({id: {$in : [fromId, toId]}}).populate('follower').exec (err, users)=>
+      User.findOne(id: req.session.userid).populate("follower").exec (err, user)=>
         throw err if err
-        from = _.find users, (user)=>
-          return user.id is fromId
-        to = _.find users, (user)=>
-          return user.id is toId
-        follow = _.find from.follower, (follow)=>
-          return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+        follow = _.find user.follower, (follow)=>
+          return _.contains(follow.ids, fromId) and _.contains(follow.ids, toId)
         follow.remove()
-        return res.send follow
+
+      # fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
+      # toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
+      # User.find({id: {$in : [fromId, toId]}}).populate('follower').exec (err, users)=>
+      #   throw err if err
+      #   from = _.find users, (user)=>
+      #     return user.id is fromId
+      #   to = _.find users, (user)=>
+      #     return user.id is toId
+      #   follow = _.find from.follower, (follow)=>
+      #     return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
+      #   follow.remove()
+      #   return res.send follow
 
   request:
     normal: (req, res)->
@@ -91,7 +104,7 @@ exports.FollowEvent = (app) ->
             return user.id is fromId
         to = _.find users, (user)=>
           return user.id is toId
-        follow = _.find from.following, (follow)=>
+        follow = _.find from.follower, (follow)=>
           return (_.contains(follow.ids, fromId) && _.contains(follow.ids, toId))
         unless follow
           follow = new Follow

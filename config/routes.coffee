@@ -41,7 +41,8 @@ module.exports = (app) ->
 
   # ViewEvent
   app.get '/render/test', Debug.rendertest
-  app.get '/views/profile/index.html', Debug.profile.index
+  app.get '/views/profile/index', SiteEvent.profile.index
+  app.get '/views/candidate/:id', SiteEvent.candidate
 
   # FollowEvent
   app.get '/api/users/:user_id/followings', Follow.following.fetch

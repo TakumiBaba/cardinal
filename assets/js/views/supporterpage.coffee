@@ -85,6 +85,7 @@ class App.View.SupporterPage extends Backbone.View
     else if target.hasClass 'follower'
       console.log 'delete follower'
       @removeFollower(e)
+    $(target).parent().parent().remove()
 
   removeFollowing: (e)->
     id = $(e.currentTarget).parent().parent().attr 'id'

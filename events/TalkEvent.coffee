@@ -12,7 +12,7 @@ exports.TalkEvent = (app) ->
       throw err if err
       console.log user.talks
       # exclude リストに、自分のIDを入れてみる
-      Talk.find({_id: {$in: user.talks}}).populate('candidate').populate('user').exec (err, talks)=>
+      Talk.find({_id: {$in: user.talks}, candidate: {$ne: user._id}}).populate('candidate').populate('user').exec (err, talks)=>
         news = _.filter user.news, (n)->
           console.log n
           return !n.isRead && n.type is "talk"

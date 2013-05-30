@@ -15,21 +15,32 @@ JST['matching/page'] = _.template(
         </div>
         <div class='sm_main main_box'>
           <div class='matchinguser_menu box_menu'>
-            <img class='profile_image pull-left' src='' />
-            <h4 class='name'></h4>
-            <h5 class='simple_profile'></h5>
-            <a href="/#/like"><img class='like' src="/image/iine_button.gif" /></a>
-            <a href="/#/message"><img class='sendMessage' src="/image/m_button.gif" /></a>
-            <a href="/#/talk"><img class='talk' src="/image/o_button.gif" /></a>
+            <div class='thumbnail_box'>
+              <img class='profile_image pull-left' src='' />
+            </div>
+            <h4 class='name title_box'></h4>
+            <h5 class='message'></h5>
+            <div class='btns'>
+              <a href="/#/like"><img class='like' src="/image/iine_button.gif" /></a>
+              <a href="/#/message"><img class='sendMessage' src="/image/m_button.gif" /></a>
+              <a href="/#/talk"><img class='talk' src="/image/o_button.gif" /></a>
+            </div>
+          </div>
+          <div class="supporter-message-list">
+            <h4 class="green"></h4>
+            <ul></ul>
           </div>
           <div class='detail_profile'>
             <div class='profile-column'>
               <div class='profile-column-header'>
-                <h5>プロフィール <a class="to-detail-profile" href="">詳細をみる</a></5>
+                <h4 class='title_box'></5>
               </div>
               <div class='ideal-profile'></div>
               <div class='profile-column-body'>
-                <table class='table'>
+                <table class='sub'>
+
+                </table>
+                <table class='main'>
                   <tbody>
                   </tbody>
                 </table>
@@ -43,9 +54,6 @@ JST['matching/page'] = _.template(
                 <ul class='follower-list'>
                 </ul>
               </div>
-            </div>
-            <div class='supporter-message-list'>
-              <ul></ul>
             </div>
           </div>
         </div>
@@ -587,15 +595,14 @@ JST['userpage/detailProfile'] = _.template(
 JST['matching/follower'] = _.template(
   """
   <li>
-    <div class='media'>
-      <a href=<%= facebook_url %> >
-        <img src=<%= source %> class='pull-left' />
-        <div class='media-body'>
-          <h5><%= name %></h5>
-        </div>
+    <div class='thumbnail'>
+      <a href='<%= facebook_url %>' class='to-user'>
+        <img src=<%= source %> />
+        <h5><%= name %> さん</h5>
       </a>
     </div>
   </li>
+
   """
   );
 
@@ -1292,9 +1299,9 @@ JST['supporter-message/li'] = _.template(
     </div>
     <div class='s-message-right'>
       <% if(message_id != false){ %>
-        <div class='s-messge-header'><%= name %>さん <a id=<%= message_id %>class='delete-supporter-message'>この情報を削除する</a></div>
+        <div class='s-message-header'><%= name %>さん <a id=<%= message_id %>class='delete-supporter-message'>この情報を削除する</a></div>
       <% }else{ %>
-      <div class='s-messge-header'><%= name %>さん </div>
+        <div class='s-message-header'><%= name %>さん </div>
       <% }%>
 
       <div class='s-message-body'><%= message %></div>
