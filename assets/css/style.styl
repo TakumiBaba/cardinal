@@ -150,8 +150,9 @@ div#matching_page
   h5.pink
     color: white;
     background-color: #DC6B82
-  // h5.message
-  //   clear: left
+  h5.message
+    font-weight: normal
+    min-height: 40px
   div.btns
     float: right
     img.like
@@ -166,26 +167,25 @@ div#matching_page
     max-height: 700px
     overflow: auto
     display: block
-    // margin-left: 5px
-    // margin-right: 10px
+    float: left
+    width: 60px
+    margin-left: 0px
     li
-      // margin-right: 15px
       margin-bottom: 5px
       img
         border: 4px solid white
-        width: 50px
-        height: 50px
+        width: 45px
+        height: 45px
     li.active
       img
         border: 4px solid #ed4b7c
   div.box
     // height: 500px
     height: 100%
-    width: 599px
-    margin-bottom: 20px
+    width: 549px
     div.matching_side_div
       height: inherit
-      max-height: 700px
+      width: 50px
       float: left
     div.main_box
       float: left
@@ -241,25 +241,30 @@ div#matching_page
           margin-bottom: 10px
           table.sub
             width 494px
+            font-size: 11px
             tr
               height: 5px
             td.key
               background-color: #ccffcc
               width: 130px
+              font-weight: bold
             td.value
               width: 364px
           table.main
             width: 494px
+            font-size: 11px
             tr
               height: 5px
             td.left-key
               background-color: #ccffcc
               width: 60px
+              font-weight: bold
             td.left-value
               width: 100px
             td.right-key
               background-color: #ccffcc
               width: 100px
+              font-weight: bold
             td.right-value
               width: 134px
 
@@ -511,8 +516,6 @@ div.profile_and_following_view
     width: 100%
     div.sm_side
       height: 100%
-      width: 10%
-      min-width: 100px
       float: left
     div.main_box
       float: left
