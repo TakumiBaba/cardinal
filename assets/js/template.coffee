@@ -413,17 +413,20 @@ JST['like/page'] = _.template(
 
 JST['like/thumbnail'] = _.template(
   """
-  <li id='<%= id %>' >
+  <li>
     <div class='thumbnail'>
-      <button class='close hide'>&times;</button>
+      <!-- <button class='close hide'>&times;</button> -->
       <a href='/#/u/<%= id %>' class='to-user'>
-        <img src=<%= source %> />
-        <h5><%= name %> さん</h5>
+        <img class='user-thumbnail' src=<%= source %> />
+      </a>
+      <a href='/#/u/<%= id %>' class='to-user'>
+        <%= name %> さん
       </a>
       <a href="<%= href %>" class="action_button">
         <img class="action_button l_d_<%= status %>" src=<%= button_source %> />
       </a>
-      <a class='to-talk'><span>応援トークをする</span></a></div>
+      <a href="<%= href %>" class='to-talk'><span>応援トークをする</span></a>
+    </div>
   </li>
   """
   )
@@ -462,9 +465,10 @@ JST['talk/unit'] = _.template(
     </div>
   </div>
   <div class='like_box'>
-    <span>
-      <a href='#'>いいね！(<%= like_count %>)</a>
-    </span>
+    <small>
+      <a class='like_count' href='/#/talk'><%= like_or_dislike %></a>
+    </small>
+    <small><%= like_count %></small>
   </div>
   <div class='comments_box'>
   </div>

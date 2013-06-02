@@ -1,0 +1,31 @@
+div.sidebar-inner
+    a(href='/#/')
+      img.logo(src='/image/logo.png')
+    div#welcome_box.clearfix
+      a.pull-left
+        img.user_profile_image(src='#{source}')
+      div
+        a.user_name(href='/#/me') #{name}さん
+        a(href='/#/profile') プロフィールを編集する
+    a.pull-right.usage(data-toggle="modal", data-target="#usage")
+      small 使い方
+    div.navigation.clearfix
+      ul.nav.nav-list
+        li.nav-header メニュー
+        li.like: a(href='/#/like') いいねリスト
+        li.talk: a.talk-badge(href='/#/talk') 応援トーク
+          span.badge.badge-important.talk-badge
+        li.message: a.message-badge(href='/#/message') メッセージ
+          span.badge.badge-important.message-badge
+        li.divider
+        li.test: a(href='/#/invite') 応援団を増やす
+        li.supporter: a(href='/#/supporter') あなたの婚活仲間
+      ul.follower
+        - each follower in followers
+          li: img(src="#{follower.profile.image_url}")
+      ul.nav.nav-list.sidebar-bottom
+        li.use-policy: a(data-toggle="modal", data-target="#usepolicy") 利用規約
+        li: a(href="https://www.facebook.com/about/privacy/", target="_blank") プライバシーポリシー
+        li: a(href="/#/team") 運営チーム
+
+

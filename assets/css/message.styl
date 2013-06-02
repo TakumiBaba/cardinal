@@ -1,0 +1,82 @@
+div#message_page
+  div.user-list-column
+    float: left
+    width: 100px
+    height: 500px
+    min-height: 400px
+    ul.message-user-thumbnail
+      height: 100%
+      overflow: auto
+      list-style: none
+      padding-left: 10px
+      li
+        height: 45px
+        width: 45px
+        margin-right: 15px
+        margin-bottom: 10px
+        img
+          height: 40px
+          width: 40px
+          border: 3px solid white
+      li.active
+        img
+          border: 3px solid #ed4b7c
+
+  div#message-list-view
+    float: left
+    height: 500px
+    width: 449px
+    div.message-body
+      float: left
+      width: 100%
+      height: 100%
+      border: 1px solid #ccc
+      margin-bottom: 10px
+      overflow: auto
+      ul
+        list-style: none
+        li
+          padding-top: 15px
+          margin-bottom: 15px
+          div.message_clm
+            clear: left
+            max-width: 400px
+            padding: 0px 10px 10px 10px
+            div.message_left
+              float: left
+              min-height: 100px
+              height: 100%
+              width: 32px
+              img.message_img
+                float: left
+                width: 32px
+                height: 32px
+                display: block
+            div.message_line
+              float: left
+              height: 100%
+              max-width: 300px
+              margin-left: 8px
+              font-size: 13px
+              color: #666
+              line-height: 120%
+    div.message-footer
+      clear: left
+      width: 100%
+      img
+        float: left
+        width: 32px
+        height: 32px
+        display: block
+        margin-right: 10px
+      input.comment_area
+        width: 80%
+      div.reply_box
+        float: left
+        width: 100%
+        input
+          width: 100%
+        textarea
+          width: 100%
+        button
+          float: right
