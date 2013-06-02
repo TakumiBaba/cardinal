@@ -219,6 +219,9 @@ TalkSchema = new Schema
   candidate:
     type: ObjectId
     ref: "User"
+  count:
+    type: [ObjectId, ref: "User"]
+    default: []
   updatedAt:
     type: Date
     default: Date.now

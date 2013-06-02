@@ -10,36 +10,39 @@ class App.View.Sidebar extends Backbone.View
 
   constructor: ->
     super
+    @render()
+  render: ->
+    requirejs ["text!/views/sidebar?time=#{Date.now()}"], (view)=>
+      $(@.el).html view
+    # _.bindAll @, "render"
+    # @.model.bind 'change', @render
+    # @followers = new App.Collection.Followers
+    #   userid: "me"
+    # @followers.bind 'reset', @setFollower
 
-    _.bindAll @, "render"
-    @.model.bind 'change', @render
-    @followers = new App.Collection.Followers
-      userid: "me"
-    @followers.bind 'reset', @setFollower
+  # render: (model)=>
+  #   isSupporter = model.get('isSupporter')
+  #   if isSupporter is false
+  #     attributes =
+  #       name: model.get('first_name')
+  #       source: model.get('profile').image_url
+  #     html = JST['sidebar/main'](attributes)
+  #   else
+  #     attributes =
+  #       name: model.get('first_name')
+  #       source: model.get('profile').image_url
+  #     html = JST['sidebar/supporter'](attributes)
+  #     location.href = "/#/supporter"
+  #   $(@.el).html html
+  #   @followers.fetch()
 
-  render: (model)=>
-    isSupporter = model.get('isSupporter')
-    if isSupporter is false
-      attributes =
-        name: model.get('first_name')
-        source: model.get('profile').image_url
-      html = JST['sidebar/main'](attributes)
-    else
-      attributes =
-        name: model.get('first_name')
-        source: model.get('profile').image_url
-      html = JST['sidebar/supporter'](attributes)
-      location.href = "/#/supporter"
-    $(@.el).html html
-    @followers.fetch()
-
-  setFollower: (collection)->
-    _.each collection.models, (model)=>
-      console.log model.get('follower').firstname
-      attributes =
-        id: model.get('follower').id
-      li = JST['sidebar/follower'](attributes)
-      $('ul.sidebar-follower-list').append li
+  # setFollower: (collection)->
+  #   _.each collection.models, (model)=>
+  #     console.log model.get('follower').firstname
+  #     attributes =
+  #       id: model.get('follower').id
+  #     li = JST['sidebar/follower'](attributes)
+  #     $('ul.sidebar-follower-list').append li
 
   modalUsage: ->
     if $("div.usage").length < 1

@@ -22,7 +22,6 @@ class App.Model.Message extends Backbone.Model
 
   constructor: (attrs, options)->
     super
-    @.urlRoot = "/api/users/#{attrs.userid}/messages"
 
 class App.Model.Talk extends Backbone.Model
 

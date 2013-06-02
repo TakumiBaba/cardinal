@@ -21,6 +21,8 @@ div.sidebar-inner
         li.test: a(href='/#/invite') 応援団を増やす
         li.supporter: a(href='/#/supporter') あなたの婚活仲間
       ul.sidebar-follower-list
+        - each follower in followers
+          li: img(src="#{follower.profile.image_url}")
       ul.nav.nav-list.sidebar-bottom
         li.use-policy: a(data-toggle="modal", data-target="#usepolicy") 利用規約
         li: a(href="https://www.facebook.com/about/privacy/" target="_blank") プライバシーポリシー

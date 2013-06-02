@@ -4,13 +4,14 @@ exports.LikeEvent = (app) ->
   User = app.settings.models.User
   Candidate = app.settings.models.Candidate
   Status = app.settings.models.Status
+  SupporterMessage = app.settings.models.SupporterMessage
 
   fetch: (req, res)->
     status = if req.query.status? then req.query.status.split(",") else [0,1,2,3]
     id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
     User.findOne({id: id}).exec (err, user)->
       throw err if err
-      Candidate.find({_id: {$in: user.candidates}}).populate("user").exec (err, candidates)->
+      Candidate.find({_id: {$in: user.candidates}}).populate("user").exec (err, candidates)=>
         throw err if err
         list = _.filter candidates, (c)=>
           return _.contains status, c.status.toString()
@@ -34,15 +35,17 @@ exports.LikeEvent = (app) ->
                 status: status.two_status
                 myStatus: status.one_status
                 isSystemMatching: status.two_isSystemMatching
+                isRemoved: status.isRemoved
             else
               json =
                 user: status.one
                 status: status.one_status
                 myStatus: status.two_status
                 isSystemMatching: status.one_isSystemMatching
+                isRemoved: status.isRemoved
             if status.isRemoved is false
               if _.contains query, "0"
-                if json.status is false && json.myStatus is false
+                if (json.status is false) and (json.myStatus is false)
                   list.push json
               if _.contains query, "1"
                 if json.status is false && json.myStatus is true
@@ -195,6 +198,33 @@ exports.LikeEvent = (app) ->
           candidate.isSystemMatching = false
         candidate.save()
         return res.send candidate
+
+  test:
+    update: (req, res)->
+      playerId = req.params.user_id
+      candidateId = req.body.user.id
+      params = req.body
+      Status.find({ids: {$all: [playerId, candidateId]}}).populate("one", "id").populate("two", "id").exec (err, statuses)=>
+        throw err if err
+        if statuses.length > 0
+          _.each statuses, (status, i)->
+            if i > 0
+              status.remove()
+        status = statuses[0]
+        if status.one.id is playerId
+          oneStatus = params.myStatus
+          twoStatus = params.status
+        else
+          oneStatus = params.status
+          twoStatus = params.myStatus
+        status.one_status = oneStatus
+        status.two_status = twoStatus
+        status.isRemoved = params.isRemoved
+        status.save (err)->
+          throw err if err
+          console.log status
+          return res.send status
+
 
   # recommend: (req, res)->
   #   oneId = req.params.user_id

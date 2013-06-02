@@ -1,6 +1,7 @@
 module.exports = (app) ->
 
   SiteEvent = app.settings.events.SiteEvent app
+  View = app.settings.events.ViewEvent app
   User = app.settings.events.UserEvent app
   Talk = app.settings.events.TalkEvent app
   Message = app.settings.events.MessageEvent app
@@ -33,16 +34,14 @@ module.exports = (app) ->
   app.get '/api/users/me/news/delete', User.news.delete
   app.get '/api/users/facebook/:facebook_id', User.facebook.fetch
 
-  # app.put '/api/users/:oneId/follow/:twoId', User.follow.update
-  # app.post '/api/users/:following/follow/:follower', User.follow.create
-  # app.post '/api/users/:from_id/follow/:to_id', User.follow.following.create
-  # app.get '/api/users/:from_id/follow/:to_id', User.follow.following.create # post に
-  # app.get '/api/users/:following/follow/:follower', User.follow.create #
-
   # ViewEvent
   app.get '/render/test', Debug.rendertest
   app.get '/views/profile/index', SiteEvent.profile.index
   app.get '/views/candidate/:id', SiteEvent.candidate
+  app.get '/views/sidebar', View.sidebar
+  app.get '/views/matching', View.matching
+  app.get '/views/like', View.like
+  app.get '/views/message', View.message
 
   # FollowEvent
   app.get '/api/users/:user_id/followings', Follow.following.fetch
@@ -53,22 +52,20 @@ module.exports = (app) ->
   app.delete '/api/users/:from_id/following/:to_id', Follow.following.delete
   app.delete '/api/users/:from_id/followers/:to_id', Follow.follower.delete
 
-  # app.get '/api/users/:user_id/pending.json', User.pending.fetch
-  # app.get '/api/users/:user_id/request.json', User.request.fetch
-  # app.post '/api/users/me/following/:follow_id', User.followings.create
-  # app.delete '/api/users/:user_id/following/:deleteId', User.followings.delete
-  # app.delete '/api/users/:user_id/follower/:deleteId', User.followers.delete
-  # app.get '/api/users/:user_id/follower.json', User.fetchFollower
-
   # TalkEvent
   app.get '/api/users/:user_id/talks.json', Talk.fetch
   app.post '/api/talks.json', Talk.create
   app.post '/api/talks/:talk_id/comment', Talk.comment.create
+  app.post '/api/talks/:talk_id/like/:user_id/increment', Talk.like.increment
+  app.post '/api/talks/:talk_id/like/:user_id/decrement', Talk.like.decrement
   app.get '/api/talks/:talk_id/comments.json', Talk.comment.fetch
 
   # MessageEvent
-  app.get '/api/users/:user_id/messages.json', Message.fetch
-  app.post '/api/users/:user_id/:candidate_id/message', Message.create
+  app.get '/api/users/:user_id/messages.json', Message.List.fetch
+  app.post '/api/users/:user_id/:candidate_id/message', Message.List.create
+  app.post '/api/users/:user_id/messages/:candidate_id', Message.List.create
+  app.get '/api/messagelist/:list_id/messages', Message.Comment.fetch
+  app.post '/api/messagelist/:list_id/message', Message.Comment.create
 
   # SupporterMessageEvent
   app.get '/api/users/:user_id/supportermessages', User.supporterMessage.fetch
@@ -77,14 +74,12 @@ module.exports = (app) ->
   app.delete '/api/supportermessages/:id', User.supporterMessage.delete
 
   # LikeEvent
-  # app.get '/api/users/:user_id/candidates.json', Like.fetch # Queryによって返す値を変更
-  # app.post '/api/users/:user_id/candidates/:candidate_id.json', Like.update
-  # app.post "/api/users/:user_id/candidates/:candidate_id/recommend", Like.recommend
-
   app.get '/api/users/:user_id/candidates.json', Like.status.fetch
   app.get '/api/users/:oneId/candidates/:twoId', Like.create
   app.post '/api/users/:oneId/candidates/:twoId', Like.status.update
   app.get '/api/users/:oneId/candidates/:twoId/:status', Like.status.update
+  # Like test
+  app.post '/api/users/:user_id/candidates', Like.test.update
 
   # NotificationEvent
   app.post '/api/users/:from/notification/:to/message', User.news.message

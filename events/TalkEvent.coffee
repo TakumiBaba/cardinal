@@ -12,9 +12,9 @@ exports.TalkEvent = (app) ->
       throw err if err
       console.log user.talks
       # exclude リストに、自分のIDを入れてみる
-      Talk.find({_id: {$in: user.talks}, candidate: {$ne: user._id}}).populate('candidate').populate('user').exec (err, talks)=>
+      Talk.find({_id: {$in: user.talks}, candidate: {$ne: user._id}}).populate('candidate').populate('user').populate('count', "id first_name").exec (err, talks)=>
+        throw err if err
         news = _.filter user.news, (n)->
-          console.log n
           return !n.isRead && n.type is "talk"
         _.each news, (n)=>
           n.isRead = true
@@ -49,7 +49,7 @@ exports.TalkEvent = (app) ->
   comment:
     create: (req, res)->
       console.log req.params
-      id = if req.body.user_id is 'me' then req.session.userid else req.body.user_id
+      id = if req.body.user is 'me' then req.session.userid else req.body.user
       text = req.body.text
       Talk.findOne({_id: req.params.talk_id}).populate('user', "id facebook_id").populate("candidate", "id facebook_id").exec (err, talk)->
         throw err if err
@@ -70,3 +70,29 @@ exports.TalkEvent = (app) ->
         throw err if err
         console.log talk.comments
         res.send talk.comments
+  like:
+    increment: (req, res)->
+      id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
+      Talk.findOne({_id: req.params.talk_id}).exec (err, talk)=>
+        throw err if err
+        User.findOne({id: id}).exec (err, user)=>
+          liked = _.find talk.count, (count)=>
+            return count.toString() is user._id.toString()
+          console.log liked
+          if liked
+            return res.send 'already increment'
+          else
+            talk.count.push user._id
+            talk.save (err)->
+              throw err if err
+              return res.send 'increment'
+    decrement: (req, res)->
+      id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
+      Talk.findOne({_id: req.params.talk_id}).exec (err, talk)=>
+        throw err if err
+        User.findOne({id: id}).exec (err, user)=>
+          _.each talk.count, (count)=>
+            if count.toString() is user._id.toString()
+              console.log "decrement!"
+              return res.send 'decrement'
+          return res.send 'not decrement'

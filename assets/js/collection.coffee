@@ -14,6 +14,13 @@ class App.Collection.PreCandidates extends Backbone.Collection
     super
     @.url = "/api/users/#{attrs.userid}/candidates.json?status=#{attrs.status}"
 
+  getBySystems: ->
+    return _.filter @models, (model)->
+      return model.get('isSystemMatching') is true
+  getBySupporters: ->
+    return _.filter @models, (model)->
+      return model.get('isSystemMatching') is false
+
 class App.Collection.Followings extends Backbone.Collection
   model: App.Model.User
 
@@ -42,12 +49,18 @@ class App.Collection.Request extends Backbone.Collection
     super
     @.url = "/api/users/#{attrs.userid}/request.json"
 
-class App.Collection.Messages extends Backbone.Collection
+class App.Collection.MessageList extends Backbone.Collection
   # model: App.Model.Message
 
   constructor: (attrs, options)->
     super
     @.url = "/api/users/#{attrs.userid}/messages.json"
+
+class App.Collection.Messages extends Backbone.Collection
+  model: App.Model.Message
+
+  constructor: (attrs, options)->
+    super
 
 class App.Collection.Talks extends Backbone.Collection
   model: App.Model.Talk

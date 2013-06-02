@@ -8,7 +8,7 @@ window.App = {
 
 requirejs.config
   baseUrl: "/"
-  urlArgs: "bust=#{(new Date()).getTime()}"
+  # urlArgs: "bust=#{(new Date()).getTime()}"
   paths:
     text: "/lib/text"
 
