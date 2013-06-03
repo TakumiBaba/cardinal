@@ -1,0 +1,135 @@
+div#user_page.profile_and_following_view
+  h3.title_box プロフィールページ
+  div.box
+    div.user_profiles.main_box
+      div.profile_header
+        div.p_h_left
+          img(src="#{image_source}")
+        div.p_h_right
+          h4.title_box #{name} さん
+          p.message #{gender_birthday}
+      //- div.box_menu
+      //-   div.thumbnail_box
+      //-     img.profile_image.pull-left(src='#{image_source}')
+      //-   h4.name #{name} さん
+      //-   h5.simple_profile #{gender_birthday}
+      div.detail_profile.pull-left
+        div.tabbable
+          ul.nav.nav-tabs.supporter-menu
+            li.active: a(href='#detail_profile', data-toggle='tab') プロフィール詳細
+            li: a(href='#matchinglist', data-toggle='tab') マッチングリスト
+            li: a(href='#likelist', data-toggle='tab') いいねリスト
+            li: a(href='#supportertalk', data-toggle='tab') 応援団トーク
+          div.tab-content
+            <!-- プロフィール -->
+            div#detail_profile.tab-pane.active
+              div.detail_profile
+                div.profile_column
+                  div.profile_column_header
+                    h4.title_box #{name}さんのプロフィール
+                  div.profile_column_body
+                    table.sub
+                      tbody
+                        tr
+                          td.key.hoby 趣味
+                          td.value #{profile.hoby}
+                        tr
+                          td.key.like 好きなもの
+                          td.value #{profile.like}
+                        tr
+                          td.key.ideal-message 理想のパートナー像
+                          td.value #{profile.idealPartner}
+                        tr
+                          td.key.ideal-age お相手の希望年齢
+                          td.value #{profile.ageRangeMin} ~ #{profile.ageRangeMax}歳`
+                    table.main
+                      tbody
+                        - martialHistoryArray = ['---','なし','あり']
+                        - childrenArray = ['---','いない','いる(別居)','いる(同居)']
+                        tr
+                          td.left-key 結婚歴
+                          td.left-value #{martialHistoryArray[profile.martialHistory]}
+                          td.right-key 子供の有無
+                          td.right-value #{childrenArray[profile.hasChild]}
+
+                        - wantMarriageArray = ['---','すぐにでも','2〜3年のうちに','お相手に合わせる','特に決めてない']
+                        - wantChildArray = ['---','結婚したら欲しい','お相手と相談したい','いなくても構わない','欲しくない','特に決めてない']
+                        tr
+                          td.left-key 結婚希望時期
+                          td.left-value #{wantMarriageArray[profile.wantMarriage]}
+
+                          td.right-key 子どもの希望
+                          td.right-value #{wantChildArray[profile.wantChild]}
+
+                        - addressArray = ['---','北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県',,'滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県']
+                        - hometownArray = ['---','北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県',,'滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県']
+                        tr
+                          td.left-key 居住地
+                          td.left-value #{addressArray[profile.address]}
+
+                          td.right-key 出身地
+                          td.right-value #{hometownArray[profile.hometown]}
+
+                        - jobArray = ['会社員（営業）','会社員（技術）','会社員（企画）','会社員（サービス）','会社員（販売）','会社員（クリエイティブ）','会社員（事務）','会社員（IT）','会社員（その他）','会社役員','会社経営','国家公務員','地方公務員','自営業','専門職','団体職員','派遣社員','アルバイト','家事手伝い','学生','その他']
+                        tr
+                          td.left-key ご職業
+                          td.left-value #{jobArray[profile.job]}
+
+                          td.right-key 年収
+                          td.right-value #{profile.income} 万円
+
+                        - educationArray = ['---','中学卒','高校卒','短大卒','大卒','大学院卒','その他']
+                        - bloodTypeArray = ['---','A','B','O','AB']
+                        tr
+                          td.left-key 学歴
+                          td.left-value #{educationArray[profile.education]}
+
+                          td.right-key 血液型
+                          td.right-value #{bloodTypeArray[profile.bloodType]}
+
+                        - shapeArray = ['---','スリム','ふつう','ぽっちゃり','グラマー','ガッチリ','太め']
+                        tr
+                          td.left-key 身長
+                          td.left-value #{profile.height} cm
+
+                          td.right-key 体型
+                          td.right-value #{shapeArray[profile.shape]}
+
+                        - drinkingArray = ['---','毎日飲む','週3～4日飲む','週1～2日程度','たまに飲む','全く飲まない']
+                        - smokingArray = ['---','よく吸う','たまに吸う','まったく吸わない']
+                        tr
+                          td.left-key 飲酒習慣
+                          td.left-value #{drinkingArray[profile.drinking]}
+
+                          td.right-key 喫煙習慣
+                          td.right-value #{smokingArray[profile.smoking]}
+              div.supporter-message-list
+                h4.title_box #{name}さんの応援団おすすめ情報
+                ul
+              div.supporter-message-post-view
+                textarea
+                button.btn 応援メッセージを投稿する
+             //- マッチングリスト
+            div#matchinglist.tab-pane
+              h4.title_box マッチング情報
+              div.system.info.box-inner.container.likebox
+                ul.userpage-like-thumbnail
+              h4.title_box 応援団おすすめ情報
+              div.supporter.info.box-inner.container.likebox
+                ul.userpage-like-thumbnail
+             //- いいねリスト
+            div#likelist.tab-pane
+              h4.title_box 両想い中
+                small 'どんどんメッセージを送って会う約束をしよう！'
+              div.each-like.info.box-inner.container.likebox
+                ul.like-thumbnail
+              h4.title_box お相手が片想い
+                small 'ピピっと来たら、『いいね』をプッシュ！'
+              div.your-like.info.box-inner.container.likebox
+                ul.like-thumbnail
+              h4.title_box #{name} さんが片想い
+              div.my-like.info.box-inner.container.likebox
+                ul.like-thumbnail
+             //- 応援団トーク
+            div#supportertalk.tab-pane
+              ul.talk_list
