@@ -82,7 +82,9 @@ JST['matching/supportermessages'] = _.template(
   """
   <h4 class='title_box'><%= name %>さんの応援団おすすめ情報<h4>
   <%  _.each(messages, function(message){ %>
-    <%= JST['matching/supportermessages/li'](message) %>
+    <ul>
+      <%= JST['matching/supportermessages/li'](message) %>
+    </ul>
   <%  }); %>
   """
   )
@@ -103,7 +105,9 @@ JST['matching/supporters'] = _.template(
   """
   <h4 class='title_box'><%= name %>さんの応援団<h4>
   <%  _.each(followers, function(follower){ %>
-    <%= JST['matching/supporter/li'](follower) %>
+    <ul>
+      <%= JST['matching/supporter/li'](follower) %>
+    </ul>
   <%  }); %>
   """
   )

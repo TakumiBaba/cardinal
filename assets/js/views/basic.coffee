@@ -136,7 +136,9 @@ class App.View.ProfilePage extends Backbone.View
       ageRangeMin: parseInt $("#age_range_min").val()
       ageRangeMax: parseInt $("#age_range_max").val()
       idealPartner: $("#ideal_partner").val()
-    @.model.save detail
+    @.model.save detail,
+      success:(data)->
+        location.href = "/#/me"
 
   cancel: (e)->
     @.render()
@@ -163,56 +165,56 @@ class App.View.ProfilePage extends Backbone.View
 
 
 
-class App.View.FollowDropDownMenu extends Backbone.View
-  el:"div.recommend"
+# class App.View.FollowDropDownMenu extends Backbone.View
+#   el:"div.recommend"
 
-  events:
-    "click li": "recommend"
+#   events:
+#     "click li": "recommend"
 
-  constructor: (attrs, options)->
-    super
+#   constructor: (attrs, options)->
+#     super
 
-    @.collection = new App.Collection.Followings
-      userid: "me"
+#     @.collection = new App.Collection.Followings
+#       userid: "me"
 
-    @targetId = attrs.targetId
+#     @targetId = attrs.targetId
 
-    _.bindAll @, "appendItem", "appendAllItem"
-    @collection.bind 'add', @.appendItem
-    @collection.bind 'reset', @.appendAllItem
+#     _.bindAll @, "appendItem", "appendAllItem"
+#     @collection.bind 'add', @.appendItem
+#     @collection.bind 'reset', @.appendAllItem
 
-  render:->
-    @collection.fetch()
+#   render:->
+#     @collection.fetch()
 
-  appendItem: (model)->
-    if model.get('approval')
-      f = model.get('following')
-      attributes =
-        id: f.id
-        source: "/api/users/#{f.id}/picture"
-        name: f.firstName
-      html = JST['recommend/li'](attributes)
-      $(@.el).find('ul.recommend-following').append html
+#   appendItem: (model)->
+#     if model.get('approval')
+#       f = model.get('following')
+#       attributes =
+#         id: f.id
+#         source: "/api/users/#{f.id}/picture"
+#         name: f.firstName
+#       html = JST['recommend/li'](attributes)
+#       $(@.el).find('ul.recommend-following').append html
 
-  appendAllItem: (collection)->
-    $(@.el).find('ul.recommend-following').empty()
-    if collection.models.length > 0
-      _.each collection.models, @.appendItem
-    else
-      $(@.el).find('button').addClass 'disabled'
+#   appendAllItem: (collection)->
+#     $(@.el).find('ul.recommend-following').empty()
+#     if collection.models.length > 0
+#       _.each collection.models, @.appendItem
+#     else
+#       $(@.el).find('button').addClass 'disabled'
 
-  setTargetId: (id)->
-    @targetId = id
+#   setTargetId: (id)->
+#     @targetId = id
 
-  recommend: (e)->
-    id = $(e.currentTarget).attr 'id'
-    $.ajax
-      type: "POST"
-      url: "/api/users/#{id}/candidates/#{@targetId}"
-      data:
-        nextStatus: "promotion"
-      success: (data)->
-        console.log data
+#   recommend: (e)->
+#     id = $(e.currentTarget).attr 'id'
+#     $.ajax
+#       type: "POST"
+#       url: "/api/users/#{id}/candidates/#{@targetId}"
+#       data:
+#         nextStatus: "promotion"
+#       success: (data)->
+#         console.log data
 
 class App.View.MePage extends Backbone.View
   el: "div#main"
@@ -220,24 +222,27 @@ class App.View.MePage extends Backbone.View
   constructor : ->
     super
 
-    @model = App.User
-    @followers = new App.Collection.Followers
-      userid: "me"
+    @supporterMessages = new App.Collection.SupporterMessages
+      id: "me"
     _.bindAll @, "setSupporterMessages"
-    @followers.fetch()
-
+    @supporterMessages.bind 'reset', @setSupporterMessages
 
   render: (model)->
     requirejs ["text!/views/profile/index?time=#{Date.now()}"], (view)=>
       $(@.el).html view
 
   setSupporterMessages: (collection)->
-    _.each collection.models, (model)->
-      s = model.get 'supporter'
-      attributes =
-        source: s.profile.image_url
-        name: s.first_name
-        message: model.get('message')
-      li = JST['supporter-message/li'](attributes)
-      $("div.supporter-message-list ul").append li
+    _.each collection.models, (model)=>
+      li = new App.View.Supporting.SupporterMessage
+        parent: @
+        model: model
+      li.render()
+      # s = model.get 'supporter'
+      # attributes =
+      #   source: s.profile.image_url
+      #   name: s.first_name
+      #   message: model.get('message')
+      # li = JST['supporter-message/li'](attributes)
+      # $("div.supporter-message-list ul").append li
+
 

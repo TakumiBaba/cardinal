@@ -2,6 +2,7 @@ exports.ViewEvent = (app) ->
 
   User = app.settings.models.User
   Candidate = app.settings.models.Candidate
+  Follow = app.settings.models.Follow
 
   candidate: (req, res)->
     id = if req.params.id is 'me' then req.session.userid else req.params.id
@@ -18,13 +19,15 @@ exports.ViewEvent = (app) ->
         throw err if err
         Follow.find({_id: {$in: followIds}}).populate("from", "first_name facebook_id id").exec (err, followers)=>
           throw err if err
+          approvaledFollowers = _.filter followers, (f)->
+            return f.approval is true
           return res.render 'candidate',
             req: req
             image_url: user.profile.image_url
             name: user.first_name
             profile: user.profile
             messages: messages
-            followers: followers
+            followers: approvaledFollowers
           , (err, html)->
             return res.send html
 
@@ -53,19 +56,23 @@ exports.ViewEvent = (app) ->
 
   sidebar: (req, res)->
     id = req.session.userid
-    User.findOne({id: id}).populate('follower', "profile.image_url id").exec (err, user)->
+    User.findOne({id: id}).populate('follower').exec (err, user)->
       throw err if err
+      console.log user.follower
+      followerIds = user.follower
       if user.isSupporter is true
         return res.render 'sidebar/supporter',
           req: req
           name: user.first_name
           source: user.profile.image_url
       else
-        return res.render 'sidebar/player',
-          req: req
-          name: user.first_name
-          source: user.profile.image_url
-          followers: user.follower
+        Follow.find({_id: {$in: followerIds}}).populate('from').exec (err, followers)=>
+          throw err if err
+          return res.render 'sidebar/player',
+            req: req
+            name: user.first_name
+            source: user.profile.image_url
+            followers: followers
 
   matching: (req, res)->
     id = req.session.userid
@@ -87,4 +94,23 @@ exports.ViewEvent = (app) ->
         req: req
         source: user.profile.image_url
       , (err, html)->
+        return res.send html
+  supportUser: (req, res)->
+    User.findOne({id: req.params.userid}).populate("supporter_message").exec (err, user)->
+      throw err if err
+      name = user.get('first_name')
+      gender = if user.get('profile').gender is 'male' then "男性" else "女性"
+      birthday = user.get('profile').birthday
+      gender_birthday = "#{gender} #{moment().diff(moment(birthday), "year")}歳"
+      image_source = user.get('profile').image_url
+      messages = user.get('supporter_message')
+      return res.render 'supportuser',
+        name: name
+        gender_birthday: gender_birthday
+        image_source: image_source
+        messages: user.supporter_message
+        profile: user.get('profile')
+        req: req
+      , (err, html)->
+        throw err if err
         return res.send html

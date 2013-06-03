@@ -214,15 +214,16 @@ exports.LikeEvent = (app) ->
         if status.one.id is playerId
           oneStatus = params.myStatus
           twoStatus = params.status
+          status.one_isSystemMatching = params.isSystemMatching
         else
           oneStatus = params.status
           twoStatus = params.myStatus
+          status.two_isSystemMatching = params.isSystemMatching
         status.one_status = oneStatus
         status.two_status = twoStatus
         status.isRemoved = params.isRemoved
         status.save (err)->
           throw err if err
-          console.log status
           return res.send status
 
 

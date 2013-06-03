@@ -84,9 +84,12 @@ class Router extends Backbone.Router
     $("div#main").empty()
     if @now
       @now.undelegateEvents()
-    @now = new App.View.UserPage
+    @now = new App.View.Supporting.Page
       id: id
-    @now.model.fetch()
+    @now.render()
+    # @now = new App.View.UserPage
+    #   id: id
+    # @now.model.fetch()
 
   userpageAction: (id)->
     $("div#main").empty()

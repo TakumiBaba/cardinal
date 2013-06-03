@@ -12,8 +12,6 @@ module.exports = (app) ->
   # {ensure}
   log = app.settings.helper.logger no
 
-
-
   app.get    '/',  log,  SiteEvent.index
   app.post   '/',  log,  SiteEvent.postindex
   app.post '/hogefuga', Debug.hogefuga
@@ -42,6 +40,7 @@ module.exports = (app) ->
   app.get '/views/matching', View.matching
   app.get '/views/like', View.like
   app.get '/views/message', View.message
+  app.get '/views/supporting/:userid', View.supportUser
 
   # FollowEvent
   app.get '/api/users/:user_id/followings', Follow.following.fetch
@@ -49,6 +48,7 @@ module.exports = (app) ->
   app.get '/api/users/:from_id/request/:to_id', Follow.request.normal # get → post
   app.post '/api/users/:from_id/fbrequest/:to_facebook_id', Follow.request.facebook
   app.put '/api/users/:from_id/followings/:to_id', Follow.following.update # get → put
+  app.post '/api/users/:from_id/followings/:to_id', Follow.following.update # get → put
   app.delete '/api/users/:from_id/following/:to_id', Follow.following.delete
   app.delete '/api/users/:from_id/followers/:to_id', Follow.follower.delete
 
@@ -71,6 +71,7 @@ module.exports = (app) ->
   app.get '/api/users/:user_id/supportermessages', User.supporterMessage.fetch
   app.post '/api/users/:user_id/supportermessages/:supporter_id', User.supporterMessage.createOrUpdate
   app.get '/api/users/:user_id/supportermessages/:supporter_id/:message', User.supporterMessage.createOrUpdate
+  app.post '/api/users/:user_id/supportermessage', User.supporterMessage.test.createOrUpdate
   app.delete '/api/supportermessages/:id', User.supporterMessage.delete
 
   # LikeEvent

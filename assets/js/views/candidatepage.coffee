@@ -13,28 +13,16 @@ class App.View.CandidatePage extends Backbone.View
     super
     $(@.el).children().remove()
     @render(attrs)
-    # @.model = new App.Model.User
-    #   id: attrs.id
+    @supporterMessages = new App.Collection.SupporterMessages
+      id: attrs.id
 
-    # @.collection = new App.Collection.Followers
-    #   userid: attrs.id
-
-    # @.supporterMessages = new App.Collection.SupporterMessages
-    #   id: attrs.id
-
-    # _.bindAll @, "render", "appendFollowers", "appendSupporterMessages"
-    # @.model.bind 'change', @render
-    # @.collection.bind 'reset', @appendFollowers
-    # @.supporterMessages.bind 'reset', @appendSupporterMessages
-
-    # @.model.fetch()
-    # @.collection.fetch()
-    # @.supporterMessages.fetch()
-
+    _.bindAll @, "appendSupporterMessages"
+    @supporterMessages.bind 'reset', @appendSupporterMessages
 
   render: (attrs)->
     requirejs ["text!/views/candidate/#{attrs.id}?time=#{Date.now()}"], (view)=>
       $(@.el).html view
+      @supporterMessages.fetch()
     # user = model
     # gender = if user.get('profile').gender is 'male' then "男性" else "女性"
     # b = new Date(user.get('profile').birthday)
@@ -66,12 +54,16 @@ class App.View.CandidatePage extends Backbone.View
   appendSupporterMessages: (collection)->
     _.each collection.models, (model)=>
       s = model.get('supporter')
-      attributes =
-        source: s.profile.image_url
-        name: s.first_name
-        message: model.get('message')
-      li = JST['supporter-message/li'](attributes)
-      $(@.el).find("div.supporter-message-list ul").append li
+      li = new App.View.Supporting.SupporterMessage
+        parent: @
+        model: model
+      li.render()
+      # attributes =
+      #   source: s.profile.image_url
+      #   name: s.first_name
+      #   message: model.get('message')
+      # li = JST['supporter-message/li'](attributes)
+      # $(@.el).find("div.supporter-message-list ul").append li
 
   doLike: (e)->
     console.log e

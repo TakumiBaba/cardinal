@@ -837,7 +837,6 @@ JST['supporter/li'] = _.template(
   """
   <li id='<%= id %>' >
     <div class='thumbnail'>
-      <button class='close hide'>&times;</button>
       <a href='/#/s/<%= id %>' class='to-user'>
         <img src=<%= source %> />
         <h5><%= name %>さん</h5>
@@ -852,7 +851,6 @@ JST['supporter/request-li'] = _.template(
   """
   <li id='<%= id %>' >
     <div class='thumbnail'>
-      <button class='close hide'>&times;</button>
       <a href='/#/s/<%= id %>' class='to-user'>
         <img src=<%= source %> />
         <h5><%= name %>さん</h5>

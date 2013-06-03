@@ -3,7 +3,14 @@ html
   head
     title DingDong
     !=css('style')
-    !=css('bootstrap.min')
+    !=css('basic')
+    !=css('matching')
+    !=css('like')
+    !=css('talk')
+    !=css('message')
+    !=css('candidate')
+    !=css('supportinguser')
+    !=css('bootstrap.limit.min')
     script(src='/lib/require.js')
     script(src='/lib/jquery-1.9.1.min.js')
     script(src='/lib/underscore.min.js')
@@ -11,9 +18,10 @@ html
     script(src='/lib/bootstrap.min.js')
     script(src='/lib/moment.min.js')
 
-    !=js('script')
+    !=js('supporterscript')
     !=js('views/basic')
-    !=js('views/userpage')
+    //- !=js('views/userpage')
+    !=js('views/supporting')
     !=js('views/talk')
     !=js('views/candidatepage')
     !=js('views/supporterpage')
@@ -21,8 +29,9 @@ html
     !=js('model')
     !=js('collection')
     !=js('template')
+    !=js('template/supporter')
     script(src='/lib/connect.facebook.all.js')
   body
     div#wrapper(class="#{id}")
-      div#sidebar.pull-left.span3
-      div#main.pull-left.span10
+      div#sidebar
+      div#main

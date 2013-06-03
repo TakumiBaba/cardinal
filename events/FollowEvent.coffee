@@ -20,14 +20,15 @@ exports.FollowEvent = (app) ->
               approval: follow.approval
           return res.send list
     update: (req, res)->
+      console.log req.body, req.params
       fromId = if req.params.from_id is "me" then req.session.userid else req.params.from_id
       toId = if req.params.to_id is "me" then req.session.userid else req.params.to_id
       User.findOne({id: fromId}).populate('following').exec (err, from)=>
         throw err if err
-        follow = _.find from.following, (following)=>
+        nonApprovalFollow = _.find from.following, (following)=>
           return _.contains following.ids, toId
-        if follow
-          Follow.findOne({_id: follow._id}).populate('to', "facebook_id").populate('from', "facebook_id first_name id").exec (err, follow)->
+        if nonApprovalFollow
+          Follow.findOne({_id: nonApprovalFollow._id}).populate('to').exec (err, follow)->
             throw err if err
             if follow
               follow.approval = true
@@ -46,6 +47,13 @@ exports.FollowEvent = (app) ->
         follow = _.find user.following, (follow)=>
           return _.contains(follow.ids, fromId) and _.contains(follow.ids, toId)
         follow.remove()
+    approve: (req, res)->
+      params = req.body
+      console.log req.body
+      return res.send 'hoge'
+      # User.findOne({id: req.params.from_id}).exec (err, user)->
+      #   throw err if err
+
       # User.find({id: {$in : [fromId, toId]}}).populate('following').exec (err, users)=>
       #   throw err if err
       #   from = _.find users, (user)=>

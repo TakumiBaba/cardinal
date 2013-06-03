@@ -39,4 +39,4 @@ class App.Model.SupporterMessage extends Backbone.Model
 
   constructor: (attrs, options)->
     super
-    @.urlRoot = "/api/talks/#{attrs.talk_id}/supportermessage"
+    @.urlRoot = "/api/users/#{attrs.userid}/supportermessage"

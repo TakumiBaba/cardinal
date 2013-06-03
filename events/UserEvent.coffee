@@ -512,9 +512,33 @@ exports.UserEvent = (app) ->
         supporterMessage.save()
         user.save()
         return res.send supporterMessage
+    test:
+      createOrUpdate: (req, res)->
+        userId = req.body.userid
+        supporterId = req.body.supporterId
+        messageText = req.body.message
+        User.find({id: {$in: [userId, supporterId]}}).populate('supporter_message').exec (err, users)=>
+          throw err if err
+          user = _.find users, (u)=>
+            return u.id is userId
+          supporter = _.find users, (u)=>
+            return u.id is supporterId
+          supporterMessage = _.find user.supporter_message, (message)->
+            return message.supporterId is supporter.id
+          unless supporterMessage
+            supporterMessage = new SupporterMessage()
+            supporterMessage.supporterId = supporter.id
+            supporterMessage.supporter = supporter._id
+            user.supporter_message.push supporterMessage
+          supporterMessage.message = messageText
+          supporterMessage.save()
+          user.save()
+          return res.send supporterMessage
 
     delete: (req, res)->
+      console.log 'supporter message delete'
       sm_id = req.params.id
+      console.log sm_id
       SupporterMessage.findOne _id: sm_id, (err, message)->
         throw err if err
         message.remove()

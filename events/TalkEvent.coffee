@@ -10,7 +10,6 @@ exports.TalkEvent = (app) ->
     id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
     User.findOne({id: id}).populate("news").exec (err, user)->
       throw err if err
-      console.log user.talks
       # exclude リストに、自分のIDを入れてみる
       Talk.find({_id: {$in: user.talks}, candidate: {$ne: user._id}}).populate('candidate').populate('user').populate('count', "id first_name").exec (err, talks)=>
         throw err if err
@@ -35,6 +34,7 @@ exports.TalkEvent = (app) ->
         t = user if user.id is two
       Talk.findOne({}).where("candidate").in([o._id, t._id]).where("user").in([o._id, t._id]).exec (err, talk)=>
         throw err if err
+        console.log talk
         unless talk
           talk = new Talk()
           talk.user = o._id

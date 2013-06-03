@@ -80,7 +80,7 @@ exports.SiteEvent = (app) ->
             , (response)->
               throw response.error if !response or response.error
               console.log response
-              return res.send response
+              res.send response
 
     if signed_request is "" || facebook_id is ""
       return res.redirect "/login"

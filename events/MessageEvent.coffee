@@ -61,7 +61,6 @@ exports.MessageEvent = (app) ->
         throw err if err
         Message.find({_id: {$in: list.messages}}).populate('from', "id first_name").exec (err, messages)->
           throw err if err
-          console.log messages
           return res.send messages
     create: (req, res)->
       params = req.body
@@ -86,7 +85,6 @@ exports.MessageEvent = (app) ->
       userid = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
       candidateid = req.params.candidate_id
       text = req.body.text
-      console.log userid, candidateid
       User.find {id: {$in: [userid, candidateid]}}, (err, users)=>
         throw err if err
         f = _.find users, (u)->
