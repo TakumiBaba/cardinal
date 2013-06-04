@@ -1,6 +1,6 @@
 {
   "port": 1218,
-  "env": "test",
+  "env": "development",
   "maxage": 604800,
   "migration": false,
   "appSecret": "9da6d32dc52a4370fce032a86ab6ceda",
