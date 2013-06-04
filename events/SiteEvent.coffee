@@ -250,7 +250,7 @@ exports.SiteEvent = (app) ->
         user.profile.gender = params.gender
         user.isSuppoter = true
         user.isFirstLogin = false
-        user.profile.image_url = "https://graph.facebook.com/#{params.id}/picture?type=large"
+        user.profile.image_url = "https://graph.facebook.com/#{params.id}/picture"
         user.save()
         req.session.userid = user.id
         json =

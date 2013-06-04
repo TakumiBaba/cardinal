@@ -13,17 +13,23 @@ div.sidebar-inner
     ul.nav.nav-list
       li.nav-header メニュー
       li.like: a(href='/#/like') いいねリスト
-      li.talk: a.talk-badge(href='/#/talk') 応援トーク
-        span.badge.badge-important.talk-badge
       li.message: a.message-badge(href='/#/message') メッセージ
         span.badge.badge-important.message-badge
+      li.talk: a.talk-badge(href='/#/talk') 応援トーク
+        span.badge.badge-important.talk-badge
+      li.supporter: a(href="/#/supporter") 婚活仲間リスト
       li.divider
-      li.test: a(href='/#/invite') 応援団を増やす
-      li.supporter: a(href='/#/supporter') あなたの婚活仲間
+      //- li.test: a(href='/#/invite') 応援団を増やす
+      li あなたの婚活応援団
     ul.follower
       - each follower in followers
-        - console.log(follower)
         li: img(src="#{follower.from.profile.image_url}")
+      button.btn 応援団を増やす
+
+    //- ul.follower
+    //-   - each follower in followers
+    //-     - console.log(follower)
+    //-     li: img(src="#{follower.from.profile.image_url}")
     ul.bottom
       li.use-policy: a(data-toggle="modal", data-target="#usepolicy") 利用規約
       li: a(href="https://www.facebook.com/about/privacy/", target="_blank") プライバシーポリシー

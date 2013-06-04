@@ -328,18 +328,18 @@ exports.DebugEvent = (app) ->
       return res.send 'ok'
 
   Dammy:
-    create: (req, res)->
-      _.each [0..99], (i)=>
-        fbid = i+10000
-        User.findOne facebook_id: fbid, (err, user)=>
-          console.log err if err
-          unless user
-            user = new User()
+    User:
+      create: (req, res)->
+        _.each [0..99], (i)=>
+          fbid = i+10000
+          User.findOne facebook_id: fbid, (err, user)=>
+            console.log err if err
+            unless user
+              user = new User()
             sha1_hash = Crypto.createHash 'sha1'
             sha1_hash.update "#{fbid+10000}"
             lastName = lastNames[i]
             k = Math.floor i/2
-            console.log k
             firstName = if i%2 is 0 then firstNames_men[k] else firstNames_women[k]
             user.name = "#{lastName}#{firstName}"
             user.first_name = firstName
@@ -381,4 +381,69 @@ exports.DebugEvent = (app) ->
             user.news.push news
             console.log user.name
             user.save()
-      return res.send 'dammy create!'
+        return res.send 'dammy create!'
+    Supporter:
+      create:(req, res)->
+        id = req.params.userid
+        User.findOne({id: id}).exec (err, user)->
+          throw err if err
+          User.find().where("facebook_id").gt(10000).lt(10100).exec (err, dammies)=>
+            throw err if err
+            shuffled = _.shuffle dammies
+            _.each [0..11], (i)->
+              dammy = shuffled[i]
+              if i <= 4
+                console.log "following"
+                follow = new Follow
+                  from: user._id
+                  to: dammy._id
+                  ids: [user.id, dammy.id]
+                  approval: true
+                follow.save()
+                user.following.push follow._id
+                console.log user.following
+                console.log dammy.follower
+                dammy.follower.push follow._id
+              else if 4 < i <= 8
+                console.log "follower"
+                follow = new Follow
+                  from: dammy._id
+                  to: user._id
+                  ids: [dammy.id, user.id]
+                  approval: true
+                follow.save()
+                user.follower.push follow
+                dammy.following.push follow
+              else if 9 <= i <= 10
+                console.log "following and follower"
+                follow_ = new Follow
+                  from: user._id
+                  to: dammy._id
+                  ids: [user.id, dammy.id]
+                  approval: true
+                follow_.save()
+                user.following.push follow_
+                dammy.follower.push follow_
+                follow = new Follow
+                  from: dammy._id
+                  to: user._id
+                  ids: [dammy.id, user.id]
+                  approval: true
+                follow.save()
+                user.follower.push follow
+                dammy.following.push follow
+              else
+                console.log "request"
+                follow = new Follow
+                  from: dammy._id
+                  to: user._id
+                  ids: [dammy.id, user.id]
+                  approval: false
+                follow.save()
+                user.follower.push follow
+                dammy.following.push follow
+              user.save()
+              dammy.save()
+              console.log follow
+
+            return res.send 'dammies'
