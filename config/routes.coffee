@@ -100,6 +100,7 @@ module.exports = (app) ->
   app.delete '/debug/sdk/request', Debug.facebooksdk.deleteRequest
   app.get '/debug/api/reset/statuses/:id', Debug.reset.statuses
   app.get '/debug/api/users/:user_id/status/removecancel', Debug.removeCancel
+  app.get '/debug/api/dammy/create', Debug.Dammy.create
   # app.get '/debug/api/users/me/sm/delete', User.supporterMessage.delete
 
   return SiteEvent.failure

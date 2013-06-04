@@ -21,21 +21,7 @@ module.exports = (app, done) ->
     console.log 'migration'
 
     User.find {}, (err, users)->
-      _.each users, (user)->
-        user.remove()
-      Message.find {}, (err, messages)->
-        _.each messages, (message)->
-          message.remove()
-      Follow.find {}, (err, follows)->
-        _.each follows, (follow)->
-          follow.remove()
-      Talk.find {}, (err, talks)->
-        _.each talks, (talk)->
-          talk.remove()
-      Status.find {}, (err, statuses)->
-        _.each statuses, (status)->
-          status.remove()
-
+      throw err if err
       _.each [0..100], (i)=>
         fbid = i+10000
         User.findOne facebook_id: fbid, (err, user)=>
@@ -61,10 +47,14 @@ module.exports = (app, done) ->
             user.profile.age = age
             user.isMarried = false
             user.profile.image_url = "/image/friends/#{if i%24 is 0 then 25 else i%24}.jpg"
-            user.profile.message = "こんばんわ！#{i}です！"
+            user.profile.message = "こんばんわ！#{user.first_name}です！"
             user.isSupporter = false
             p = user.profile
-            p.birthday = Date.now()
+            y = 1960+Math.floor(Math.random()*30)
+            m = 1+Math.floor(Math.random()*13)
+            d = 1+Math.floor(Math.random()*30)
+            birthday = moment(y+m+d)
+            p.birthday = new Date(birthday)
             p.martialHistory = i%4
             p.hasChild = i%5
             p.wantMarriage = i%6
@@ -80,7 +70,7 @@ module.exports = (app, done) ->
             p.drinking = i%7
             p.smoking = i%5
             news = new News()
-            news.text = "#{i}さんがDing Dongを始めました！"
+            news.text = "#{user.first_name}さんがDing Dongを始めました！"
             user.news.push news
             console.log user.name
             user.save()

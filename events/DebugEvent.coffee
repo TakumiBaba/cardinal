@@ -320,3 +320,61 @@ exports.DebugEvent = (app) ->
         status.isRemoved = false
         # status.save()
       return res.send 'ok'
+
+  Dammy:
+    create: (req, res)->
+      User.find {}, (err, users)->
+      throw err if err
+      _.each [0..100], (i)=>
+        fbid = i+10000
+        User.findOne facebook_id: fbid, (err, user)=>
+          console.log err if err
+          unless user
+            user = new User()
+            sha1_hash = Crypto.createHash 'sha1'
+            sha1_hash.update "#{i+10000}"
+            lastName = lastNames[i]
+            k = Math.floor i/2
+            console.log k
+            firstName = if i%2 is 0 then firstNames_men[k] else firstNames_women[k]
+            user.name = "#{lastName}#{firstName}"
+            user.first_name = firstName
+            user.last_name = lastName
+            user.facebook_id = fbid
+            user.id = sha1_hash.digest 'hex'
+            if i%2 is 0
+              user.profile.gender = 'male'
+            else
+              user.profile.gender = 'female'
+            age = parseInt (20+(Math.floor(Math.random()*40)))
+            user.profile.age = age
+            user.isMarried = false
+            user.profile.image_url = "/image/friends/#{if i%24 is 0 then 25 else i%24}.jpg"
+            user.profile.message = "こんばんわ！#{user.first_name}です！"
+            user.isSupporter = false
+            p = user.profile
+            y = 1960+Math.floor(Math.random()*30)
+            m = 1+Math.floor(Math.random()*13)
+            d = 1+Math.floor(Math.random()*30)
+            birthday = moment(y+m+d)
+            p.birthday = new Date(birthday)
+            p.martialHistory = i%4
+            p.hasChild = i%5
+            p.wantMarriage = i%6
+            p.wantChild = i%6
+            p.address = i%48
+            p.hometown = i%48
+            p.job = i%23
+            p.income = i*100
+            p.height = 160+(i*30)
+            p.education = i%7
+            p.bloodType = i%5
+            p.shape = i%9
+            p.drinking = i%7
+            p.smoking = i%5
+            news = new News()
+            news.text = "#{user.first_name}さんがDing Dongを始めました！"
+            user.news.push news
+            console.log user.name
+            user.save()
+    return res.send 'dammy create!'
