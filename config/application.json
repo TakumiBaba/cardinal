@@ -1,12 +1,13 @@
 {
   "port": 1218,
-  "env": "development",
+  "env": "test",
   "maxage": 604800,
   "migration": false,
   "appSecret": "9da6d32dc52a4370fce032a86ab6ceda",
   "appId":  381551511881912,
   "mongo": {
     "development": "mongodb://localhost/condom-development",
-    "production": "mongodb://localhost/condom-production"
+    "production": "mongodb://localhost/condom-production",
+    "test": "mongodb://localhost/dingodng-test"
   }
 }

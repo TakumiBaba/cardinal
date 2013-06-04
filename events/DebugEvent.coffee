@@ -7,6 +7,7 @@ exports.DebugEvent = (app) ->
   Talk = app.settings.models.Talk
   Comment = app.settings.models.Comment
   Follow = app.settings.models.Follow
+  News = app.settings.models.News
   Status = app.settings.models.Status
   SupporterMessage = app.settings.models.SupporterMessage
 
@@ -16,6 +17,7 @@ exports.DebugEvent = (app) ->
 
   Config = app.settings.config
   FB = require 'fb'
+  Crypto = require 'crypto'
 
   lastNames = ["佐藤","鈴木","高橋","田中","伊藤","山本","渡辺","中村","小林","加藤","吉田","山田","佐々木","山口","松本","井上","木村","斎藤","林","清水","山崎","阿部","森","池田","橋本","山下","石川","中島","前田","藤田","小川","後藤","岡田","長谷川","村上","石井","近藤","坂本","遠藤","藤井","青木","西村","福田","斉藤","太田","藤原","三浦","岡本","松田","中川","中野","小野","原田","田村","竹内","金子","和田","中山","石田","上田","森田","柴田","酒井","原","横山","宮崎","工藤","宮本","内田","高木","谷口","安藤","大野","丸山","今井","高田","藤本","河野","小島","村田","武田","上野","杉山","増田","平野","菅原","小山","久保","大塚","千葉","松井","岩崎","木下","松尾","野口","野村","佐野","菊地","渡部"]
   firstNames_men = ["蓮","颯太","大翔","大和","翔太","湊","悠人","大輝","蒼空","龍生","陽","陽斗","陸","陸斗","颯真","瑛太","悠真","颯汰","樹","蒼大","悠斗","陽太","一颯","結人","虎太郎","太陽","隼人","遥斗","陽向","颯","海翔","優心","陽翔","龍之介","翔","輝","結斗","春輝","晴","蒼","蒼介","智也","直輝","優希","悠翔","陽大","翼","琉生","颯介","絢斗"]
@@ -327,16 +329,14 @@ exports.DebugEvent = (app) ->
 
   Dammy:
     create: (req, res)->
-      User.find {}, (err, users)->
-      throw err if err
-      _.each [0..100], (i)=>
+      _.each [0..99], (i)=>
         fbid = i+10000
         User.findOne facebook_id: fbid, (err, user)=>
           console.log err if err
           unless user
             user = new User()
             sha1_hash = Crypto.createHash 'sha1'
-            sha1_hash.update "#{i+10000}"
+            sha1_hash.update "#{fbid+10000}"
             lastName = lastNames[i]
             k = Math.floor i/2
             console.log k
@@ -381,4 +381,4 @@ exports.DebugEvent = (app) ->
             user.news.push news
             console.log user.name
             user.save()
-    return res.send 'dammy create!'
+      return res.send 'dammy create!'
