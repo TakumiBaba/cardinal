@@ -23,12 +23,6 @@ div.sidebar-inner
       - each follower in followers
         li: img(src="#{follower.from.profile.image_url}")
     button.request.btn 応援団を増やす
-
-    //- ul.follower
-    //-   - each follower in followers
-    //-     - console.log(follower)
-    //-     li: img(src="#{follower.from.profile.image_url}")
     ul.bottom
-
       li.use-policy: a(data-toggle="modal", data-target="#usepolicy"): small 利用規約
       li: a(href="https://www.facebook.com/about/privacy/", target="_blank"): small プライバシーポリシー

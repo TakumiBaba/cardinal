@@ -66,7 +66,7 @@ exports.ViewEvent = (app) ->
           name: user.first_name
           source: user.profile.image_url
       else
-        Follow.find({_id: {$in: followerIds}}).populate('from').exec (err, followers)=>
+        Follow.find({_id: {$in: followerIds}}).populate('from').where('approval').equals(true).exec (err, followers)=>
           throw err if err
           return res.render 'sidebar/player',
             req: req
@@ -114,3 +114,10 @@ exports.ViewEvent = (app) ->
       , (err, html)->
         throw err if err
         return res.send html
+
+  usage: (req, res)->
+    return res.render "usage",
+      req: req
+    , (err, html)->
+      throw err if err
+      return res.send html

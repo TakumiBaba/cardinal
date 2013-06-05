@@ -425,7 +425,7 @@ JST['like/thumbnail'] = _.template(
       <a href="<%= href %>" class="action_button">
         <img class="action_button l_d_<%= status %>" src=<%= button_source %> />
       </a>
-      <a href="<%= href %>" class='to-talk'><span>応援トークをする</span></a>
+      <a href="/#/talk" class='to-talk'><span>応援トークをする</span></a>
     </div>
   </li>
   """

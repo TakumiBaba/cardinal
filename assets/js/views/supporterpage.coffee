@@ -132,13 +132,17 @@ class App.View.SupporterPageLi extends Backbone.View
   events:
     "click a.to-user": "toUser"
     "click a.delete": "remove"
-    "click button.request": "approve"
+    "click a.request": "approve"
 
   constructor: (attrs)->
     super
     @parent = attrs.parent
     @model = attrs.model
     @type = attrs.type
+
+    _.bindAll @, "destroy"
+    @model.bind 'destroy', @destroy
+
   render: ->
     f =  if @model.get('following') then @model.get('following') else @model.get('follower')
     attributes =
@@ -163,9 +167,13 @@ class App.View.SupporterPageLi extends Backbone.View
     $(@parent.el).find("div#request ul").append @.el
 
   approve: (e)->
+    console.log "approve"
+    e.preventDefault()
     # console.log @model.collection
     # @model.set "approval", true
-    @model.urlRoot = "/api/users/#{App.User.get('id')}/followings/#{@model.get('following').id}"
+    # @model.urlRoot = "/api/users/#{App.User.get('id')}/followings/#{@model.get('following').id}"
+    @model.urlRoot = "/api/follow/"
+    @model.set 'id', @model.get '_id'
     params =
       approval: true
     _this = @
@@ -180,14 +188,18 @@ class App.View.SupporterPageLi extends Backbone.View
 
 
   remove: (e)->
+    e.preventDefault()
     target = $(e.currentTarget)
     if !target.hasClass 'deleteFlag'
       target.addClass 'deleteFlag'
       target.html "本当に削除しますか?"
       return false
-    console.log @model
-    @model.destroy
-      success: (data)->
+    @model.urlRoot = "/api/follow/"
+    @model.set 'id', @model.get '_id'
+    @model.destroy()
+
+  destroy: (model)=>
+    $(@.el).remove()
 
   toUser: (e)->
     e.preventDefault()

@@ -87,15 +87,18 @@ class App.View.TalkUnit extends Backbone.View
       console.log @model.get "_id"
       comment = new App.Model.Comment
         talk_id: @model.get "_id"
-      comment.set
+      detail =
         user: App.User.get('id')
-        text: input.val()
+        text: _.escape input.val()
         count: 0
         created_at: Date.now()
-      comment.save()
+      comment.save detail,
+        success: (model)=>
+          @comments.collection.add comment
+          input.val("")
       # あとで、イベント後発行に
-      @comments.collection.add comment
-      input.val("")
+      # @comments.collection.add comment
+
 
   count: (e)->
     console.log 'count'
@@ -143,7 +146,7 @@ class App.View.Comments extends Backbone.View
     created_at = "#{d.getMonth()+1}月#{d.getDate()}日 #{hours}:#{minutes}"
     attributes =
       source: "/api/users/#{model.get('user')}/picture"
-      message: model.get('text')
+      message: _.escape model.get('text')
       created_at: created_at
     html = JST['talk/comment'](attributes)
     $(@.el).prepend html

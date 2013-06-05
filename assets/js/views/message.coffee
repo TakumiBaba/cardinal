@@ -150,7 +150,7 @@ class App.View.MessageView extends Backbone.View
     attributes =
       source: "/api/users/#{model.get('from').id}/picture"
       name: model.get('from').first_name
-      text: model.get('text')
+      text: _.escape model.get('text')
       created_at: moment(model.get("created_at")).format("LLL")
     @ul.prepend JST['message/body'](attributes)
 
@@ -158,13 +158,15 @@ class App.View.MessageView extends Backbone.View
   postMessage: (e)->
     text = $('input.comment_area').val()
     message = new App.Model.Message()
-    message.set
-      text: text
+    detail =
+      text: _.escape text
       from: App.User.get('_id')
       parent: @messages.id
     message.urlRoot = "/api/messagelist/#{@messages.id}/message"
-    message.save()
-    console.log message
+    message.save detail,
+      success: (model)=>
+        @messages.add model
+        $('input.comment_area').val("")
 
     # $.ajax
     #   type: "POST"

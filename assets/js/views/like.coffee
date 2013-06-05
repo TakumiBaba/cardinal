@@ -70,26 +70,26 @@ class App.View.Like.Thumbnail extends Backbone.View
     @parent.append @.el
 
   like: (e)->
-    @mode.set "myStatus", true
-    @mode.save
-      success: (data)->
+    detail =
+      myStatus: true
+    @model.save detail,
+      success: (model)=>
         # success が呼ばれてない
-        console.log data
+        $(@.el).remove()
+        thumbnail = new App.View.Like.Thumbnail
+          model: model
+        thumbnail.render()
     e.preventDefault()
     console.log e
   cancel: (e)->
-    @model.set "myStatus", false
-    @model.set "isRemoved", true
-    _li = @
-    @model.save
-      success: (data)->
-        # success が呼ばれてない
-        console.log _li
-        console.log @
-        $(_li.el).hide()
+    detail =
+      myStatus: false
+      isRemoved: true
+    @model.save detail,
+      success: (data)=>
+        $(@.el).remove()
     e.preventDefault()
   message: (e)->
-    e.preventDefault()
     $.ajax
       type: "POST"
       url: "/api/users/me/messages/#{@model.get('user').id}"
@@ -98,17 +98,14 @@ class App.View.Like.Thumbnail extends Backbone.View
           location.href = "/#/message"
 
   talk: (e)->
-    e.preventDefault()
-    $.ajax
-      type: "POST"
-      url: "/api/talks.json"
-      data:
-        one: "me"
-        two: @model.get('user').id
-      success:(data)->
-        if data
-          location.href = "/#/talk"
-
+    talk = new Backbone.Model()
+    talk.urlRoot = "/api/talks.json"
+    detail =
+      one: App.User.get('id')
+      two: @model.get("user").id
+    talk.save detail,
+      success: (model)->
+        location.href = "/#/talk"
 
 # class App.View.LikePage extends Backbone.View
 #   el: "div#main"

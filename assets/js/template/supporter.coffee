@@ -30,8 +30,8 @@ JST['supporter/request/thumbnail'] = _.template(
         <img src=<%= source %> />
         <h5><%= name %>さん</h5>
       </a>
-      <button class='btn request'>応援する</button>
-      <a class='delete'>削除する</a>
+      <a href="/#/request" class='request'>応援する</a>
+      <a href="/#/delete" class='delete'>削除する</a>
     </div>
   """
   )

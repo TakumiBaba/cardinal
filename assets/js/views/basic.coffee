@@ -17,36 +17,6 @@ class App.View.Sidebar extends Backbone.View
   invite: ->
     location.href = "/#/invite"
 
-    # _.bindAll @, "render"
-    # @.model.bind 'change', @render
-    # @followers = new App.Collection.Followers
-    #   userid: "me"
-    # @followers.bind 'reset', @setFollower
-
-  # render: (model)=>
-  #   isSupporter = model.get('isSupporter')
-  #   if isSupporter is false
-  #     attributes =
-  #       name: model.get('first_name')
-  #       source: model.get('profile').image_url
-  #     html = JST['sidebar/main'](attributes)
-  #   else
-  #     attributes =
-  #       name: model.get('first_name')
-  #       source: model.get('profile').image_url
-  #     html = JST['sidebar/supporter'](attributes)
-  #     location.href = "/#/supporter"
-  #   $(@.el).html html
-  #   @followers.fetch()
-
-  # setFollower: (collection)->
-  #   _.each collection.models, (model)=>
-  #     console.log model.get('follower').firstname
-  #     attributes =
-  #       id: model.get('follower').id
-  #     li = JST['sidebar/follower'](attributes)
-  #     $('ul.sidebar-follower-list').append li
-
   modalUsePolicy: ->
     console.log 'use policy'
     if $("div.usepolicy").length < 1
@@ -128,12 +98,12 @@ class App.View.ProfilePage extends Backbone.View
       height: $("#height").val()
       drinking: parseInt($("#drinking").val())
       smoking: parseInt($("#smoking").val())
-      hoby: $("#hoby").val()
+      hoby: _.escape $("#hoby").val()
       like: likelist
-      message: $("#message").val()
+      message: _.escape $("#message").val()
       ageRangeMin: parseInt $("#age_range_min").val()
       ageRangeMax: parseInt $("#age_range_max").val()
-      idealPartner: $("#ideal_partner").val()
+      idealPartner: _.escape $("#ideal_partner").val()
     @.model.save detail,
       success:(data)->
         location.href = "/#/me"
@@ -161,58 +131,6 @@ class App.View.ProfilePage extends Backbone.View
         if data is true
           $(e.currentTarget).parent().parent().parent().remove()
 
-
-
-# class App.View.FollowDropDownMenu extends Backbone.View
-#   el:"div.recommend"
-
-#   events:
-#     "click li": "recommend"
-
-#   constructor: (attrs, options)->
-#     super
-
-#     @.collection = new App.Collection.Followings
-#       userid: "me"
-
-#     @targetId = attrs.targetId
-
-#     _.bindAll @, "appendItem", "appendAllItem"
-#     @collection.bind 'add', @.appendItem
-#     @collection.bind 'reset', @.appendAllItem
-
-#   render:->
-#     @collection.fetch()
-
-#   appendItem: (model)->
-#     if model.get('approval')
-#       f = model.get('following')
-#       attributes =
-#         id: f.id
-#         source: "/api/users/#{f.id}/picture"
-#         name: f.firstName
-#       html = JST['recommend/li'](attributes)
-#       $(@.el).find('ul.recommend-following').append html
-
-#   appendAllItem: (collection)->
-#     $(@.el).find('ul.recommend-following').empty()
-#     if collection.models.length > 0
-#       _.each collection.models, @.appendItem
-#     else
-#       $(@.el).find('button').addClass 'disabled'
-
-#   setTargetId: (id)->
-#     @targetId = id
-
-#   recommend: (e)->
-#     id = $(e.currentTarget).attr 'id'
-#     $.ajax
-#       type: "POST"
-#       url: "/api/users/#{id}/candidates/#{@targetId}"
-#       data:
-#         nextStatus: "promotion"
-#       success: (data)->
-#         console.log data
 
 class App.View.MePage extends Backbone.View
   el: "div#main"
@@ -244,3 +162,12 @@ class App.View.MePage extends Backbone.View
       # $("div.supporter-message-list ul").append li
 
 
+class App.View.Usage extends Backbone.View
+  el: "div#main"
+
+  constructor: ->
+    super
+
+  render: ->
+    requirejs ["text!/views/usage"], (view)=>
+      $(@.el).html view

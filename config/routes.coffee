@@ -41,6 +41,7 @@ module.exports = (app) ->
   app.get '/views/like', View.like
   app.get '/views/message', View.message
   app.get '/views/supporting/:userid', View.supportUser
+  app.get '/views/usage', View.usage
 
   # FollowEvent
   app.get '/api/users/:user_id/followings', Follow.following.fetch
@@ -49,8 +50,10 @@ module.exports = (app) ->
   app.post '/api/users/:from_id/fbrequest/:to_facebook_id', Follow.request.facebook
   app.put '/api/users/:from_id/followings/:to_id', Follow.following.update # get → put
   app.post '/api/users/:from_id/followings/:to_id', Follow.following.update # get → put
-  app.delete '/api/users/:from_id/following/:to_id', Follow.following.delete
+  # app.delete '/api/users/:from_id/following/:to_id', Follow.following.delete
+  app.delete '/api/follow/:follow_id', Follow.following.delete
   app.delete '/api/users/:from_id/followers/:to_id', Follow.follower.delete
+  app.put '/api/follow/:follow_id', Follow.following.bUpdate
 
   # TalkEvent
   app.get '/api/users/:user_id/talks.json', Talk.fetch

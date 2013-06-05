@@ -41,9 +41,12 @@ class App.View.MatchingPage extends Backbone.View
     if t.hasClass 'system'
       @supporterList.hide()
       @systemList.show()
+      if @systemList.collection.getBySystems().length > 0 then $(@profileView.el).show() else $(@profileView.el).hide()
     else if t.hasClass 'supporter'
       @supporterList.show()
       @systemList.hide()
+      if @supporterList.collection.getBySupporters().length > 0 then $(@profileView.el).show() else $(@profileView.el).hide()
+
 
 class App.View.Matching.UserList extends Backbone.View
   el: "ul.user_list"
@@ -172,16 +175,29 @@ class App.View.Matching.Profile extends Backbone.View
     supporters.fetch()
 
   like: (e)->
-    console.log @model
-    @model.set "myStatus", true
+    detail =
+      myStatus: true
     @model.urlRoot = "/api/users/#{App.User.get('id')}/candidates"
-    @model.save
+    @model.save detail,
       success: (data)=>
-        console.log data
+        $(@.el).find("img.like").hide()
+        $(@.el).find("img.like").remove()
     e.preventDefault()
   message: (e)->
-    console.log e
+    $.ajax
+      type: "POST"
+      url: "/api/users/me/#{@model.get('user').id}/message"
+      success:(data)->
+        if data
+          location.href = "/#/message"
   talk: (e)->
+    talk = new Backbone.Model()
+    talk.urlRoot = "/api/talks.json"
+    talk.set
+      one: App.User.get('id')
+      two: @model.get("user").id
+    talk.save()
+    e.preventDefault()
     console.log e
 
 # class App.View.MatchingListView extends Backbone.View

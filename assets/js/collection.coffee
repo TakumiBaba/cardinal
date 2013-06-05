@@ -22,14 +22,12 @@ class App.Collection.PreCandidates extends Backbone.Collection
       return model.get('isSystemMatching') is false
 
 class App.Collection.Followings extends Backbone.Collection
-  model: App.Model.User
 
   constructor: (attrs, options)->
     super
     @.url = "/api/users/#{attrs.userid}/followings"
 
 class App.Collection.Followers extends Backbone.Collection
-  model: App.Model.User
 
   constructor: (attrs, options)->
     super
