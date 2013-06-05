@@ -28,6 +28,9 @@ class Router extends Backbone.Router
       @now.undelegateEvents()
     if action is undefined
       action = 'matching'
+    $("ul.menu li").each ()->
+      $(@).removeClass "target"
+    $("ul.menu li.#{action}").addClass 'target'
     switch action
       # when 'index'
       when 'matching'

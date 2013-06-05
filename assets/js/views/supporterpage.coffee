@@ -131,7 +131,7 @@ class App.View.SupporterPageLi extends Backbone.View
 
   events:
     "click a.to-user": "toUser"
-    "click button.delete": "remove"
+    "click a.delete": "remove"
     "click button.request": "approve"
 
   constructor: (attrs)->

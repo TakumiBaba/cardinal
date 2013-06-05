@@ -77,6 +77,8 @@ class App.View.Message.UserList extends Backbone.View
     @collection.bind 'reset', @setCollection
 
   changeModel: (clickedLi)->
+    console.log clickedLi.model
+    # $(@.el).find('div.message-header h5').html("#{model.get('from').first_name}さんとのやりとり")
     @setMessages clickedLi.model
     _.each $(@.el).children(), (child)->
       if $(child).hasClass 'active'
@@ -151,7 +153,6 @@ class App.View.MessageView extends Backbone.View
       text: model.get('text')
       created_at: moment(model.get("created_at")).format("LLL")
     @ul.prepend JST['message/body'](attributes)
-    $(@.el).find('div.message-header h5').html("#{model.get('from').first_name}さんとのやりとり")
 
 
   postMessage: (e)->

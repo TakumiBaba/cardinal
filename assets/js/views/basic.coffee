@@ -5,8 +5,7 @@ class App.View.Sidebar extends Backbone.View
   el: "div#sidebar"
 
   events:
-    "click a.usage": "modalUsage"
-    "click li.use-policy": "modalUsePolicy"
+    "click button.request": "invite"
 
   constructor: ->
     super
@@ -14,6 +13,10 @@ class App.View.Sidebar extends Backbone.View
   render: ->
     requirejs ["text!/views/sidebar?time=#{Date.now()}"], (view)=>
       $(@.el).html view
+
+  invite: ->
+    location.href = "/#/invite"
+
     # _.bindAll @, "render"
     # @.model.bind 'change', @render
     # @followers = new App.Collection.Followers
@@ -44,11 +47,6 @@ class App.View.Sidebar extends Backbone.View
   #     li = JST['sidebar/follower'](attributes)
   #     $('ul.sidebar-follower-list').append li
 
-  modalUsage: ->
-    if $("div.usage").length < 1
-      $("body").append JST['usage/page']()
-    $("div.usage").modal
-      keyboard: true
   modalUsePolicy: ->
     console.log 'use policy'
     if $("div.usepolicy").length < 1

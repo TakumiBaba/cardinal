@@ -1,6 +1,13 @@
 div#user_page
+  margin-left: 10px
+  h3
+    font-size: 16px
+  small
+    font-weight: normal
+  h4.title_box
+    padding: 5px
   div.profile_header
-    width: 559px
+    width: 549px
     div.p_h_left
       float: left
       width: 100px
@@ -10,87 +17,114 @@ div#user_page
         height: 90px
     div.p_h_right
       float: left
-      width: 450px
+      width: 440px
       h4.title_box
         float: left
-        width: 450px
-        height: 25px
-      p.message
+        width: 440px
+        margin-bottom: 5px
+      small.message
         float: left
-        width: 450px
+        width: 440px
         min-height: 70px
   div.detail_profile
     div.profile_column
-      width: 559px
+      width: 549px
     div.profile_column_body
       h4.title_box
-        width: 559px
+        width: 549px
       float: left
-      width: 559px
+      width: 549px
+      table
+        margin-bottom: 10px
+        font-size: 12px
+        td
+          padding: 5px
       table.sub
-        width: 559px
-        font-size: 11px
+        width: 549px
+        margin-top: 5px
         tbody
           tr
             height: 5px
             td.key
-              background-color: #ccffcc
+              background-color: #cef6ec
               width: 130px
-              font-weight: bold
             td.value
               width: 340px
       table.main
-        width: 559px
-        font-size: 11px
+        width: 549px
         tr
           height: 5px
         td.left-key
-          background-color: #ccffcc
+          background-color: #cef6ec
           width: 100px
-          font-weight: bold
         td.left-value
           width: 100px
         td.right-key
-          background-color: #ccffcc
+          background-color: #cef6ec
           width: 130px
           font-weight: bold
         td.right-value
           width: 140px
     div.supporter-message-list
-      width: 559px
-      li
-        padding-top: 15px
-        margin-bottom: 15px
-        div.message_clm
-          clear: left
-          width: 559px
-          padding: 0px 10px 10px 10px
-          div.message_left
-            float: left
-            min-height: 100px
+      width: 549px
+      ul
+        padding-left: 0px
+        li
+          margin-left: 0px
+          padding-top: 15px
+          margin-bottom: 15px
+          div.s-message-left
             height: 100%
             width: 50px
-            img.message_img
-              float: left
-              width: 32px
-              height: 32px
-              display: block
-          div.message_line
             float: left
+            img
+              width: 40px
+              height: 40px
+              float: right
+          div.s-message-right
             height: 100%
-            width: 400px
-            margin-left: 8px
-            font-size: 12px
-            color: #666
+            width: 450px
+            float: left
+            margin-left: 5px
+            div.s-messge-header
+              height: 20%
+              width: 450px
+              float: left
+            div.s-message-body
+              height: 79%
+              width: 450px
+              float: left
+        // div.message_clm
+        //   clear: left
+        //   width: 549px
+        //   padding: 0px 10px 10px 10px
+        //   div.message_left
+        //     float: left
+        //     min-height: 100px
+        //     height: 100%
+        //     width: 50px
+        //     img
+        //       float: left
+        //       width: 32px
+        //       height: 32px
+        //       display: block
+        //   div.message_line
+        //     float: left
+        //     height: 100%
+        //     width: 400px
+        //     margin-left: 8px
+        //     font-size: 12px
+        //     color: #666
   div#matchinglist
     height: 100%
-    width: 559px
+    width: 549px
     h4
       float: left
       width: 550px
     div.likebox
       float: left
       ul
+        margin: 0px
         display: block
         float: left
         width: 550px
@@ -100,17 +134,51 @@ div#user_page
           margin-right: 10px
           float: left
           width: 100px
-          height: 200px
+          height: 150px
           div.thumbnail
             a.to-user
               display: block
               width: 100px
               text-align: center
+              h5
+                margin: 5px
               img
-                height: 100px
-                width: 100px
+                height: 70px
+                width: 70px
+            a.like
+              img
+                height: 30px
+                width: 90px
             a.to-talk
               font-size: 11px
+  div#likelist
+    div.likebox
+      width: 100%
+      margin-bottom: 30px
+      height: 150px
+      ul
+        margin: 0px
+        padding-left: 0px
+        list-style: none
+        li
+          width: 150px
+          height: 150px
+          float: left
+          margin-top: 20px
+          div.thumbnail
+            margin-right: 10px
+            a
+              margin: 5px
+              display: block
+              text-align: center
+              img
+                margin: 0 auto
+                width: 70px
+                height: 70px
+            a.to-user
+              h5
+                margin: 5px
+
 
   div#supportertalk
     width: 549px

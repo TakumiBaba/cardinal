@@ -12,7 +12,7 @@ JST['supporting/supportermessage/li'] = _.template(
       <div class='s-message-header'><%= name %>さん </div>
     <% }%>
     <div class='s-message-body'>
-      <%= message %>
+      <small><%= message %></small>
     </div>
   </div>
 
@@ -39,7 +39,7 @@ JST['supporting/matching/system'] = _.template(
       <img src=<%= source %> />
       <h5><%= name %>さん</h5>
     </a>
-    <button class='like-action'>イイね！</button>
+    <a class='like' href="/#/"><img src="/image/iine_button.gif" /></a>
     <a class='to-talk'><span>応援トークをする</span></a>
   </div>
   """

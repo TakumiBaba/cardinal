@@ -7,20 +7,18 @@ div.sidebar-inner
     div
       a.user_name(href='/#/me') #{name}さん
       a(href='/#/profile') プロフィールを編集する
-  a.pull-right.usage(data-toggle="modal", data-target="#usage")
-    small 使い方
+  a.usage(href="/#/usage"): small 使い方
   div.navigation.clearfix
-    ul.nav.nav-list
-      li.nav-header メニュー
-      li.like: a(href='/#/like') いいねリスト
+    ul.nav.nav-list.menu
+      li.first.like: a(href='/#/like') いいねリスト
       li.message: a.message-badge(href='/#/message') メッセージ
         span.badge.badge-important.message-badge
       li.talk: a.talk-badge(href='/#/talk') 応援トーク
         span.badge.badge-important.talk-badge
       li.supporter: a(href="/#/supporter") 婚活仲間リスト
-      li.divider
+      //- li.divider
       //- li.test: a(href='/#/invite') 応援団を増やす
-      li あなたの婚活応援団
+    h3.dong あなたの婚活応援団
     ul.follower
       - each follower in followers
         li: img(src="#{follower.from.profile.image_url}")
@@ -31,8 +29,6 @@ div.sidebar-inner
     //-     - console.log(follower)
     //-     li: img(src="#{follower.from.profile.image_url}")
     ul.bottom
-      li.use-policy: a(data-toggle="modal", data-target="#usepolicy") 利用規約
-      li: a(href="https://www.facebook.com/about/privacy/", target="_blank") プライバシーポリシー
-      li: a(href="/#/team") 運営チーム
 
-
+      li.use-policy: a(data-toggle="modal", data-target="#usepolicy"): small 利用規約
+      li: a(href="https://www.facebook.com/about/privacy/", target="_blank"): small プライバシーポリシー

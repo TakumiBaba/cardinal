@@ -10,7 +10,7 @@ JST['matching/userlist/li'] = _.template(
 
 JST['matching/profile'] = _.template(
   """
-  <h4 class='title_box'><%= name %>さんのプロフィール<h4>
+  <h4 class='title_box'><%= name %>さんのプロフィール</h4>
   <table class="sub">
     <tbody>
       <tr>

@@ -1,5 +1,5 @@
 div#user_page.profile_and_following_view
-  h3.title_box プロフィールページ
+  h3 プロフィールページ
   div.box
     div.user_profiles.main_box
       div.profile_header
@@ -7,7 +7,8 @@ div#user_page.profile_and_following_view
           img(src="#{image_source}")
         div.p_h_right
           h4.title_box #{name} さん
-          p.message #{gender_birthday}
+          small.message #{profile.message}
+          //- p.message #{gender_birthday}
       //- div.box_menu
       //-   div.thumbnail_box
       //-     img.profile_image.pull-left(src='#{image_source}')

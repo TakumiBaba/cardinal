@@ -394,7 +394,7 @@ JST['sidebar/following'] = _.template(
 JST['like/page'] = _.template(
   """
   <div id='like_page'>
-    <h3>いいねリスト<small>"ピピっと来たら『いいね』をプッシュ！メッセージを送信！"</small></h3>
+    <h3>いいねリスト<small> "ピピっと来たら『いいね』をプッシュ！メッセージを送信！"</small></h3>
     <div class='each-like info box-inner container likebox'>
       <h4 class='title_box pink'>両想い中<small>'どんどんメッセージを送って会う約束をしよう！'</small></h3>
       <ul class='like-thumbnail'></ul>
@@ -419,7 +419,7 @@ JST['like/thumbnail'] = _.template(
       <a href='/#/u/<%= id %>' class='to-user'>
         <img class='user-thumbnail' src=<%= source %> />
       </a>
-      <a href='/#/u/<%= id %>' class='to-user'>
+      <a class='name'>
         <%= name %> さん
       </a>
       <a href="<%= href %>" class="action_button">
@@ -434,7 +434,7 @@ JST['like/thumbnail'] = _.template(
 JST['talk/page'] = _.template(
   """
   <div id='talk_page'>
-    <h3 class='title_box'>応援トーク<small class=''>お気に入りの人について応援団と大いに語ろう！</small></h3>
+    <h3>応援トーク<small>　お気に入りの人について応援団と大いに語ろう！</small></h3>
     <ul class='talk_list'>
     </ul>
   </div>

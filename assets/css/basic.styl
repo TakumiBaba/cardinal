@@ -8,7 +8,7 @@ body
   padding: 0
   color: white
   text-decoration: none
-  width: 800px
+  width: 799px
 
 ul
   list-style: none
@@ -37,6 +37,7 @@ p
   margin: 0
 
 div#wrapper
+  width: 799px
   margin: 0 auto
 
 div#sidebar
@@ -47,7 +48,7 @@ div#sidebar
   background-color: white
   border-right: 1px solid #ccc
   padding-right: 10px
-  padding-top: 10px
+  margin-top: 0px
   div.sidebar-inner
     width: 200px
     img.logo
@@ -55,7 +56,7 @@ div#sidebar
       padding-right: 10px
     div#welcome_box
       margin-top: 20px
-      margin-bottom: 20px
+      margin-bottom: 10px
       img.user_profile_image
         width: 40px
         height: 40px
@@ -71,16 +72,41 @@ div#sidebar
           text-decoration: none
           display: block
           word-wrap: break-word
+          &:first-child
+            margin-bottom: 8px
+            color: #0088cc
+            font-weight: bold
+          color: #808080
+  a.usage
+    float: right
+    color: #808080
   div.navigation
-    ul
+    margin-top: 20px
+    ul.menu
       list-style: none
       li
         a
-          border-bottom: 0px
+          padding-top: 10px
+          padding-bottom: 10px
+          border-top: 0px
+          border-bottom: 1px solid #e5e5e5
+          &:hover
+            background-color: #e5e5e5
+      li.first
+        border-top: 0px
+      li.target
+        a
+          background-color: #e5e5e5
+    h3.dong
+      margin-top: 30px
+      margin-bottom: 0px
+      font-size: 12px
+      font-weight: normal
     ul.follower
       padding-left: 15px
       height: 100%
       min-height: 30px
+      margin-top: 5px
       li
         float: left
         display: block
@@ -94,21 +120,36 @@ div#sidebar
     button.request
       float: right
     ul.bottom
-      float: left
+      float: right
       display: block
+      // position: absolute
       bottom: 50px
+      li
+        &:first-child
+          margin-top: 100px
+        margin-top: 10px
+        a
+          color: #a9a9a9
+
 
 div#main
   padding-left: 211px
 
 div#supporter_list_page
   width: 100%
+  margin-left: 10px
+  h3
+    font-size: 16px
+  small
+    font-weight: normal
+  h4.title_box
+    padding: 5px
   div.thumbnail_box
     width: 100%
   ul
     list-style: none
     li
-      margin-bottom: 5px
+      margin-bottom: 30px
       float: left
       width: 120px
       height: 100%
@@ -116,7 +157,7 @@ div#supporter_list_page
         display: block
         text-align: center
         img
-          width: 90px
+          width: 70px
           height: 70px
 
 

@@ -7,7 +7,7 @@ JST['supporter/following/thumbnail'] = _.template(
         <img src=<%= source %> />
         <h5><%= name %>さん</h5>
       </a>
-      <button class='btn btn-block delete'>削除する</button>
+      <a class='delete'>削除する</a>
     </div>
   """
   )
@@ -18,7 +18,7 @@ JST['supporter/follower/thumbnail'] = _.template(
         <img src=<%= source %> />
         <h5><%= name %>さん</h5>
       </a>
-      <button class='btn btn-block delete '>削除する</button>
+      <a class='delete'>削除する</a>
     </div>
   """
   )
@@ -30,8 +30,8 @@ JST['supporter/request/thumbnail'] = _.template(
         <img src=<%= source %> />
         <h5><%= name %>さん</h5>
       </a>
-      <button class='btn btn-block request'>応援する</button>
-      <button class='btn btn-danger btn-block delete delete-request'>削除する</button>
+      <button class='btn request'>応援する</button>
+      <a class='delete'>削除する</a>
     </div>
   """
   )

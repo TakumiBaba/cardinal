@@ -69,8 +69,8 @@ class App.View.TalkUnit extends Backbone.View
       candidate_id: c.id
       height: c.profile.height
       profile_message: c.profile.message
-      like_count: if (@model.get("count") isnt null) then "#{@model.get('count').length}人がイイね！を押しています。" else ""
-      like_or_dislike: if liked is true then "イイね！を取り消す" else "イイね！"
+      like_count: if (@model.get("count") isnt null) then "#{@model.get('count').length}人がいいね！を押しています。" else ""
+      like_or_dislike: if liked is true then "いいね！を取り消す" else "いいね！"
     html = JST['talk/unit'](attributes)
     $(@.el).append html
 

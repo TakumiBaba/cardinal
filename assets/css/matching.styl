@@ -6,6 +6,14 @@ div#matching_page
     float: left
     ul#matching_type_list
       margin-top: 20px
+      li
+        a
+          color: #555555
+      li.active
+        a
+          color: #08c
+          font-weight: bold
+
   div.body
     float: left
     width: 550px
@@ -14,9 +22,9 @@ div#matching_page
       float: left
       width: 70px
       max-height: 700px
-      overflow: scroll
+      overflow-y: scroll
       ul.user_list
-        padding-left: 10px
+        padding-left: 0px
         li
           margin-bottom: 5px
           img
@@ -27,10 +35,11 @@ div#matching_page
           img
             border: 4px solid #ed4b7c
     div.profile
-      width: 470px
+      padding-left: 10px
+      width: 460px
       float: left
       div.profile_header
-        width: 470px
+        width: 460px
         div.p_h_left
           float: left
           width: 100px
@@ -40,26 +49,32 @@ div#matching_page
             height: 90px
         div.p_h_right
           float: left
-          width: 365px
+          width: 355px
           h4.title_box
             float: left
-            width: 365px
-            height: 25px
-          p.message
+            width: 355px
+            margin-bottom: 5px
+          small.message
             float: left
-            width: 365px
+            width: 355px
             min-height: 70px
+            font-size: 12px
           div.btns
             float: left
-            width: 365px
+            width: 355px
+            img
+              margin-top: 10px
+              margin-bottom: 10px
             img.like
-              width: 90px
+              width: 80px
             img.message
-              width: 130px
+              width: 120px
+              margin-left: 5px
+              margin-right: 5px
             img.talk
-              width: 130px
+              width: 120px
       div.profile_supporter_messages
-        width: 470px
+        width: 460px
         float: left
         ul
           li
@@ -86,37 +101,38 @@ div#matching_page
                 float: left
       div.profile_body
         float: left
-        width: 470px
+        width: 460px
+        table
+          margin-bottom: 10px
+          font-size: 12px
+          td
+            padding: 5px
         table.sub
-          width: 470px
-          font-size: 11px
+          margin-top: 5px
+          width: 460px
           tr
             height: 5px
           td.key
-            background-color: #ccffcc
+            background-color: #cef6ec
             width: 130px
-            font-weight: bold
           td.value
             width: 340px
         table.main
-          width: 470px
-          font-size: 11px
+          width: 460px
           tr
             height: 5px
           td.left-key
-            background-color: #ccffcc
+            background-color: #cef6ec
             width: 100px
-            font-weight: bold
           td.left-value
             width: 100px
           td.right-key
-            background-color: #ccffcc
+            background-color: #cef6ec
             width: 130px
-            font-weight: bold
           td.right-value
             width: 140px
       div.profile_supporters
-        width: 470px
+        width: 460px
         float: left
         li
           div.thumbnail

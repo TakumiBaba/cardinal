@@ -80,11 +80,11 @@ class App.View.Matching.UserList extends Backbone.View
         li.render()
         $(li.el).addClass 'active' if i is @target
       @setProfile @model
-    else
-      if $(@.el).hasClass 'system'
-        $("ul#matching_type_list li.system").hide()
-      else
-        $("ul#matching_type_list li.supporter").hide()
+    # else
+    #   if $(@.el).hasClass 'system'
+    #     $("ul#matching_type_list li.system").hide()
+    #   else
+    #     $("ul#matching_type_list li.supporter").hide()
 
   nextModel: (e)->
     @target += 1 if @target > 1
@@ -137,7 +137,7 @@ class App.View.Matching.Profile extends Backbone.View
     u = @model.get 'user'
     $("div.p_h_left img").attr 'src', u.profile.image_url
     $("div.p_h_right h4.title_box").html "#{u.first_name} さんからのメッセージ"
-    $("div.p_h_right p.message").html u.profile.message
+    $("div.p_h_right small.message").html u.profile.message
     $("div.profile_supporter_messages h4.title_box").html "#{u.first_name} さんの応援団おすすめ情報"
 
     $("div.profile_supporters h4.title_box").html "#{u.first_name} さんの応援団"

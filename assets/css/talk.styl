@@ -1,19 +1,27 @@
 div#talk_page
+  width: 549px
+  margin-left: 10px
+  h3
+    font-size: 16px
+  small
+    font-weight: normal
+  h4.title_box
+    padding: 5px
   ul.talk_list
     list-style: none
     margin-left: 0px
-    padding-left: 10px
     li.talk
       border: 1px solid #ccc
-      width: 80%
+      width: 100%
       margin-bottom: 15px
       -webkit-border-radius: 5px/* Safari,Google Chrome用 */
       -moz-border-radius: 5px /* Firefox用 */
 
 div.com_box
   float: left
-  width: 100%
+  width: 80%
   padding: 10px
+  margin-left: 15px
   display: block
   div.com_line
     float: left
@@ -51,7 +59,8 @@ div.part_box
   float: left
   width: 90%
   border: 1px solid #ccc
-  margin-left: 20px
+  margin-left: 15px
+  margin-right: 15px
   margin-bottom: 10px
   padding: 10px
   display: block
@@ -67,16 +76,20 @@ div.part_box
     display: inline
     font-size: 13px
     color: #333
+  a
+    margin-top: 10px
+    float: right
 
 div.like_box
   float:left
-  width: 100%
+  width: 70%
   padding-right: 10px
   padding-left: 10px
   display:block
 div.comments_box
   float: left
-  height: 200px
+  min-height: 20px
+  max-height: 200px
   width: 100%
   overflow: auto
   ul.comments

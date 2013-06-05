@@ -1,4 +1,12 @@
 div#profile_page
+  margin-left: 10px
+  h3
+    font-size: 16px
+  small
+    font-weight: normal
+  h4.title_box
+    padding: 5px
+    margin-bottom: 5px
   div.profile
     width: 550px
     float: left
@@ -17,20 +25,25 @@ div#profile_page
         h4.title_box
           float: left
           width: 450px
-          height: 25px
-        p.message
+
+        small.message
           float: left
           width: 450px
           min-height: 70px
         div.btns
           float: left
-          width: 450px
+          width: 355px
+          img
+            margin-top: 10px
+            margin-bottom: 10px
           img.like
-            width: 90px
+            width: 80px
           img.message
-            width: 130px
+            width: 120px
+            margin-left: 5px
+            margin-right: 5px
           img.talk
-            width: 130px
+            width: 120px
     div.supporter-message-list
       width: 550px
       float: left
@@ -42,11 +55,11 @@ div#profile_page
           width: 550px
           div.s-message-left
             height: 100%
-            width: 100px
+            width: 50px
             float: left
             img
-              width: 90px
-              height: 90px
+              width: 40px
+              height: 40px
           div.s-message-right
             height: 100%
             width: 450px
@@ -55,6 +68,7 @@ div#profile_page
               height: 20%
               width: 450px
               float: left
+              margin-bottom: 10px
             div.s-message-body
               height: 79%
               width: 450px
@@ -62,32 +76,32 @@ div#profile_page
     div.profile_body
       float: left
       width: 550px
+      table
+        margin-bottom: 10px
+        font-size: 12px
+        td
+          padding: 5px
       table.sub
         width: 550px
-        font-size: 11px
         tr
           height: 5px
         td.key
-          background-color: #ccffcc
+          background-color: #cef6ec
           width: 130px
-          font-weight: bold
         td.value
           width: 340px
       table.main
         width: 550px
-        font-size: 11px
         tr
           height: 5px
         td.left-key
-          background-color: #ccffcc
+          background-color: #cef6ec
           width: 100px
-          font-weight: bold
         td.left-value
           width: 100px
         td.right-key
-          background-color: #ccffcc
+          background-color: #cef6ec
           width: 130px
-          font-weight: bold
         td.right-value
           width: 140px
     div.profile_supporters
@@ -99,4 +113,7 @@ div#profile_page
           a.to-user
             text-align: center
         img
-          width: 90px
+          display: block
+          margin: 0 auto
+          width: 70px
+          height: 70px

@@ -127,7 +127,7 @@ class App.View.Supporting.MatchingThumbnail extends Backbone.View
   tagName: "li"
 
   events:
-    "click button.like-action": "supporterLike"
+    "click a.like": "supporterLike"
     "click a.to-talk": "talk"
 
   constructor: (attrs)->
