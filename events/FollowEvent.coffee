@@ -209,8 +209,10 @@ exports.FollowEvent = (app) ->
                 follow.save()
                 from.follower.push follow
                 to.following.push follow
-                from.save()
-                to.save()
-              console.log follow
-              follow.cancel_request_facebook_id = to.facebook_id
-              return res.send follow
+              from.save (err)=>
+                throw err if err
+                to.save (err)=>
+                  throw err if err
+                  console.log follow
+                  follow.cancel_request_facebook_id = to.facebook_id
+                  return res.send follow

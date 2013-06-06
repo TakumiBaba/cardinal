@@ -56,6 +56,7 @@ window.fbAsyncInit = ->
   FB.init
     appId: 381551511881912
     channelUrl: '//apps.facebook.com/ding_dong'
+    frictionlessRequests : true
     status: true
     cookie: true
     xfbml: true

@@ -15,16 +15,17 @@ exports.SiteEvent = (app) ->
   FB = require 'fb'
 
   index: (req, res)->
-    if !req.session.userid
-      return res.redirect '/login'
-    if req.session.isSupporter
-      return res.render "supporter-index",
-        req: req
-        id: req.session.userid
-    else
-      return res.render "index",
-        req: req
-        id: req.session.userid
+    return res.redirect '/login'
+    # if !req.session.userid
+    #   return res.redirect '/login'
+    # if req.session.isSupporter
+    #   return res.render "supporter-index",
+    #     req: req
+    #     id: req.session.userid
+    # else
+    #   return res.render "index",
+    #     req: req
+    #     id: req.session.userid
 
     # fbreq = req.query.request_ids || ""
     # signed_request = req.body.signed_request
@@ -87,8 +88,8 @@ exports.SiteEvent = (app) ->
     req.session.facebook_id = b.user_id
     User.findOne facebook_id: facebook_id, (err, user)=>
       throw err if err
-      # if user is null or user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
-      return res.redirect "/firstlogin"
+      if user is null or user.isFirstLogin is true # ここで、アカウントがあるかどうかを確認。
+        return res.redirect "/firstlogin"
       req.session.userid = user.id
       req.session.isSupporter = user.isSupporter
       if user.isSupporter
