@@ -14,7 +14,6 @@ module.exports = (app) ->
 
   app.get    '/',  log,  SiteEvent.index
   app.post   '/',  log,  SiteEvent.postindex
-  app.post '/hogefuga', Debug.hogefuga
   app.get '/login', SiteEvent.Login.normal
   app.get '/firstlogin', SiteEvent.Login.first
   app.get '/signup', SiteEvent.Login.signup

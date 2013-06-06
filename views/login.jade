@@ -11,9 +11,11 @@ html
           status: true
           cookie: true
           xfbml: true
+          frictionlessRequests : true
         FB.getLoginStatus (response)->
           console.log(response)
           if response.status is "connected"
+            console.log("connected")
             form = document.createElement "form"
             form.setAttribute "action", "/"
             form.setAttribute "method", "POST"
@@ -25,8 +27,9 @@ html
             form.submit()
           else
             FB.login (res)->
-              if res.authResponse
-                location.href = "/#/"
-              else
-                FB.login()
+              console.log(res)
+              #if res.authResponse
+               # location.href = "/#/"
+              #else
+               # FB.login()
   body

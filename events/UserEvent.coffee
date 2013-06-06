@@ -472,14 +472,13 @@ exports.UserEvent = (app) ->
       user.isSupporter = false
       user.isFirstLogin = false
       user.save (err)=>
-        if err
-          return res.redirect "/signup/error"
-          throw err
-        else
-          return res.render "index",
-            req: req
-            id: user.id
-            href: "/#/profile"
+        throw err if err
+        console.log "SIGN UP"
+        return res.render 'index',
+          req: req
+          id: user.id
+          href: "/#/profile"
+
 
   supporterMessage:
     fetch: (req, res)->
@@ -564,6 +563,7 @@ exports.UserEvent = (app) ->
 
   news:
     fetch: (req, res)->
+      console.log "FETCH NEWS"
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       User.findOne({id: id}).populate('news').exec (err, user)->
         throw err if err
