@@ -140,6 +140,7 @@ class App.View.Matching.Profile extends Backbone.View
     u = @model.get 'user'
     $("div.p_h_left img").attr 'src', u.profile.image_url
     $("div.p_h_right h4.title_box").html "#{u.first_name} さんからのメッセージ"
+    if @model.get('myStatus') is true then $('div.btns img.like').hide() else $('div.btns img.like').show()
     $("div.p_h_right small.message").html u.profile.message
     $("div.profile_supporter_messages h4.title_box").html "#{u.first_name} さんの応援団おすすめ情報"
 
@@ -180,8 +181,9 @@ class App.View.Matching.Profile extends Backbone.View
     @model.urlRoot = "/api/users/#{App.User.get('id')}/candidates"
     @model.save detail,
       success: (data)=>
+        # フィードバックをどう表現するのか？
+        # いいねした人のいいねボタンを消しつつ、他の人のを消さない仕組み
         $(@.el).find("img.like").hide()
-        $(@.el).find("img.like").remove()
     e.preventDefault()
   message: (e)->
     $.ajax
