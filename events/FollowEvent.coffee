@@ -193,23 +193,24 @@ exports.FollowEvent = (app) ->
                 isSuppoter: true
                 isFirstLogin: true
                 profile:
-                  image_url: "https://graph.facebook.com/#{toFacebookId}/picture?type=large"
+                  image_url: "https://graph.facebook.com/#{toFacebookId}/picture"
                   gender: params.gender
-              to.save()
-            follow = _.find from.following, (follow)=>
-              return (_.contains(follow.ids, fromId) && _.contains(follow.ids, to.id))
-            unless follow
-              follow = new Follow
-                from: to._id
-                to: from._id
-                ids: [to.id, from.id]
-                request_id: params.request_id
-                approval: false
-              follow.save()
-              from.follower.push follow
-              to.following.push follow
-              from.save()
-              to.save()
-            console.log follow
-            follow.cancel_request_facebook_id = to.facebook_id
-            return res.send follow
+            to.save (err)->
+              throw err if err
+              follow = _.find from.following, (follow)=>
+                return (_.contains(follow.ids, fromId) && _.contains(follow.ids, to.id))
+              unless follow
+                follow = new Follow
+                  from: to._id
+                  to: from._id
+                  ids: [to.id, from.id]
+                  request_id: params.request_id
+                  approval: false
+                follow.save()
+                from.follower.push follow
+                to.following.push follow
+                from.save()
+                to.save()
+              console.log follow
+              follow.cancel_request_facebook_id = to.facebook_id
+              return res.send follow
