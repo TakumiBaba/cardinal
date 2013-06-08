@@ -7,6 +7,10 @@ class App.View.MatchingPage extends Backbone.View
 
   events:
     "click ul#matching_type_list li": "change"
+    "mousedown a.next": "next"
+    "mouseup a.next": "replaceImage"
+    "mousedown a.prev": "prev"
+    "mouseup a.prev": "replaceImage"
 
   constructor: ->
     super
@@ -21,41 +25,50 @@ class App.View.MatchingPage extends Backbone.View
 
       @profileView = new App.View.Matching.Profile()
 
-      @systemList = new App.View.Matching.UserList
+      @userList = new App.View.Matching.UserList
         collection: @collection
-        el: "ul.user_list.system"
         profileView: @profileView
-      @supporterList = new App.View.Matching.UserList
-        collection: @collection
-        el: "ul.user_list.supporter"
-        profileView: @profileView
-      @supporterList.hide()
+      @selectedList = @userList
 
       @collection.fetch()
+
   change: (e)->
     $(@.el).find('ul#matching_type_list li').each ()->
-      if $(@).hasClass 'active'
-        $(@).removeClass 'active'
+      $(@).removeClass 'active' if $(@).hasClass 'active'
     t = $(e.currentTarget)
     t.addClass 'active'
     if t.hasClass 'system'
-      @supporterList.hide()
-      @systemList.show()
-      if @systemList.collection.getBySystems().length > 0 then $(@profileView.el).show() else $(@profileView.el).hide()
+      # @userList.change()
+      @userList.setSystems()
+      if @userList.collection.getBySystems().length > 0 then $(@profileView.el).show() else $(@profileView.el).hide()
     else if t.hasClass 'supporter'
-      @supporterList.show()
-      @systemList.hide()
-      if @supporterList.collection.getBySupporters().length > 0 then $(@profileView.el).show() else $(@profileView.el).hide()
+      # @supporterList.show()
+      # @systemList.hide()
+      @userList.setSupporters()
+      if @userList.collection.getBySupporters().length > 0 then $(@profileView.el).show() else $(@profileView.el).hide()
+
+  next: (e)->
+    @selectedList.nextModel(e)
+    $(e.currentTarget).find('img').attr 'src', "/image/scroll_top2.gif"
+  replaceImage: (e)->
+    if $(e.currentTarget).hasClass 'prev'
+      $(e.currentTarget).find('img').attr 'src', "/image/scroll_bottom.gif"
+    else
+      $(e.currentTarget).find('img').attr 'src', "/image/scroll_top.gif"
+  prev: (e)->
+    @selectedList.prevModel(e)
+    $(e.currentTarget).find('img').attr 'src', "/image/scroll_bottom2.gif"
 
 
 class App.View.Matching.UserList extends Backbone.View
   el: "ul.user_list"
   events:
     "keydown body": "changeModelForKey"
+
   constructor: (attrs)->
     super
-    @el = attrs.el
     @target = 0
+    @at = 0
     @model = ""
     @profileView = attrs.profileView
     @type = attrs.isSystemMatching
@@ -68,33 +81,67 @@ class App.View.Matching.UserList extends Backbone.View
       if $(child).hasClass 'active'
         $(child).removeClass 'active'
     $(clickedLi.el).addClass 'active'
+    console.log clickedLi
 
   changeModelForKey: (e)->
     console.log e.keyCode
 
   setCollection: (collection)->
-    @users = if $(@.el).hasClass "system" then collection.getBySystems() else collection.getBySupporters()
-    @model = @users[0]
-    if @users.length > 0
-      for i in [0..@users.length-1]
-        li = new App.View.Matching.UserListThumbnail
-          parent: @
-          model: @users[i]
-        li.render()
-        $(li.el).addClass 'active' if i is @target
-      @setProfile @model
-    # else
-    #   if $(@.el).hasClass 'system'
-    #     $("ul#matching_type_list li.system").hide()
-    #   else
-    #     $("ul#matching_type_list li.supporter").hide()
+    @systems = collection.getBySystems()
+    @supporters = collection.getBySupporters()
+    @users = @systems
+    for i in [0..@systems.length-1]
+      li = new App.View.Matching.UserListThumbnail
+        parent: @
+        model: @systems[i]
+      li.render()
+      $(li.el).addClass 'active' if i is @target
+    @setProfile @systems[0]
+
+  setSystems: ->
+    $(@.el).empty()
+    @target = 0
+    if @systems.lengt < 1
+      return
+    for i in [0..@systems.length-1]
+      li = new App.View.Matching.UserListThumbnail
+        parent: @
+        model: @systems[i]
+      li.render()
+      $(li.el).addClass 'active' if i is @target
+    @setProfile @systems[@target]
+    $(@.el).css
+      'transform': "translate(0px, #{-@target*65}px)"
+    @users = @systems
+
+  setSupporters: ->
+    $(@.el).empty()
+    @target = 0
+    if @supporters.length < 1
+      return
+    for i in [0..@supporters.length-1]
+      li = new App.View.Matching.UserListThumbnail
+        parent: @
+        model: @supporters[i]
+      li.render()
+      $(li.el).addClass 'active' if i is @target
+    @setProfile @supporters[@target]
+    $(@.el).css
+      'transform': "translate(0px, #{-@target*65}px)"
+    @users = @supporters
 
   nextModel: (e)->
-    @target += 1 if @target > 1
-    console.log 'next'
+    e.preventDefault()
+    @target += 1 if @target < @collection.models.length-7
+    $(@.el).css
+      'transform': "translate(0px, #{-@target*65}px)"
+    # @changeModel @users[@target]
   prevModel: (e)->
-    @target -= 1 if @target < @collection.model.length-1
-    console.log 'prev'
+    e.preventDefault()
+    @target -= 1 if @target > 0
+    $(@.el).css
+      'transform': "translate(0px, #{-@target*65}px)"
+    # @changeModel @users[@target]
 
   show: ->
     $(@.el).show()

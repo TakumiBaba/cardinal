@@ -567,6 +567,9 @@ exports.UserEvent = (app) ->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       User.findOne({id: id}).populate('news').exec (err, user)->
         throw err if err
+        if user.news is null or user.news.length is 0
+          console.log "NEWS is null or length is 0"
+          return res.send []
         news = _.filter user.news, (n)->
           return !n.isRead
         return res.send news

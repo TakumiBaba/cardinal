@@ -35,6 +35,9 @@ class Router extends Backbone.Router
       when "signup"
         @now = new App.View.SignupPage()
         @now.render()
+      when "usage"
+        @now = new App.View.Usage()
+        @now.render()
 
   supporterpageAction: (id)->
     $("div#main").empty()

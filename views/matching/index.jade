@@ -5,8 +5,10 @@ div#matching_page
       li.supporter: a 応援団おすすめリスト
   div#system_matching.body
     div.side
-      ul.user_list.system
-      ul.user_list.supporter
+      a.prev(href="/#/matching"): img(src='/image/scroll_bottom.gif')
+      div.user_list_box
+        ul.user_list
+      a.next(href="/#/matching"): img(src='/image/scroll_top.gif')
     div.profile
       div.profile_header
         div.p_h_left
