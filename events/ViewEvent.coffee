@@ -56,8 +56,11 @@ exports.ViewEvent = (app) ->
 
   sidebar: (req, res)->
     id = req.session.userid
-    User.findOne({id: id}).populate('follower').exec (err, user)->
+    console.log 'SIDEBAR'
+    console.log id
+    User.findOne({id: id}).exec (err, user)->
       throw err if err
+      console.log user
       console.log user.follower
       followerIds = user.follower
       if user.isSupporter is true
@@ -68,6 +71,7 @@ exports.ViewEvent = (app) ->
       else
         Follow.find({_id: {$in: followerIds}}).populate('from').where('approval').equals(true).exec (err, followers)=>
           throw err if err
+          console.log followers
           return res.render 'sidebar/player',
             req: req
             name: user.first_name

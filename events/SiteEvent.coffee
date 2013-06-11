@@ -94,14 +94,8 @@ exports.SiteEvent = (app) ->
                   user.save()
                   users[i].save()
               return res.redirect '/'
-              # return res.render 'index',
-              #   req: req
-              #   id: user.id
           else
             return res.redirect '/'
-            # return res.render 'index',
-            #   req: req
-            #   id: user.id
 
   Login:
     normal: (req, res)->
@@ -130,7 +124,6 @@ exports.SiteEvent = (app) ->
           console.log response
           User.findOne({facebook_id: response.id}).exec (err, user)=>
             throw err if err
-            console.log user
             unless user
               console.log response.id
               sha1_hash = Crypto.createHash 'sha1'
@@ -138,13 +131,12 @@ exports.SiteEvent = (app) ->
               user = new User
                 id: sha1_hash.digest 'hex'
                 facebook_id: response.id
-                name: response.last_name+response.first_name
-                first_name: response.first_name
-                last_name: response.last_name
-                username: response.username
-                profile:
-                  image_url: "https://graph.facebook.com/#{facebook_id}/picture"
-                  gender: response.gender
+            user.name = response.last_name+response.first_name
+            user.first_name = response.first_name
+            user.last_name = response.last_name
+            user.username = response.username
+            user.profile.image_url = "https://graph.facebook.com/#{response.id}/picture"
+            user.profile.gender = response.gender
             user.isFirstLogin = false
             user.isSupporter = true
             user.save (err)=>
@@ -153,14 +145,12 @@ exports.SiteEvent = (app) ->
                 req: req
                 id: user.id
 
-
   login: (req, res)->
     params = req.body
     id = req.body.id
     User.findOne({facebook_id: id}).exec (err, user)=>
       throw err if err
       if user && !user.isFirstLogin
-        console.log 'user is exist'
         req.session.userid = user.id
         json =
           id: user.id

@@ -36,19 +36,6 @@ exports.UserEvent = (app) ->
       else
         res.send "user data missing"
 
-  # signup: (req, res)->
-  #   id = req.session.userid
-  #   console.log 'signup'
-  #   console.log req.body
-  #   console.log req.params
-  #   User.findOne id: id, (err, user)->
-  #     throw err if err
-  #     user.isSupporter = false
-  #     console.log user
-
-  #     # user.save()
-  #     return res.send 'signup done'
-
   profile:
     picture: (req, res)->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
@@ -465,12 +452,14 @@ exports.UserEvent = (app) ->
       user.id = sha1_hash.digest 'hex'
       user.facebook_id = facebook_id
       user.name = "#{params.last_name}#{params.first_name}"
+      user.profile.image_url = "https://graph.facebook.com/#{facebook_id}/picture"
       user.profile.birthday = new Date("#{params.birthday_year}/#{params.birthday_month}/#{params.birthday_day}")
       user.username = params.username
       user.first_name = params.first_name
       user.last_name = params.last_name
       user.isSupporter = false
       user.isFirstLogin = false
+      req.session.userid = user.id
       user.save (err)=>
         throw err if err
         console.log "SIGN UP"
@@ -489,6 +478,14 @@ exports.UserEvent = (app) ->
         SupporterMessage.find({_id: {$in: list}}).populate('supporter').exec (err, message)->
           throw err if err
           return res.send message
+
+    fetchOne: (req, res)->
+      id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
+      sm_id = req.params.sm_id
+      SupporterMessage.findOne({_id: sm_id}).populate('supporter').exec (err, message)->
+        throw err if err
+        console.log message
+        return res.send message
 
     createOrUpdate: (req, res)->
       userId = if req.params.user_id is "me" then req.session.userid else req.params.user_id
@@ -567,6 +564,9 @@ exports.UserEvent = (app) ->
       id = if req.params.user_id is "me" then req.session.userid else req.params.user_id
       User.findOne({id: id}).populate('news').exec (err, user)->
         throw err if err
+        unless news
+          console.log "NEWS is null or length is 0"
+          return res.send []
         if user.news is null or user.news.length is 0
           console.log "NEWS is null or length is 0"
           return res.send []

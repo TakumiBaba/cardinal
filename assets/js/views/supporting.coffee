@@ -5,6 +5,9 @@ App.View.Supporting = {}
 class App.View.Supporting.Page extends Backbone.View
   el: "div#main"
 
+  events:
+    "click a[href='#supportertalk']": "talk"
+
   constructor: (attrs)->
     super
     @id = attrs.id
@@ -30,6 +33,10 @@ class App.View.Supporting.Page extends Backbone.View
         id: @id
       @talk.collection.fetch()
 
+  talk: (e)->
+    console.log 'talk'
+    @talk.collection.fetch()
+
 class App.View.Supporting.Profile extends Backbone.View
   el: "div#detail_profile"
 
@@ -44,7 +51,6 @@ class App.View.Supporting.Profile extends Backbone.View
     _.bindAll @, "append", "allAppend"
     @supporterMessages.bind "add", @append
     @supporterMessages.bind "reset", @allAppend
-    console.log @
 
   append: (model)->
     console.log model
@@ -61,12 +67,21 @@ class App.View.Supporting.Profile extends Backbone.View
     message = input.val()
     model = new App.Model.SupporterMessage
       userid: @id
-    console.log model
-    model.set
+    detail =
       supporter: App.User.get('_id')
       supporterId: App.User.get('id')
       message: message
-    model.save()
+    model.save detail,
+      success: (model)=>
+        model.urlRoot = "/api/supportermessages/"
+        model.set 'id', model.get('_id')
+        model.bind 'change', (m)=>
+          li = new App.View.Supporting.SupporterMessage
+            parent: @
+            model: model
+          li.render()
+        model.fetch()
+        $("textarea").val("")
 
 class App.View.Supporting.SupporterMessage extends Backbone.View
   tagName: "li"
@@ -77,27 +92,46 @@ class App.View.Supporting.SupporterMessage extends Backbone.View
     super
     @parent = attrs.parent
     @model  = attrs.model
+    _.bindAll @, "destroy", "modify"
+    @model.bind 'destroy', @destroy
+
 
   render: ->
     attributes =
       source: @model.get('supporter').profile.image_url
       name: @model.get('supporter').first_name
       message: @model.get('message')
-      isMyMessage: if @model.get('supporter').id is App.User.get('id') then "true" else "else"
+      isMyMessage: if @model.get('supporter').id is App.User.get('id') then true else false
     $(@.el).html JST['supporting/supportermessage/li'](attributes)
     $(@parent.el).find("div.supporter-message-list ul").append @.el
+    if @model.get('supporter').id is App.User.get('id')
+      option =
+        trigger: $("a.modify-supporter-message")
+        action: "click"
+      $(@.el).find('div.s-message-body small').editable option, @modify
+      $("div.supporter-message-post-view").hide()
+
 
   delete: (e)->
     e.preventDefault()
-    console.log @model
-    @model.urlRoot = "/api/supportermessages/#{@model.get('_id')}"
-    @model.destroy
-      success: (d)->
-        console.log "success"
-        console.log d
-      error: (e)->
-        console.log "error"
-        console.log e
+    @model.urlRoot = "/api/supportermessages/"
+    @model.set
+      isNew: false
+      id: @model.get("_id")
+    @model.destroy()
+
+  destroy: (model)->
+    $(@.el).remove()
+
+  modify: (e)->
+    @model.urlRoot = "/api/users/#{@parent.id}/supportermessages/#{@model.get('supporter').id}"
+    detail =
+      supporter: App.User.get('_id')
+      supporterId: App.User.get('id')
+      message: e.value
+    @model.save detail,
+      success: (model)=>
+        console.log model
 
 class App.View.Supporting.MatchingList extends Backbone.View
   el: "div#matchinglist"
@@ -149,22 +183,30 @@ class App.View.Supporting.MatchingThumbnail extends Backbone.View
     ul.append @.el
 
   supporterLike: (e)->
+    e.preventDefault()
     console.log @model
     @model.urlRoot = "/api/users/#{@model.get("user").id}/candidates"
-    @model.set "isSystemMatching", false
-    @model.save
-      success:(data)->
+    # @model.set "isSystemMatching", false
+    @model.save {isSystemMatching: false},
+      success:(data)=>
         console.log data
-    e.preventDefault()
+        $(@.el).remove()
+        @parent.append data
+
 
   talk: (e)->
+    e.preventDefault()
+    console.log 'talk'
     talk = new Backbone.Model()
     talk.urlRoot = "/api/talks.json"
-    talk.set
+    detail =
       one: @parent.id
       two: @model.get("user").id
-    talk.save()
-    e.preventDefault()
+    talk.save detail,
+      success: (model)=>
+        console.log model
+
+
 
 class App.View.Supporting.LikeList extends Backbone.View
   el: "div#likelist"

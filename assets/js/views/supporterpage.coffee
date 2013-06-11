@@ -169,9 +169,6 @@ class App.View.SupporterPageLi extends Backbone.View
   approve: (e)->
     console.log "approve"
     e.preventDefault()
-    # console.log @model.collection
-    # @model.set "approval", true
-    # @model.urlRoot = "/api/users/#{App.User.get('id')}/followings/#{@model.get('following').id}"
     @model.urlRoot = "/api/follow/"
     @model.set 'id', @model.get '_id'
     params =

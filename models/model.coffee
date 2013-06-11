@@ -108,8 +108,10 @@ UserSchema = new Schema
     default: []
   following:
     type: [{type: ObjectId, ref: "Follow"}]
+    default: []
   follower:
     type: [{type: ObjectId, ref: "Follow"}]
+    default: []
   pending:
     type: [{type: ObjectId, ref: "Follow"}]
     default: []
@@ -138,8 +140,10 @@ UserSchema = new Schema
     type: Date
   news:
     type: [{type: ObjectId, ref: "News"}]
+    default: []
   statuses:
     type: [{type: ObjectId, ref: "Status"}]
+    default: []
 
 StatusSchema = new Schema
   one:

@@ -43,7 +43,7 @@ class App.View.MessagePage extends Backbone.View
     html = JST['message/page'](attributes)
     if collection.models.length > 0
       $(@.el).html html
-      _.each collection.models, @.appendItem
+      _.each collection.models, @appendItem
       $(@.el).find('ul.message-user-thumbnail li:first').click()
     else
       html = """

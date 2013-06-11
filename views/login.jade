@@ -25,11 +25,8 @@ html
             input.setAttribute "value", response.authResponse.signedRequest
             form.appendChild input
             form.submit()
+            console.log(form)
           else
             FB.login (res)->
               console.log(res)
-              #if res.authResponse
-               # location.href = "/#/"
-              #else
-               # FB.login()
   body

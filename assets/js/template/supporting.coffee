@@ -7,7 +7,10 @@ JST['supporting/supportermessage/li'] = _.template(
   </div>
   <div class='s-message-right'>
     <% if(isMyMessage != false){ %>
-      <div class='s-message-header'><%= name %>さん <a href='/#/s/' class='delete-supporter-message'>この情報を削除する</a></div>
+      <div class='s-message-header'><%= name %>さん
+        <a href='/#/s/' class='delete-supporter-message'>この情報を削除する</a>
+        <a class='modify-supporter-message'>編集する</a>
+      </div>
     <% }else{ %>
       <div class='s-message-header'><%= name %>さん </div>
     <% }%>

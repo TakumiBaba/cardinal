@@ -69,6 +69,7 @@ module.exports = (app) ->
   app.post '/api/messagelist/:list_id/message', Message.Comment.create
 
   # SupporterMessageEvent
+  app.get '/api/supportermessages/:sm_id', User.supporterMessage.fetchOne
   app.get '/api/users/:user_id/supportermessages', User.supporterMessage.fetch
   app.post '/api/users/:user_id/supportermessages/:supporter_id', User.supporterMessage.createOrUpdate
   app.get '/api/users/:user_id/supportermessages/:supporter_id/:message', User.supporterMessage.createOrUpdate
