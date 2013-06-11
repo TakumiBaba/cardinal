@@ -101,26 +101,35 @@ class App.View.TalkUnit extends Backbone.View
 
 
   count: (e)->
-    console.log 'count'
-    console.log @model
+    e.preventDefault()
     liked = false
     _.each @model.get('count'), (count)=>
       console.log count.id, App.User.get('id')
       if count.id is App.User.get('id')
         liked = true
+    @model.urlRoot = "/api/users/#{@model.get('user').id}/talks/#{@model.get('_id')}"
     console.log liked
     if liked is true
       $.ajax
         type: "POST"
         url: "/api/talks/#{@model.get('_id')}/like/#{App.User.get('id')}/decrement"
-        success: (data)->
+        success: (data)=>
           console.log data
+          if data.status is "success"
+            console.log 'success'
+            $("a.like_count").html "いいね！"
+            $("small.like_count_num").html "#{data.length}人がいいね！を押しています"
+            @model.fetch()
     else
       $.ajax
         type: "POST"
         url: "/api/talks/#{@model.get('_id')}/like/#{App.User.get('id')}/increment"
-        success: (data)->
+        success: (data)=>
           console.log data
+          if data.status is 'success'
+            $("a.like_count").html "いいね！を取り消す"
+            $("small.like_count_num").html "#{data.length}人がいいね！を押しています"
+            @model.fetch()
 
 
 class App.View.Comments extends Backbone.View

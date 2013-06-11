@@ -468,7 +468,7 @@ JST['talk/unit'] = _.template(
     <small>
       <a class='like_count' href='/#/talk'><%= like_or_dislike %></a>
     </small>
-    <small><%= like_count %></small>
+    <small class='like_count_num'><%= like_count %></small>
   </div>
   <div class='comments_box'>
   </div>

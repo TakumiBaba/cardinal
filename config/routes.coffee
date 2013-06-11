@@ -55,6 +55,7 @@ module.exports = (app) ->
 
   # TalkEvent
   app.get '/api/users/:user_id/talks.json', Talk.fetch
+  app.get '/api/users/:user_id/talks/:talk_id', Talk.fetchOne
   app.post '/api/talks.json', Talk.create
   app.post '/api/talks/:talk_id/comment', Talk.comment.create
   app.post '/api/talks/:talk_id/like/:user_id/increment', Talk.like.increment

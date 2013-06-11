@@ -20,6 +20,7 @@ exports.SiteEvent = (app) ->
     return res.render 'index',
       req: req
       id: req.session.userid
+      href: "/#/"
 
   postindex: (req, res)->
     console.log req.headers

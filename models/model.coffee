@@ -224,7 +224,7 @@ TalkSchema = new Schema
     type: ObjectId
     ref: "User"
   count:
-    type: [ObjectId, ref: "User"]
+    type: [type: ObjectId, ref: "User"]
     default: []
   updatedAt:
     type: Date

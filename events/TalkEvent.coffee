@@ -22,6 +22,12 @@ exports.TalkEvent = (app) ->
           return talk.updatedAt
         return res.send sortedTalks
 
+  fetchOne: (req, res)->
+    talk_id = req.params.talk_id
+    Talk.findOne({_id: talk_id}).populate('candidate').populate('user').populate('count', "id first_name").exec (err, talk)->
+      throw err if err
+      return res.send talk
+
   create: (req, res)->
     one = if req.body.one is 'me' then req.session.userid else req.body.one
     two = if req.body.two is 'me' then req.session.userid else req.body.two
@@ -78,21 +84,37 @@ exports.TalkEvent = (app) ->
         User.findOne({id: id}).exec (err, user)=>
           liked = _.find talk.count, (count)=>
             return count.toString() is user._id.toString()
+          console.log 'liked'
           console.log liked
           if liked
-            return res.send 'already increment'
+            json =
+              status: "failed"
+              length: talk.count.length
+            return res.json json
           else
-            talk.count.push user._id
-            talk.save (err)->
+            talk.count.push user
+            talk.save (err)=>
               throw err if err
-              return res.send 'increment'
+              json =
+                status: "success"
+                length: talk.count.length
+              return res.json json
     decrement: (req, res)->
       id = if req.params.user_id is 'me' then req.session.userid else req.params.user_id
       Talk.findOne({_id: req.params.talk_id}).exec (err, talk)=>
         throw err if err
         User.findOne({id: id}).exec (err, user)=>
+          removeFlag = false
           _.each talk.count, (count)=>
             if count.toString() is user._id.toString()
-              console.log "decrement!"
-              return res.send 'decrement'
-          return res.send 'not decrement'
+              removeFlag = true
+          if removeFlag
+            talk.count.remove(user._id)
+            talk.save (err)=>
+              throw err if err
+              json =
+                status: "success"
+                length: talk.count.length
+              return res.json json
+          else
+            return res.send 'not decrement'
