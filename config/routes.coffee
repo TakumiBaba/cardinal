@@ -32,7 +32,6 @@ module.exports = (app) ->
   app.get '/api/users/facebook/:facebook_id', User.facebook.fetch
 
   # ViewEvent
-  app.get '/render/test', Debug.rendertest
   app.get '/views/profile/index', SiteEvent.profile.index
   app.get '/views/candidate/:id', SiteEvent.candidate
   app.get '/views/sidebar', View.sidebar

@@ -15,47 +15,12 @@ exports.SiteEvent = (app) ->
   FB = require 'fb'
 
   index: (req, res)->
-    return res.redirect '/login'
-    # if !req.session.userid
-    #   return res.redirect '/login'
-    # if req.session.isSupporter
-    #   return res.render "supporter-index",
-    #     req: req
-    #     id: req.session.userid
-    # else
-    #   return res.render "index",
-    #     req: req
-    #     id: req.session.userid
+    unless req.session.userid
+      return res.redirect '/login'
+    return res.render 'index',
+      req: req
+      id: req.session.userid
 
-    # fbreq = req.query.request_ids || ""
-    # signed_request = req.body.signed_request
-    # if signed_request
-    #   b = JSON.parse(new Buffer(signed_request.split(".")[1], "base64").toString())
-    #   facebook_id = b.user_id
-    # if signed_request is "" || facebook_id = ""
-    #   return res.redirect "/login"
-    # return res.render "index",
-    #   req: req
-    # console.log 'get-index'
-    # console.log req.session
-    # if req.session
-    #   facebook_id = req.session.facebook_id
-    # else
-    #   facebook_id = ""
-    # User.findOne facebook_id: facebook_id, (err, user)->
-    #   throw err if err
-    #   unless user.isSupporter
-    #     return res.render 'supporter-index',
-    #       req: req
-    #   return res.render 'index',
-    #     req: req
-      # if user.isSupporter
-      #   console.log "supporter"
-      #   res.render 'supporter-index',
-      #     req: req
-      # else
-      #   res.render 'index',
-      #     req: req
   postindex: (req, res)->
     console.log req.headers
     console.log 'post-index'
@@ -128,13 +93,15 @@ exports.SiteEvent = (app) ->
                   users[i].statuses.push status
                   user.save()
                   users[i].save()
-              return res.render 'index',
-                req: req
-                id: user.id
+              return res.redirect '/'
+              # return res.render 'index',
+              #   req: req
+              #   id: user.id
           else
-            return res.render 'index',
-              req: req
-              id: user.id
+            return res.redirect '/'
+            # return res.render 'index',
+            #   req: req
+            #   id: user.id
 
   Login:
     normal: (req, res)->
